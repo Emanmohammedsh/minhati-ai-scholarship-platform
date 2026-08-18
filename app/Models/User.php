@@ -2,48 +2,78 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
 class User extends Authenticatable
 {
-    /** @use HasFactory<UserFactory> */
     use HasFactory, Notifiable;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var list<string>
-     */
+    protected $table = 'users';
+
+    protected $primaryKey = 'user_id';
+
+    public $incrementing = true;
+
+    protected $keyType = 'int';
+
     protected $fillable = [
-        'name',
+        'role',
+        'full_name',
         'email',
-        'password',
+        'password_hash',
+        'is_active',
+        'last_login_at',
+        'email_verified_at',
     ];
 
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var list<string>
-     */
     protected $hidden = [
-        'password',
-        'remember_token',
+        'password_hash',
     ];
 
-    /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
-     */
     protected function casts(): array
     {
         return [
+            'is_active' => 'boolean',
+            'last_login_at' => 'datetime',
             'email_verified_at' => 'datetime',
-            'password' => 'hashed',
+            'created_at' => 'datetime',
+            'updated_at' => 'datetime',
+            'password_hash' => 'hashed',
         ];
+    }
+
+    /**
+     * Laravel's Auth system looks for a "password" column by default.
+     * Our table uses "password_hash" instead, so we point Auth to it here.
+     */
+    public function getAuthPassword()
+    {
+        return $this->password_hash;
+    }
+
+    /**
+     * User → StudentProfile
+     */
+    public function studentProfile()
+    {
+        return $this->hasOne(
+            StudentProfile::class,
+            'user_id',
+            'user_id'
+        );
+    }
+
+    /**
+     * Admin → Scholarships
+     */
+    public function createdScholarships()
+    {
+        return $this->hasMany(
+            Scholarship::class,
+            'created_by_admin_id',
+            'user_id'
+        );
     }
 }
