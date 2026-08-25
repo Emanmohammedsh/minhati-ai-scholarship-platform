@@ -5,10 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
 {
-    use HasFactory, Notifiable;
+    use HasApiTokens, HasFactory, Notifiable;
 
     protected $table = 'users';
 
@@ -44,18 +45,11 @@ class User extends Authenticatable
         ];
     }
 
-    /**
-     * Laravel's Auth system looks for a "password" column by default.
-     * Our table uses "password_hash" instead, so we point Auth to it here.
-     */
     public function getAuthPassword()
     {
         return $this->password_hash;
     }
 
-    /**
-     * User → StudentProfile
-     */
     public function studentProfile()
     {
         return $this->hasOne(
@@ -65,9 +59,6 @@ class User extends Authenticatable
         );
     }
 
-    /**
-     * Admin → Scholarships
-     */
     public function createdScholarships()
     {
         return $this->hasMany(

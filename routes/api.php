@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\StudentProfileController;
 use App\Http\Controllers\ScholarshipController;
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ScholarshipCriterionController;
 use App\Http\Controllers\CvController;
 use App\Http\Controllers\RecommendationController;
@@ -88,3 +89,11 @@ Route::middleware(['auth:sanctum', 'admin'])->group(function () {
     Route::get('/admin/action-logs', [AdminActionLogController::class, 'index']);
     Route::get('/admin/action-logs/{adminActionLog}', [AdminActionLogController::class, 'show']);
 });
+Route::post('/register', [AuthController::class, 'register']);
+Route::post('/login', [AuthController::class, 'login']);
+
+Route::middleware('auth:sanctum')->group(function () {
+    Route::post('/logout', [AuthController::class, 'logout']);
+    Route::get('/me', [AuthController::class, 'me']);
+});
+

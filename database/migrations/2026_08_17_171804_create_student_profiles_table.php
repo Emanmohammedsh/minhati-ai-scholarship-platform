@@ -6,20 +6,23 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
         Schema::create('student_profiles', function (Blueprint $table) {
-            $table->id();
+            $table->id('profile_id');
+            $table->foreignId('user_id')
+                ->unique()
+                ->constrained('users', 'user_id')
+                ->cascadeOnDelete();
+            $table->string('academic_background')->nullable();
+            $table->string('field_of_study')->nullable();
+            $table->string('degree_level')->nullable();
+            $table->text('interests')->nullable();
+            $table->string('country')->nullable();
             $table->timestamps();
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::dropIfExists('student_profiles');
