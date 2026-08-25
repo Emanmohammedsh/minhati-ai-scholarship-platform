@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI StudyPort - Upload CV</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&display=swap');
+
+  *{ box-sizing:border-box; margin:0; padding:0; }
+
+  body{
+    font-family:'Inter', system-ui, sans-serif;
+    min-height:100vh;
+    background:
+      linear-gradient(90deg, rgba(6,10,20,0.55) 0%, rgba(6,10,20,0.15) 42%, rgba(6,10,20,0.05) 60%),
+      url('/images/minhati.jpg') center/cover no-repeat;
+  }
+
+  #appShell{ display:none; }
+
+  .topbar{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:1.25rem 2rem;
+    background:rgba(13,20,38,0.72);
+    backdrop-filter:blur(18px);
+    -webkit-backdrop-filter:blur(18px);
+    border-bottom:1px solid rgba(255,255,255,0.12);
+  }
+  .brand{
+    display:flex; align-items:center; gap:0.55rem;
+    font-family:'Space Grotesk', sans-serif;
+    font-weight:600; font-size:1.05rem; color:#fff;
+  }
+  .brand .mark{
+    width:26px; height:26px; border-radius:8px;
+    background:linear-gradient(135deg, #38DFEA, #4F8CFF);
+    display:flex; align-items:center; justify-content:center;
+    font-size:0.85rem; font-weight:700; color:#0B1220;
+  }
+  .top-actions{ display:flex; align-items:center; gap:0.75rem; }
+  .link-btn{
+    padding:0.55rem 1.1rem; background:transparent;
+    border:1px solid rgba(255,255,255,0.18); border-radius:8px;
+    color:#fff; text-decoration:none; font-size:0.85rem; font-weight:600;
+    transition:background .15s;
+  }
+  .link-btn:hover{ background:rgba(255,255,255,0.1); }
+  .logout-btn{
+    padding:0.55rem 1.1rem; background:rgba(255,255,255,0.08);
+    border:1px solid rgba(255,255,255,0.18); border-radius:8px;
+    color:#fff; font-size:0.85rem; font-weight:600; cursor:pointer;
+    transition:background .15s;
+  }
+  .logout-btn:hover{ background:rgba(255,255,255,0.16); }
+
+  main{ max-width:680px; margin:3rem auto; padding:0 2rem 4rem; }
+
+  .card{
+    background:rgba(13,20,38,0.68);
+    backdrop-filter:blur(18px); -webkit-backdrop-filter:blur(18px);
+    border:1px solid rgba(255,255,255,0.14);
+    border-radius:20px; padding:2.25rem 2rem;
+    box-shadow:0 24px 60px rgba(0,0,0,0.45);
+    color:#fff;
+  }
+
+  h1{
+    font-family:'Space Grotesk', sans-serif;
+    font-weight:700; font-size:1.6rem; margin-bottom:0.5rem;
+  }
+  .sub{ color:rgba(255,255,255,0.65); font-size:0.9rem; margin-bottom:1.75rem; }
+
+  .step-indicator{
+    display:flex; gap:0.5rem; margin-bottom:1.75rem;
+  }
+  .step-dot{
+    flex:1; height:4px; border-radius:2px;
+    background:rgba(255,255,255,0.12);
+    transition:background .2s;
+  }
+  .step-dot.active{ background:linear-gradient(90deg, #38DFEA, #4F8CFF); }
+
+  /* --- Upload state --- */
+  .dropzone{
+    border:2px dashed rgba(255,255,255,0.25);
+    border-radius:14px;
+    padding:2.5rem 1.5rem;
+    text-align:center;
+    cursor:pointer;
+    transition:border-color .15s, background .15s;
+  }
+  .dropzone:hover, .dropzone.dragover{
+    border-color:#38DFEA;
+    background:rgba(56,223,234,0.06);
+  }
+  .dropzone .icon{ font-size:2rem; margin-bottom:0.75rem; }
+  .dropzone .primary-text{ font-weight:600; font-size:0.95rem; margin-bottom:0.3rem; }
+  .dropzone .secondary-text{ font-size:0.8rem; color:rgba(255,255,255,0.5); }
+  input[type="file"]{ display:none; }
+
+  .file-chip{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:0.85rem 1rem;
+    background:rgba(255,255,255,0.07);
+    border:1px solid rgba(255,255,255,0.16);
+    border-radius:10px;
+    margin-top:1rem;
+  }
+  .file-chip .file-name{ font-size:0.88rem; font-weight:600; }
+  .file-chip .file-size{ font-size:0.78rem; color:rgba(255,255,255,0.5); }
+  .file-chip button{
+    background:none; border:none; color:#FF9B9B;
+    font-size:0.8rem; font-weight:600; cursor:pointer;
+  }
+
+  .error-text{ font-size:0.82rem; color:#FF9B9B; margin-top:0.6rem; min-height:1em; }
+
+  .primary-btn{
+    margin-top:1.25rem; width:100%;
+    padding:0.85rem;
+    background:linear-gradient(135deg, #38DFEA, #4F8CFF);
+    border:none; border-radius:10px;
+    color:#0B1220; font-size:0.95rem; font-weight:700;
+    cursor:pointer; transition:opacity .15s;
+  }
+  .primary-btn:hover{ opacity:0.92; }
+  .primary-btn:disabled{ opacity:0.5; cursor:not-allowed; }
+
+  .secondary-btn{
+    margin-top:0.75rem; width:100%;
+    padding:0.75rem;
+    background:transparent;
+    border:1px solid rgba(255,255,255,0.2);
+    border-radius:10px;
+    color:#fff; font-size:0.88rem; font-weight:600;
+    cursor:pointer; transition:background .15s;
+  }
+  .secondary-btn:hover{ background:rgba(255,255,255,0.08); }
+
+  .progress-track{
+    width:100%; height:8px; border-radius:4px;
+    background:rgba(255,255,255,0.1);
+    overflow:hidden; margin-top:1.25rem;
+  }
+  .progress-fill{
+    height:100%; width:0%;
+    background:linear-gradient(90deg, #38DFEA, #4F8CFF);
+    transition:width .2s;
+  }
+  .status-line{
+    display:flex; align-items:center; gap:0.6rem;
+    font-size:0.85rem; color:rgba(255,255,255,0.75);
+    margin-top:0.9rem;
+  }
+
+  .spinner{
+    width:16px; height:16px;
+    border:2px solid rgba(255,255,255,0.25);
+    border-top-color:#38DFEA;
+    border-radius:50%;
+    animation:spin 0.8s linear infinite;
+  }
+  @keyframes spin{ to{ transform:rotate(360deg); } }
+
+  .status-banner{
+    display:none; padding:0.75rem 1rem; border-radius:10px;
+    font-size:0.85rem; font-weight:600; margin-bottom:1.25rem;
+  }
+  .status-banner.success{
+    display:block; background:rgba(56,223,148,0.12);
+    border:1px solid rgba(56,223,148,0.4); color:#6EE7A8;
+  }
+  .status-banner.error{
+    display:block; background:rgba(255,107,107,0.12);
+    border:1px solid rgba(255,107,107,0.4); color:#FF9B9B;
+  }
+  .status-banner.info{
+    display:block; background:rgba(79,140,255,0.12);
+    border:1px solid rgba(79,140,255,0.4); color:#9FC2FF;
+  }
+
+  /* --- Review state --- */
+  .review-section{ margin-bottom:1.6rem; }
+  .review-section h2{
+    font-family:'Space Grotesk', sans-serif;
+    font-size:1rem; font-weight:600; margin-bottom:0.75rem;
+  }
+  .empty-note{
+    font-size:0.82rem; color:rgba(255,255,255,0.45); font-style:italic;
+  }
+
+  .chip-list{ display:flex; flex-wrap:wrap; gap:0.55rem; }
+  .skill-chip{
+    display:flex; align-items:center; gap:0.5rem;
+    padding:0.4rem 0.7rem 0.4rem 0.9rem;
+    background:rgba(56,223,234,0.1);
+    border:1px solid rgba(56,223,234,0.35);
+    border-radius:999px;
+    font-size:0.83rem;
+  }
+  .skill-chip button{
+    background:none; border:none; color:rgba(255,255,255,0.6);
+    font-size:0.9rem; line-height:1; cursor:pointer; padding:0;
+  }
+  .skill-chip button:hover{ color:#FF9B9B; }
+
+  .entry-row{
+    display:flex; align-items:flex-start; justify-content:space-between;
+    gap:0.75rem;
+    padding:0.75rem 0.9rem;
+    background:rgba(255,255,255,0.05);
+    border:1px solid rgba(255,255,255,0.12);
+    border-radius:10px;
+    margin-bottom:0.55rem;
+    font-size:0.87rem;
+  }
+  .entry-row .remove-entry{
+    background:none; border:none; color:rgba(255,255,255,0.6);
+    font-size:0.78rem; font-weight:600; cursor:pointer; white-space:nowrap;
+  }
+  .entry-row .remove-entry:hover{ color:#FF9B9B; }
+
+  .review-actions{ display:flex; gap:0.75rem; margin-top:1.75rem; }
+  .review-actions .primary-btn{ margin-top:0; }
+  .review-actions .secondary-btn{ margin-top:0; }
+
+  .loading-screen{
+    display:flex; align-items:center; justify-content:center;
+    min-height:100vh; color:#fff; font-size:0.9rem; opacity:0.7;
+  }
+</style>
+</head>
+<body>
+
+  <div class="loading-screen" id="loadingScreen">Loading...</div>
+
+  <div id="appShell">
+    <div class="topbar">
+      <div class="brand"><span class="mark">A</span> AI StudyPort</div>
+      <div class="top-actions">
+        <a class="link-btn" href="dashboard.html">Back to Dashboard</a>
+        <button class="logout-btn" id="logoutBtn">Log Out</button>
+      </div>
+    </div>
+
+    <main>
+      <div class="card">
+        <h1>Upload Your CV</h1>
+        <p class="sub">We'll pull out your skills, education, and qualifications automatically — you review everything before it's used for matching.</p>
+
+        <div class="step-indicator">
+          <div class="step-dot" id="dot1"></div>
+          <div class="step-dot" id="dot2"></div>
+          <div class="step-dot" id="dot3"></div>
+        </div>
+
+        <div class="status-banner" id="statusBanner"></div>
+
+        <!-- STEP 1: Upload -->
+        <section id="uploadStep">
+          <div class="dropzone" id="dropzone">
+            <div class="icon">📄</div>
+            <div class="primary-text">Click to choose a file or drag it here</div>
+            <div class="secondary-text">PDF only, up to 5MB</div>
+          </div>
+          <input type="file" id="fileInput" accept="application/pdf,.pdf">
+
+          <div class="file-chip" id="fileChip" style="display:none;">
+            <div>
+              <div class="file-name" id="fileName"></div>
+              <div class="file-size" id="fileSize"></div>
+            </div>
+            <button type="button" id="removeFileBtn">Remove</button>
+          </div>
+
+          <div class="error-text" id="fileError"></div>
+
+          <button class="primary-btn" id="uploadBtn" disabled>Upload CV</button>
+
+          <div id="uploadProgress" style="display:none;">
+            <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+            <div class="status-line"><div class="spinner"></div><span id="uploadStatusText">Uploading...</span></div>
+          </div>
+        </section>
+
+        <!-- STEP 2: AI Extraction (processing) -->
+        <section id="processingStep" style="display:none;">
+          <div class="status-line" style="margin-top:0;">
+            <div class="spinner"></div>
+            <span>Analyzing your CV — this usually takes a few seconds...</span>
+          </div>
+          <button class="secondary-btn" id="cancelWaitBtn" style="display:none;">This is taking a while — check back later</button>
+        </section>
+
+        <!-- STEP 3: Review -->
+        <section id="reviewStep" style="display:none;">
+          <div class="review-section">
+            <h2>Skills</h2>
+            <div class="chip-list" id="skillsList"></div>
+            <div class="empty-note" id="skillsEmptyNote" style="display:none;">No skills were detected. You can still proceed or upload a different CV.</div>
+          </div>
+
+          <div class="review-section">
+            <h2>Education</h2>
+            <div id="educationList"></div>
+            <div class="empty-note" id="educationEmptyNote" style="display:none;">No education section was detected in your CV.</div>
+          </div>
+
+          <div class="review-section">
+            <h2>Qualifications</h2>
+            <div id="qualificationsList"></div>
+            <div class="empty-note" id="qualificationsEmptyNote" style="display:none;">No qualifications were detected in your CV.</div>
+          </div>
+
+          <div class="review-actions">
+            <button class="secondary-btn" id="reuploadBtn">Upload a different CV</button>
+            <button class="primary-btn" id="confirmBtn">Confirm &amp; Continue</button>
+          </div>
+        </section>
+
+      </div>
+    </main>
+  </div>
+
+<script>
+  const API_BASE_URL = 'http://127.0.0.1:8000/api';
+  const MAX_SIZE_BYTES = 5 * 1024 * 1024; // 5MB, per FR-06
+  const EXTRACTION_TIMEOUT_MS = 30000; // 30s, per US-03 acceptance criteria
+
+  let selectedFile = null;
+  let currentCvId = null;
+  let extractedData = { skills: [], education: [], qualifications: [] };
+
+  const dropzone = document.getElementById('dropzone');
+  const fileInput = document.getElementById('fileInput');
+  const fileChip = document.getElementById('fileChip');
+  const fileNameEl = document.getElementById('fileName');
+  const fileSizeEl = document.getElementById('fileSize');
+  const fileErrorEl = document.getElementById('fileError');
+  const uploadBtn = document.getElementById('uploadBtn');
+  const removeFileBtn = document.getElementById('removeFileBtn');
+  const statusBanner = document.getElementById('statusBanner');
+
+  const uploadStep = document.getElementById('uploadStep');
+  const processingStep = document.getElementById('processingStep');
+  const reviewStep = document.getElementById('reviewStep');
+  const uploadProgress = document.getElementById('uploadProgress');
+  const progressFill = document.getElementById('progressFill');
+  const uploadStatusText = document.getElementById('uploadStatusText');
+  const cancelWaitBtn = document.getElementById('cancelWaitBtn');
+
+  const dots = [document.getElementById('dot1'), document.getElementById('dot2'), document.getElementById('dot3')];
+
+  function goToLogin() {
+    localStorage.removeItem('auth_token');
+    localStorage.removeItem('auth_user');
+    window.location.replace('login.html');
+  }
+
+  function authHeaders(extra = {}) {
+    const token = localStorage.getItem('auth_token');
+    return Object.assign({ 'Authorization': `Bearer ${token}` }, extra);
+  }
+
+  function setStep(step) {
+    uploadStep.style.display = step === 1 ? 'block' : 'none';
+    processingStep.style.display = step === 2 ? 'block' : 'none';
+    reviewStep.style.display = step === 3 ? 'block' : 'none';
+    dots.forEach((d, i) => d.classList.toggle('active', i < step));
+  }
+
+  function showBanner(message, type) {
+    statusBanner.textContent = message;
+    statusBanner.className = 'status-banner ' + type;
+  }
+  function clearBanner() {
+    statusBanner.className = 'status-banner';
+    statusBanner.textContent = '';
+  }
+
+  function formatSize(bytes) {
+    return (bytes / (1024 * 1024)).toFixed(2) + ' MB';
+  }
+
+  // ---------- Auth guard ----------
+  async function init() {
+    const token = localStorage.getItem('auth_token');
+    if (!token) { goToLogin(); return; }
+    try {
+      const res = await fetch(`${API_BASE_URL}/me`, { headers: authHeaders({ 'Accept': 'application/json' }) });
+      if (!res.ok) { goToLogin(); return; }
+      document.getElementById('loadingScreen').style.display = 'none';
+      document.getElementById('appShell').style.display = 'block';
+      setStep(1);
+    } catch (e) {
+      goToLogin();
+    }
+  }
+
+  // ---------- File selection (US-02: validate before upload) ----------
+  dropzone.addEventListener('click', () => fileInput.click());
+  dropzone.addEventListener('dragover', (e) => { e.preventDefault(); dropzone.classList.add('dragover'); });
+  dropzone.addEventListener('dragleave', () => dropzone.classList.remove('dragover'));
+  dropzone.addEventListener('drop', (e) => {
+    e.preventDefault();
+    dropzone.classList.remove('dragover');
+    if (e.dataTransfer.files.length) handleFileSelect(e.dataTransfer.files[0]);
+  });
+  fileInput.addEventListener('change', (e) => {
+    if (e.target.files.length) handleFileSelect(e.target.files[0]);
+  });
+
+  function handleFileSelect(file) {
+    fileErrorEl.textContent = '';
+    clearBanner();
+
+    const isPdf = file.type === 'application/pdf' || file.name.toLowerCase().endsWith('.pdf');
+    if (!isPdf) {
+      fileErrorEl.textContent = 'PDF only. Please choose a .pdf file.';
+      selectedFile = null;
+      fileChip.style.display = 'none';
+      uploadBtn.disabled = true;
+      return;
+    }
+    if (file.size > MAX_SIZE_BYTES) {
+      fileErrorEl.textContent = 'File exceeds 5MB. Please choose a smaller file.';
+      selectedFile = null;
+      fileChip.style.display = 'none';
+      uploadBtn.disabled = true;
+      return;
+    }
+
+    selectedFile = file;
+    fileNameEl.textContent = file.name;
+    fileSizeEl.textContent = formatSize(file.size);
+    fileChip.style.display = 'flex';
+    uploadBtn.disabled = false;
+  }
+
+  removeFileBtn.addEventListener('click', () => {
+    selectedFile = null;
+    fileInput.value = '';
+    fileChip.style.display = 'none';
+    uploadBtn.disabled = true;
+  });
+
+  // ---------- Upload (US-01) ----------
+  uploadBtn.addEventListener('click', () => {
+    if (!selectedFile) return;
+    uploadCv(selectedFile);
+  });
+
+  function uploadCv(file) {
+    clearBanner();
+    uploadBtn.disabled = true;
+    uploadProgress.style.display = 'block';
+    progressFill.style.width = '0%';
+    uploadStatusText.textContent = 'Uploading...';
+
+    const token = localStorage.getItem('auth_token');
+    const formData = new FormData();
+    formData.append('file', file);
+
+    const xhr = new XMLHttpRequest();
+    xhr.open('POST', `${API_BASE_URL}/cvs`, true);
+    xhr.setRequestHeader('Authorization', `Bearer ${token}`);
+    xhr.setRequestHeader('Accept', 'application/json');
+
+    xhr.upload.addEventListener('progress', (e) => {
+      if (e.lengthComputable) {
+        const pct = Math.round((e.loaded / e.total) * 100);
+        progressFill.style.width = pct + '%';
+      }
+    });
+
+    xhr.onload = function() {
+      uploadProgress.style.display = 'none';
+      uploadBtn.disabled = false;
+
+      if (xhr.status === 401) { goToLogin(); return; }
+
+      if (xhr.status >= 200 && xhr.status < 300) {
+        // Stored successfully — capture the primary key (cv_id, not id)
+        // and move on to AI extraction.
+        try {
+          const created = JSON.parse(xhr.responseText);
+          currentCvId = created.cv_id;
+        } catch (e) {
+          showBanner('Upload succeeded but the response was unreadable. Please refresh and try again.', 'error');
+          return;
+        }
+        setStep(2);
+        runExtraction();
+        return;
+      }
+
+      // Rejected by server-side validation (defense in depth beyond
+      // the client-side check above), or another storage error.
+      let message = 'Could not upload your CV. Please try again.';
+      try {
+        const data = JSON.parse(xhr.responseText);
+        if (data && data.message) message = data.message;
+      } catch (e) { /* keep default message */ }
+      showBanner(message, 'error');
+    };
+
+    // US-01 alt scenario: network drop mid-upload. No partial record
+    // should exist server-side (backend's responsibility not to persist
+    // an incomplete upload) — the client just surfaces a clear error
+    // and lets the student retry from the same file selection.
+    xhr.onerror = function() {
+      uploadProgress.style.display = 'none';
+      uploadBtn.disabled = false;
+      showBanner('Your connection dropped during upload. Nothing was saved — please try again.', 'error');
+    };
+
+    xhr.send(formData);
+  }
+
+  // ---------- AI Extraction (US-03) ----------
+  async function runExtraction() {
+    clearBanner();
+    cancelWaitBtn.style.display = 'none';
+
+    if (!currentCvId) {
+      showExtractionError('Missing CV reference. Please upload again.');
+      return;
+    }
+
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), EXTRACTION_TIMEOUT_MS);
+
+    try {
+      const res = await fetch(`${API_BASE_URL}/cvs/${currentCvId}/extract`, {
+        method: 'POST',
+        headers: authHeaders({ 'Accept': 'application/json' }),
+        signal: controller.signal
+      });
+      clearTimeout(timeoutId);
+
+      if (res.status === 401) { goToLogin(); return; }
+
+      if (!res.ok) {
+        showExtractionError('The AI service could not process your CV right now.');
+        return;
+      }
+
+      const data = await res.json();
+      // US-03 alt scenario: don't fabricate missing sections — an
+      // undetected field should come back empty, not guessed.
+      // Backend returns the cv record with extracted_* column names.
+      extractedData = {
+        skills: Array.isArray(data.extracted_skills) ? data.extracted_skills : [],
+        education: Array.isArray(data.extracted_education) ? data.extracted_education : [],
+        qualifications: Array.isArray(data.extracted_qualifications) ? data.extracted_qualifications : []
+      };
+      renderReview();
+      setStep(3);
+    } catch (err) {
+      clearTimeout(timeoutId);
+      // Timeout or network error — the CV file itself is already safely
+      // stored from the previous step, so we only need to retry extraction.
+      showExtractionError('This is taking longer than expected. Your CV was saved — you can retry the analysis.');
+    }
+  }
+
+  function showExtractionError(message) {
+    setStep(1); // fall back to a state where a clear action is visible
+    processingStep.style.display = 'block';
+    uploadStep.style.display = 'none';
+    dots.forEach((d, i) => d.classList.toggle('active', i < 2));
+    document.querySelector('#processingStep .status-line span').textContent = message;
+    document.querySelector('#processingStep .spinner').style.display = 'none';
+    cancelWaitBtn.style.display = 'block';
+    cancelWaitBtn.textContent = 'Retry analysis';
+    cancelWaitBtn.onclick = () => {
+      document.querySelector('#processingStep .spinner').style.display = 'inline-block';
+      document.querySelector('#processingStep .status-line span').textContent = 'Analyzing your CV — this usually takes a few seconds...';
+      cancelWaitBtn.style.display = 'none';
+      runExtraction();
+    };
+  }
+
+  // ---------- Review (US-04) ----------
+  function renderReview() {
+    const skillsList = document.getElementById('skillsList');
+    const skillsEmptyNote = document.getElementById('skillsEmptyNote');
+    skillsList.innerHTML = '';
+    if (extractedData.skills.length === 0) {
+      skillsEmptyNote.style.display = 'block';
+    } else {
+      skillsEmptyNote.style.display = 'none';
+      extractedData.skills.forEach((skill, idx) => {
+        const chip = document.createElement('div');
+        chip.className = 'skill-chip';
+        chip.innerHTML = `<span></span><button type="button" aria-label="Remove skill">&times;</button>`;
+        chip.querySelector('span').textContent = skill;
+        chip.querySelector('button').addEventListener('click', () => {
+          extractedData.skills.splice(idx, 1);
+          renderReview();
+        });
+        skillsList.appendChild(chip);
+      });
+    }
+
+    renderEntryList('educationList', 'educationEmptyNote', extractedData.education, 'education');
+    renderEntryList('qualificationsList', 'qualificationsEmptyNote', extractedData.qualifications, 'qualifications');
+  }
+
+  function renderEntryList(containerId, emptyNoteId, entries, key) {
+    const container = document.getElementById(containerId);
+    const emptyNote = document.getElementById(emptyNoteId);
+    container.innerHTML = '';
+    if (entries.length === 0) {
+      emptyNote.style.display = 'block';
+      return;
+    }
+    emptyNote.style.display = 'none';
+    entries.forEach((entry, idx) => {
+      const row = document.createElement('div');
+      row.className = 'entry-row';
+      const label = typeof entry === 'string' ? entry : (entry.label || JSON.stringify(entry));
+      row.innerHTML = `<span></span><button type="button" class="remove-entry">Remove</button>`;
+      row.querySelector('span').textContent = label;
+      row.querySelector('.remove-entry').addEventListener('click', () => {
+        extractedData[key].splice(idx, 1);
+        renderReview();
+      });
+      container.appendChild(row);
+    });
+  }
+
+  document.getElementById('reuploadBtn').addEventListener('click', () => {
+    // US-01 alt scenario: re-uploading replaces the active CV.
+    currentCvId = null;
+    selectedFile = null;
+    fileInput.value = '';
+    fileChip.style.display = 'none';
+    uploadBtn.disabled = true;
+    fileErrorEl.textContent = '';
+    clearBanner();
+    setStep(1);
+  });
+
+  document.getElementById('confirmBtn').addEventListener('click', async () => {
+    const btn = document.getElementById('confirmBtn');
+    btn.disabled = true;
+    btn.textContent = 'Saving...';
+    clearBanner();
+
+    try {
+      const res = await fetch(`${API_BASE_URL}/cvs/${currentCvId}/confirm`, {
+        method: 'PUT',
+        headers: authHeaders({ 'Content-Type': 'application/json', 'Accept': 'application/json' }),
+        body: JSON.stringify(extractedData)
+      });
+
+      if (res.status === 401) { goToLogin(); return; }
+
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}));
+        showBanner(data.message || 'Could not save your reviewed data. Please try again.', 'error');
+        return;
+      }
+
+      showBanner('Your CV data is confirmed and ready for matching.', 'success');
+    } catch (err) {
+      showBanner('Network error — please check your connection and try again.', 'error');
+    } finally {
+      btn.disabled = false;
+      btn.textContent = 'Confirm & Continue';
+    }
+  });
+
+  document.getElementById('logoutBtn').addEventListener('click', async function() {
+    const btn = this;
+    const token = localStorage.getItem('auth_token');
+    btn.disabled = true;
+    btn.textContent = 'Logging out...';
+    try {
+      if (token) {
+        await fetch(`${API_BASE_URL}/logout`, { method: 'POST', headers: authHeaders({ 'Accept': 'application/json' }) });
+      }
+    } catch (e) { /* fall through to clearing local state */ }
+    finally { goToLogin(); }
+  });
+
+  window.addEventListener('pageshow', init);
+</script>
+
+</body>
+</html>

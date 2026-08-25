@@ -2,17 +2,13 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Cv extends Model
 {
-    use HasFactory;
-
     protected $table = 'cvs';
     protected $primaryKey = 'cv_id';
-    public $incrementing = true;
-    protected $keyType = 'int';
 
     protected $fillable = [
         'user_id',
@@ -31,29 +27,19 @@ class Cv extends Model
         'reviewed_at',
     ];
 
-    protected function casts(): array
-    {
-        return [
-            'is_active' => 'boolean',
-            'reviewed_by_student' => 'boolean',
-            'extracted_skills' => 'array',
-            'extracted_education' => 'array',
-            'extracted_qualifications' => 'array',
-            'extraction_requested_at' => 'datetime',
-            'extraction_completed_at' => 'datetime',
-            'reviewed_at' => 'datetime',
-            'created_at' => 'datetime',
-            'updated_at' => 'datetime',
-        ];
-    }
+    protected $casts = [
+        'is_active'                => 'boolean',
+        'reviewed_by_student'      => 'boolean',
+        'extracted_skills'         => 'array',
+        'extracted_education'      => 'array',
+        'extracted_qualifications' => 'array',
+        'extraction_requested_at'  => 'datetime',
+        'extraction_completed_at'  => 'datetime',
+        'reviewed_at'              => 'datetime',
+    ];
 
-    public function user()
+    public function user(): BelongsTo
     {
-        return $this->belongsTo(User::class, 'user_id', 'user_id');
-    }
-
-    public function recommendations()
-    {
-        return $this->hasMany(Recommendation::class, 'cv_id', 'cv_id');
+        return $this->belongsTo(User::class);
     }
 }

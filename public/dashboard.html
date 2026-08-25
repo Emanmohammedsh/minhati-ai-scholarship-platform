@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI StudyPort - Dashboard</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&display=swap');
+
+  *{ box-sizing:border-box; margin:0; padding:0; }
+
+  body{
+    font-family:'Inter', system-ui, sans-serif;
+    min-height:100vh;
+    background:
+      linear-gradient(90deg, rgba(6,10,20,0.55) 0%, rgba(6,10,20,0.15) 42%, rgba(6,10,20,0.05) 60%),
+      url('/images/minhati.jpg') center/cover no-repeat;
+  }
+
+  /* Hidden until we've confirmed the token is valid, so a logged-out
+     visitor never sees a flash of dashboard content (FR-03 alt scenario). */
+  #appShell{ display:none; }
+
+  .topbar{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:1.25rem 2rem;
+    background:rgba(13,20,38,0.72);
+    backdrop-filter:blur(18px);
+    -webkit-backdrop-filter:blur(18px);
+    border-bottom:1px solid rgba(255,255,255,0.12);
+  }
+  .brand{
+    display:flex;
+    align-items:center;
+    gap:0.55rem;
+    font-family:'Space Grotesk', sans-serif;
+    font-weight:600;
+    font-size:1.05rem;
+    color:#fff;
+  }
+  .brand .mark{
+    width:26px; height:26px;
+    border-radius:8px;
+    background:linear-gradient(135deg, #38DFEA, #4F8CFF);
+    display:flex; align-items:center; justify-content:center;
+    font-size:0.85rem; font-weight:700; color:#0B1220;
+  }
+
+  .logout-btn{
+    padding:0.55rem 1.1rem;
+    background:rgba(255,255,255,0.08);
+    border:1px solid rgba(255,255,255,0.18);
+    border-radius:8px;
+    color:#fff;
+    font-size:0.85rem;
+    font-weight:600;
+    cursor:pointer;
+    transition:background .15s;
+  }
+  .logout-btn:hover{ background:rgba(255,255,255,0.16); }
+  .logout-btn:disabled{ opacity:0.6; cursor:not-allowed; }
+
+  main{
+    max-width:720px;
+    margin:3rem auto;
+    padding:0 2rem;
+  }
+
+  .card{
+    background:rgba(13,20,38,0.68);
+    backdrop-filter:blur(18px);
+    -webkit-backdrop-filter:blur(18px);
+    border:1px solid rgba(255,255,255,0.14);
+    border-radius:20px;
+    padding:2.25rem 2rem;
+    box-shadow:0 24px 60px rgba(0,0,0,0.45);
+    color:#fff;
+  }
+
+  h1{
+    font-family:'Space Grotesk', sans-serif;
+    font-weight:700;
+    font-size:1.6rem;
+    margin-bottom:0.5rem;
+  }
+
+  .sub{
+    color:rgba(255,255,255,0.65);
+    font-size:0.9rem;
+    margin-bottom:1.75rem;
+  }
+
+  .nav-links{
+    display:flex;
+    flex-direction:column;
+    gap:0.75rem;
+  }
+  .nav-links a{
+    display:block;
+    padding:0.85rem 1rem;
+    background:rgba(255,255,255,0.06);
+    border:1px solid rgba(255,255,255,0.14);
+    border-radius:10px;
+    color:#fff;
+    text-decoration:none;
+    font-size:0.92rem;
+    font-weight:600;
+    transition:background .15s, border-color .15s;
+  }
+  .nav-links a:hover{
+    background:rgba(255,255,255,0.11);
+    border-color:#38DFEA;
+  }
+
+  .loading-screen{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    min-height:100vh;
+    color:#fff;
+    font-size:0.9rem;
+    opacity:0.7;
+  }
+</style>
+</head>
+<body>
+
+  <div class="loading-screen" id="loadingScreen">Loading...</div>
+
+  <div id="appShell">
+    <div class="topbar">
+      <div class="brand">
+        <span class="mark">A</span>
+        AI StudyPort
+      </div>
+      <button class="logout-btn" id="logoutBtn">Log Out</button>
+    </div>
+
+    <main>
+      <div class="card">
+        <h1 id="welcomeHeading">Welcome</h1>
+        <p class="sub" id="welcomeSub">Here's your student dashboard.</p>
+
+        <div class="nav-links">
+          <a href="profile.html">Manage my academic profile</a>
+        </div>
+      </div>
+    </main>
+  </div>
+
+<script>
+  const API_BASE_URL = 'http://127.0.0.1:8000/api';
+
+  function goToLogin() {
+    localStorage.removeItem('auth_token');
+    localStorage.removeItem('auth_user');
+    window.location.replace('login.html');
+  }
+
+  async function loadDashboard() {
+    const token = localStorage.getItem('auth_token');
+
+    // No token at all — nothing cached to protect, go straight to login.
+    if (!token) {
+      goToLogin();
+      return;
+    }
+
+    try {
+      // NFR-09 / FR-03: confirm with the backend that this token is still
+      // valid before showing anything. If the 30-minute inactivity window
+      // expired, or the token was revoked by a prior logout, this fails
+      // and we bounce back to login instead of showing stale content.
+      const response = await fetch(`${API_BASE_URL}/me`, {
+        headers: {
+          'Accept': 'application/json',
+          'Authorization': `Bearer ${token}`
+        }
+      });
+
+      if (!response.ok) {
+        goToLogin();
+        return;
+      }
+
+      const user = await response.json();
+      localStorage.setItem('auth_user', JSON.stringify(user));
+
+      document.getElementById('welcomeHeading').textContent = `Welcome, ${user.full_name}`;
+      document.getElementById('loadingScreen').style.display = 'none';
+      document.getElementById('appShell').style.display = 'block';
+    } catch (error) {
+      // Network/backend unreachable — safest default is to require login
+      // again rather than trust a cached user object.
+      goToLogin();
+    }
+  }
+
+  document.getElementById('logoutBtn').addEventListener('click', async function() {
+    const btn = this;
+    const token = localStorage.getItem('auth_token');
+
+    btn.disabled = true;
+    btn.textContent = 'Logging out...';
+
+    try {
+      if (token) {
+        await fetch(`${API_BASE_URL}/logout`, {
+          method: 'POST',
+          headers: {
+            'Accept': 'application/json',
+            'Authorization': `Bearer ${token}`
+          }
+        });
+      }
+    } catch (error) {
+      // Even if the request fails (e.g. token already expired), we still
+      // clear local state below so the user isn't stuck.
+    } finally {
+      goToLogin();
+    }
+  });
+
+  // FR-03 alt scenario: pressing the browser back button after logout
+  // must not show cached dashboard content. `pageshow` fires even when
+  // the page is restored from the back/forward cache (bfcache), so we
+  // re-validate the token every time this page becomes visible again.
+  window.addEventListener('pageshow', function(event) {
+    loadDashboard();
+  });
+</script>
+
+</body>
+</html>

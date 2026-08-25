@@ -42,7 +42,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/cvs/{cv}/download', [CvController::class, 'download']);
     Route::patch('/cvs/{cv}/set-active', [CvController::class, 'setActive']);
     Route::delete('/cvs/{cv}', [CvController::class, 'destroy']);
-
+Route::post('/cvs/{cv}/extract', [CvController::class, 'extract']);
+Route::put('/cvs/{cv}/confirm', [CvController::class, 'confirm']);
     // Recommendations
     Route::get('/recommendations', [RecommendationController::class, 'index']);
     Route::get('/recommendations/{recommendation}', [RecommendationController::class, 'show']);
