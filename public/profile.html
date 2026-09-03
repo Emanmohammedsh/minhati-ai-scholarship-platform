@@ -280,6 +280,10 @@
   const saveBtn = document.getElementById('saveBtn');
   const statusBanner = document.getElementById('statusBanner');
 
+  // Tracks whether a profile already exists for this user, so the submit
+  // handler knows whether to POST (create) or PUT (update).
+  let profileExists = false;
+
   const fields = {
     fullName: document.getElementById('fullName'),
     institution: document.getElementById('institution'),
@@ -381,6 +385,7 @@
       if (profileResponse.ok) {
         const profile = await profileResponse.json();
         if (profile) {
+          profileExists = true;
           fields.fullName.value = profile.full_name || '';
           fields.institution.value = profile.institution || '';
           fields.major.value = profile.major || '';
@@ -388,8 +393,8 @@
           fields.bio.value = profile.bio || '';
         }
       }
-      // A 404 here just means no profile exists yet — the form stays
-      // empty and the first save will create one.
+      // A 404 here just means no profile exists yet — profileExists stays
+      // false, the form stays empty, and the first save will create one.
     } catch (error) {
       goToLogin();
     }
@@ -412,7 +417,7 @@
 
     try {
       const response = await fetch(`${API_BASE_URL}/profile`, {
-        method: 'PUT',
+        method: profileExists ? 'PUT' : 'POST',
         headers: {
           'Content-Type': 'application/json',
           'Accept': 'application/json',
@@ -439,6 +444,7 @@
       }
 
       showBanner('Profile saved successfully.', 'success');
+      profileExists = true;
     } catch (error) {
       showBanner('Network error — please check your connection and try again.', 'error');
     } finally {

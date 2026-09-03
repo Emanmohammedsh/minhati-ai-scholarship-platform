@@ -1,39 +1,38 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Models;
 
-use App\Models\AdminActionLog;
-use Illuminate\Http\Request;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class AdminActionLogController extends Controller
+class AdminActionLog extends Model
 {
-    /**
-     * GET /api/admin/action-logs
-     * Protected by 'admin' middleware at the route level
-     */
-    public function index(Request $request)
+    protected $table = 'admin_action_logs';
+    protected $primaryKey = 'log_id';
+    public $incrementing = true;
+    protected $keyType = 'int';
+
+    public $timestamps = false;
+
+    protected $fillable = [
+        'admin_id',
+        'action_type',
+        'target_table',
+        'target_id',
+        'details',
+        'created_at',
+    ];
+
+    protected function casts(): array
     {
-        $query = AdminActionLog::with('admin');
-
-        if ($request->filled('action_type')) {
-            $query->where('action_type', $request->input('action_type'));
-        }
-
-        if ($request->filled('admin_id')) {
-            $query->where('admin_id', $request->input('admin_id'));
-        }
-
-        $logs = $query->orderByDesc('created_at')->paginate(25);
-
-        return response()->json($logs);
+        return [
+            'details'    => 'array',
+            'created_at' => 'datetime',
+        ];
     }
 
-    /**
-     * GET /api/admin/action-logs/{adminActionLog}
-     * Protected by 'admin' middleware at the route level
-     */
-    public function show(AdminActionLog $adminActionLog)
+    public function admin(): BelongsTo
     {
-        return response()->json($adminActionLog->load('admin'));
+        return $this->belongsTo(User::class, 'admin_id', 'user_id');
     }
 }

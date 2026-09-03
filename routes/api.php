@@ -34,7 +34,10 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/student-profile', [StudentProfileController::class, 'store']);
     Route::put('/student-profile', [StudentProfileController::class, 'update']);
     Route::delete('/student-profile', [StudentProfileController::class, 'destroy']);
-
+    Route::get('/profile', [StudentProfileController::class, 'show']);
+    Route::post('/profile', [StudentProfileController::class, 'store']);
+    Route::put('/profile', [StudentProfileController::class, 'update']);
+    Route::delete('/profile', [StudentProfileController::class, 'destroy']);
     // CVs
     Route::get('/cvs', [CvController::class, 'index']);
     Route::get('/cvs/{cv}', [CvController::class, 'show']);
