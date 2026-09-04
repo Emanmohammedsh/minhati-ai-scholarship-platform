@@ -2,9 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Cv;
 use App\Models\Recommendation;
-use App\Models\Scholarship;
 use App\Models\StudentProfile;
 use App\Services\MatchingService;
 use Illuminate\Http\Request;
@@ -44,8 +42,11 @@ class RecommendationController extends Controller
 
     /**
      * POST /api/recommendations/generate
-     * Triggers a fresh recommendation run for the authenticated user,
-     * based on their StudentProfile + active Cv, against all active scholarships.
+     * FR-09: triggers a fresh recommendation run for the authenticated
+     * user, based on their StudentProfile + active Cv, against all
+     * active scholarships. MatchingService handles scoring, mandatory
+     * disqualification, and persisting both the recommendations and
+     * their per-criterion breakdown (FR-10, FR-11) in one step.
      */
     public function generate(Request $request)
     {
@@ -57,30 +58,21 @@ class RecommendationController extends Controller
             ], 422);
         }
 
-        $cv = Cv::where('user_id', Auth::id())
-            ->where('is_active', true)
-            ->first();
+        $recommendations = $this->matchingService->generate($request->user());
 
-        $scholarships = Scholarship::where('is_active', true)->get();
-
-        $ranked = $this->matchingService->generateRecommendations($profile, $cv, $scholarships);
-
-        $saved = [];
-
-        foreach ($ranked as $result) {
-            $saved[] = Recommendation::create([
-                'user_id'        => Auth::id(),
-                'scholarship_id' => $result['scholarship']->scholarship_id,
-                'cv_id'          => $cv?->cv_id,
-                'match_score'    => $result['score'],
-                'generated_at'   => now(),
-            ]);
+        // FR-09 alt scenario: no scholarships matched at all.
+        if ($recommendations->isEmpty()) {
+            return response()->json([
+                'message' => 'No matching scholarships were found for your profile yet.',
+                'count'   => 0,
+                'data'    => [],
+            ], 200);
         }
 
         return response()->json([
             'message' => 'Recommendations generated successfully.',
-            'count'   => count($saved),
-            'data'    => $saved,
+            'count'   => $recommendations->count(),
+            'data'    => $recommendations,
         ], 201);
     }
 
