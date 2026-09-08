@@ -174,7 +174,7 @@
         AI StudyPort
       </div>
       <div class="topbar-links">
-        <a href="{{ route('dashboard') }}" class="back-link">← Back to dashboard</a>
+        <a href="{{ route('dashboard') }}" class="back-link">ط£آ¢أ¢â‚¬آ ط¹آ¯ Back to dashboard</a>
       </div>
     </div>
 
@@ -223,6 +223,7 @@
           </div>
 
           <button type="submit" class="save-btn" id="saveBtn">Save Profile</button>
+          <a href="{{ route('cv-upload') }}" class="save-btn" id="continueBtn" style="display:none;text-decoration:none;text-align:center;margin-top:0.9rem;background:linear-gradient(135deg, #34D399, #22C55E);color:#06210F;">Continue to CV Upload &rarr;</a>
         </form>
       </div>
     </main>
@@ -233,6 +234,7 @@
   const LOGIN_URL = "{{ route('login') }}";
 
   let profileExists = false;
+  const CONTINUE_URL = "{{ route('cv-upload') }}";
 
   function goToLogin() {
     localStorage.removeItem('auth_token');
@@ -302,6 +304,7 @@
         const profile = await response.json();
         fillForm(profile);
         profileExists = true;
+      document.getElementById('continueBtn').style.display = 'block';
       }
 
       document.getElementById('loadingScreen').style.display = 'none';
@@ -337,7 +340,7 @@
     saveBtn.textContent = 'Saving...';
 
     try {
-      // US-04: create on first save, update independently afterwards —
+      // US-04: create on first save, update independently afterwards ط£آ¢أ¢â€ڑآ¬أ¢â‚¬â€Œ
       // each field updates without affecting the others.
       const response = await fetch(`${API_BASE_URL}/student-profile`, {
         method: profileExists ? 'PUT' : 'POST',
@@ -352,6 +355,7 @@
 
       if (response.ok) {
         profileExists = true;
+      document.getElementById('continueBtn').style.display = 'block';
         alertBox.textContent = 'Profile saved successfully.';
         alertBox.className = 'alert alert-success';
         alertBox.style.display = 'block';

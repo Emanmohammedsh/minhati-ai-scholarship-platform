@@ -20,3 +20,7 @@ Route::get('/dashboard', function () {
 Route::get('/profile', function () {
     return view('profile');
 })->name('profile');
+Route::get('/cv-upload', function () {
+    return view('cv-upload');
+})->name('cv-upload'); 
+

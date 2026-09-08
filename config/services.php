@@ -38,6 +38,9 @@ return [
     'key' => env('GEMINI_API_KEY'),
     'model' => env('GEMINI_MODEL', 'gemini-3.5-flash'),
 ], 
+'scholarship_api' => [
+    'key' => env('SCHOLARSHIP_API_KEY'),
+],
 ];
 
 
