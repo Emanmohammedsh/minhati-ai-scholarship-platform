@@ -6,20 +6,35 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
         Schema::create('cover_letters', function (Blueprint $table) {
-            $table->id();
-            $table->timestamps();
+            $table->id('cover_letter_id');
+
+            $table->foreignId('user_id')
+                ->constrained('users', 'user_id')
+                ->cascadeOnDelete();
+
+            $table->foreignId('scholarship_id')
+                ->constrained('scholarships', 'scholarship_id')
+                ->cascadeOnDelete();
+
+            $table->longText('content')->nullable();
+
+            $table->enum('generation_status', [
+                'pending',
+                'processing',
+                'completed',
+                'failed',
+            ])->default('pending');
+
+            $table->unsignedInteger('generation_time_ms')->nullable();
+
+            $table->timestamp('requested_at')->nullable();
+            $table->timestamp('completed_at')->nullable();
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::dropIfExists('cover_letters');

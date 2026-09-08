@@ -3,9 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Models\CoverLetter;
+use App\Models\Cv;
 use App\Models\Scholarship;
+use App\Models\StudentProfile;
+use App\Services\CoverLetterGenerationService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class CoverLetterController extends Controller
 {
@@ -29,32 +33,98 @@ class CoverLetterController extends Controller
     {
         $this->authorizeOwner($coverLetter);
 
-        return response()->json($coverLetter);
+        return response()->json(
+            $coverLetter->load('scholarship')
+        );
     }
 
     /**
      * POST /api/cover-letters
-     * Kicks off AI generation of a cover letter for a given scholarship (FR-12)
      */
-    public function store(Request $request)
-    {
+    public function store(
+        Request $request,
+        CoverLetterGenerationService $generationService
+    ) {
         $validated = $request->validate([
-            'scholarship_id' => ['required', 'integer', 'exists:scholarships,scholarship_id'],
+            'scholarship_id' => [
+                'required',
+                'integer',
+                'exists:scholarships,scholarship_id',
+            ],
         ]);
+
+        $user = $request->user();
+
+        $scholarship = Scholarship::findOrFail(
+            $validated['scholarship_id']
+        );
+
+        $profile = StudentProfile::where(
+            'user_id',
+            $user->user_id
+        )->first();
+
+        $cv = Cv::where('user_id', $user->user_id)
+            ->where('is_active', true)
+            ->where('reviewed_by_student', true)
+            ->first();
 
         $coverLetter = CoverLetter::create([
-            'user_id'           => Auth::id(),
-            'scholarship_id'    => $validated['scholarship_id'],
-            'content'           => null,
-            'generation_status' => 'pending',
-            'requested_at'      => now(),
+            'user_id' => $user->user_id,
+            'scholarship_id' => $scholarship->scholarship_id,
+            'content' => null,
+            'generation_status' => 'processing',
+            'requested_at' => now(),
         ]);
 
-        // TODO: dispatch a Job here to call the AI generation service and,
-        // on completion, fill in content / generation_status / generation_time_ms / completed_at
-        // GenerateCoverLetterJob::dispatch($coverLetter);
+        $startTime = microtime(true);
 
-        return response()->json($coverLetter, 201);
+        try {
+            $content = $generationService->generate(
+                $user,
+                $scholarship,
+                $profile,
+                $cv
+            );
+
+            $generationTimeMs = (int) round(
+                (microtime(true) - $startTime) * 1000
+            );
+
+            $coverLetter->update([
+                'content' => $content,
+                'generation_status' => 'completed',
+                'generation_time_ms' => $generationTimeMs,
+                'completed_at' => now(),
+            ]);
+
+            return response()->json(
+                $coverLetter->fresh()->load('scholarship'),
+                201
+            );
+        } catch (\Throwable $e) {
+            $generationTimeMs = (int) round(
+                (microtime(true) - $startTime) * 1000
+            );
+
+            $coverLetter->update([
+                'generation_status' => 'failed',
+                'generation_time_ms' => $generationTimeMs,
+                'completed_at' => now(),
+            ]);
+
+            Log::error('Cover letter generation failed', [
+                'cover_letter_id' => $coverLetter->cover_letter_id,
+                'user_id' => $user->user_id,
+                'scholarship_id' => $scholarship->scholarship_id,
+                'error' => $e->getMessage(),
+            ]);
+
+            return response()->json([
+                'message' => 'Cover letter generation failed.',
+                'cover_letter' => $coverLetter->fresh(),
+            ], 502);
+        }
     }
 
     /**
@@ -66,13 +136,19 @@ class CoverLetterController extends Controller
 
         $coverLetter->delete();
 
-        return response()->json(['message' => 'Cover letter deleted successfully.']);
+        return response()->json([
+            'message' => 'Cover letter deleted successfully.',
+        ]);
     }
 
-    private function authorizeOwner(CoverLetter $coverLetter): void
-    {
+    private function authorizeOwner(
+        CoverLetter $coverLetter
+    ): void {
         if ($coverLetter->user_id !== Auth::id()) {
-            abort(403, 'You do not have permission to access this cover letter.');
+            abort(
+                403,
+                'You do not have permission to access this cover letter.'
+            );
         }
     }
 }
