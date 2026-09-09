@@ -12,6 +12,7 @@ use App\Http\Controllers\CoverLetterController;
 use App\Http\Controllers\SavedApplicationController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\AdminActionLogController;
+use App\Http\Controllers\AdminUserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -92,6 +93,11 @@ Route::middleware(['auth:sanctum', 'admin'])->group(function () {
     // Admin Action Logs (read-only, audit trail)
     Route::get('/admin/action-logs', [AdminActionLogController::class, 'index']);
     Route::get('/admin/action-logs/{adminActionLog}', [AdminActionLogController::class, 'show']);
+    // User Management
+    Route::get('/admin/users', [AdminUserController::class, 'index']);
+    Route::get('/admin/users/{user}', [AdminUserController::class, 'show']);
+    Route::patch('/admin/users/{user}/status', [AdminUserController::class, 'updateStatus']);
+    Route::patch('/admin/users/{user}/role', [AdminUserController::class, 'updateRole']);
 });
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
