@@ -73,7 +73,7 @@ class CoverLetterController extends Controller
             'user_id' => $user->user_id,
             'scholarship_id' => $scholarship->scholarship_id,
             'content' => null,
-            'generation_status' => 'processing',
+            'generation_status' => 'pending',
             'requested_at' => now(),
         ]);
 

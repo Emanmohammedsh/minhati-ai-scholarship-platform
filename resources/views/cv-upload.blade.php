@@ -632,7 +632,10 @@
 
       showAlert(reviewAlert, 'Saved. Redirecting to your recommendations\u2026', 'success');
       setTimeout(function () {
-        window.location.href = DASHBOARD_URL;
+        // Pass a flag + anchor so the dashboard can auto-scroll and
+        // highlight the recommendations section instead of just landing
+        // on top of the page (see dashboard.blade.php changes).
+        window.location.href = DASHBOARD_URL + '?cv_updated=1#recommendations';
       }, 900);
     } catch (error) {
       showAlert(reviewAlert, 'Could not connect to the server. Make sure your Laravel backend is running.', 'error');
