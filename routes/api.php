@@ -16,7 +16,7 @@ use App\Http\Controllers\AdminUserController;
 use App\Http\Controllers\AdminDashboardController;
 use App\Http\Controllers\Api\JobRecommendationController;
 use App\Http\Controllers\Api\JobApplicationController;
-
+use App\Http\Controllers\Api\AdminJobController;
 /*
 |--------------------------------------------------------------------------
 | Public routes (no auth required)
@@ -111,12 +111,22 @@ Route::middleware(['auth:sanctum', 'admin'])->group(function () {
     Route::get('/admin/users/{user}', [AdminUserController::class, 'show']);
     Route::patch('/admin/users/{user}/status', [AdminUserController::class, 'updateStatus']);
     Route::patch('/admin/users/{user}/role', [AdminUserController::class, 'updateRole']);
-});
+    // Admin Job Management
+    Route::get('/admin/jobs', [AdminJobController::class, 'index']);
+    Route::post('/admin/jobs', [AdminJobController::class, 'store']);
+    Route::get('/admin/jobs/{job}', [AdminJobController::class, 'show']);
+    Route::put('/admin/jobs/{job}', [AdminJobController::class, 'update']);
+    Route::patch('/admin/jobs/{job}/status', [AdminJobController::class, 'updateStatus']);
+    Route::delete('/admin/jobs/{job}', [AdminJobController::class, 'destroy']);
+
+    });
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::get('/me', [AuthController::class, 'me']);
-});
+
+
+    });
 
