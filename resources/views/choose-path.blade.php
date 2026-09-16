@@ -1,11 +1,14 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html
+    lang="{{ app()->getLocale() }}"
+    dir="{{ app()->getLocale() === 'ar' ? 'rtl' : 'ltr' }}"
+>
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Jisr AI | اختر مسارك</title>
+    <title>Jisr AI | {{ __('common.choose_path_title') }}</title>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -16,29 +19,20 @@
     >
 
     <style>
-
         :root {
             --navy: #0A2E6B;
             --navy-dark: #061E48;
-
             --cyan: #00C6FF;
             --light-cyan: #87DFFF;
-
             --background: #F7FCFF;
             --light-blue: #EAF6FF;
-
             --white: #FFFFFF;
-
             --heading: #071D45;
             --text: #4B5563;
             --muted: #7B8794;
-
             --border: #DCEEF8;
-
-            --shadow:
-                0 20px 60px rgba(10,46,107,.10);
+            --shadow: 0 20px 60px rgba(10,46,107,.10);
         }
-
 
         * {
             margin: 0;
@@ -46,15 +40,11 @@
             box-sizing: border-box;
         }
 
-
         body {
             min-height: 100vh;
 
             font-family:
-                "Cairo",
-                Arial,
-                sans-serif;
-
+                {{ app()->getLocale() === 'ar' ? 'Arial, sans-serif' : '"Poppins", Arial, sans-serif' }};
             color: var(--text);
 
             background:
@@ -71,11 +61,9 @@
                 var(--background);
         }
 
-
         a {
             text-decoration: none;
         }
-
 
         /* ==========================
            TOP BAR
@@ -83,24 +71,17 @@
 
         .topbar {
             width: 100%;
-
-            padding:
-                18px clamp(22px, 5vw, 72px);
+            padding: 18px clamp(22px, 5vw, 72px);
 
             display: flex;
             justify-content: space-between;
             align-items: center;
 
-            background:
-                rgba(255,255,255,.88);
+            background: rgba(255,255,255,.88);
+            backdrop-filter: blur(15px);
 
-            backdrop-filter:
-                blur(15px);
-
-            border-bottom:
-                1px solid rgba(10,46,107,.08);
+            border-bottom: 1px solid rgba(10,46,107,.08);
         }
-
 
         .brand {
             display: flex;
@@ -108,97 +89,109 @@
             gap: 13px;
         }
 
-
         .brand img {
             width: 52px;
             height: 52px;
-
             object-fit: contain;
-
             border-radius: 13px;
         }
-
 
         .brand-info {
             line-height: 1.25;
         }
 
-
         .brand-info strong {
             display: block;
 
-            font-family:
-                "Poppins",
-                sans-serif;
-
+            font-family: "Poppins", sans-serif;
             font-size: 18px;
 
-            color:
-                var(--navy);
+            color: var(--navy);
         }
-
 
         .brand-info span {
+            font-family: "Poppins", sans-serif;
             font-size: 11px;
-
-            color:
-                var(--muted);
+            color: var(--muted);
         }
 
+        /* ==========================
+           TOP ACTIONS
+        ========================== */
+
+        .top-actions {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .language-switcher {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+
+            direction: ltr;
+
+            background: var(--light-blue);
+            padding: 7px 12px;
+
+            border: 1px solid rgba(10,46,107,.06);
+            border-radius: 10px;
+
+            font-family: "Poppins", sans-serif;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .language-switcher a {
+            color: var(--muted);
+            transition: .2s;
+        }
+
+        .language-switcher a:hover {
+            color: var(--cyan);
+        }
+
+        .language-switcher a.active {
+            color: var(--navy);
+            font-weight: 700;
+        }
+
+        .language-switcher span {
+            color: #BCD2DF;
+        }
 
         .logout-btn {
             border: 0;
+            background: transparent;
 
-            background:
-                transparent;
+            font-family: inherit;
+            font-size: 13px;
 
-            font-family:
-                inherit;
+            color: var(--muted);
 
-            font-size:
-                13px;
+            cursor: pointer;
 
-            color:
-                var(--muted);
+            padding: 10px 15px;
+            border-radius: 10px;
 
-            cursor:
-                pointer;
-
-            padding:
-                10px 15px;
-
-            border-radius:
-                10px;
-
-            transition:
-                .2s;
+            transition: .2s;
         }
-
 
         .logout-btn:hover {
-            background:
-                var(--light-blue);
-
-            color:
-                var(--navy);
+            background: var(--light-blue);
+            color: var(--navy);
         }
-
 
         /* ==========================
            PAGE
         ========================== */
 
         .page {
-            width:
-                min(1180px, calc(100% - 40px));
-
-            margin:
-                0 auto;
-
-            padding:
-                55px 0 65px;
+            width: min(1180px, calc(100% - 40px));
+            margin: 0 auto;
+            padding: 55px 0 65px;
         }
-
 
         /* ==========================
            HERO
@@ -206,151 +199,87 @@
 
         .intro {
             text-align: center;
-
-            max-width:
-                760px;
-
-            margin:
-                0 auto 42px;
+            max-width: 760px;
+            margin: 0 auto 42px;
         }
-
 
         .intro-badge {
-            display:
-                inline-flex;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
 
-            align-items:
-                center;
+            direction: ltr;
 
-            gap:
-                8px;
+            background: var(--light-blue);
+            color: var(--navy);
 
-            background:
-                var(--light-blue);
+            padding: 8px 15px;
+            border-radius: 999px;
 
-            color:
-                var(--navy);
+            font-family: "Poppins", sans-serif;
+            font-size: 12px;
+            font-weight: 700;
 
-            padding:
-                8px 15px;
-
-            border-radius:
-                999px;
-
-            font-size:
-                12px;
-
-            font-weight:
-                700;
-
-            margin-bottom:
-                18px;
+            margin-bottom: 18px;
         }
 
+        .intro-badge .dot {
+            width: 8px;
+            height: 8px;
 
-        .intro-badge span {
-            width:
-                8px;
+            border-radius: 50%;
 
-            height:
-                8px;
-
-            border-radius:
-                50%;
-
-            background:
-                var(--cyan);
-
-            box-shadow:
-                0 0 14px rgba(0,198,255,.7);
+            background: var(--cyan);
+            box-shadow: 0 0 14px rgba(0,198,255,.7);
         }
-
 
         .intro h1 {
-            color:
-                var(--heading);
+            color: var(--heading);
 
-            font-size:
-                clamp(32px, 5vw, 48px);
+            font-size: clamp(32px, 5vw, 48px);
 
-            margin-bottom:
-                13px;
-
-            line-height:
-                1.3;
+            margin-bottom: 13px;
+            line-height: 1.3;
         }
-
-
-        .intro h1 b {
-            color:
-                var(--cyan);
-        }
-
 
         .intro p {
-            color:
-                var(--muted);
+            color: var(--muted);
 
-            font-size:
-                15px;
-
-            line-height:
-                1.9;
+            font-size: 15px;
+            line-height: 1.9;
         }
-
 
         .user-welcome {
-            margin-top:
-                14px;
+            margin-top: 14px;
 
-            font-size:
-                13px;
-
-            color:
-                var(--navy);
+            font-size: 13px;
+            color: var(--navy);
         }
-
 
         /* ==========================
            PATH GRID
         ========================== */
 
         .paths {
-            display:
-                grid;
-
-            grid-template-columns:
-                repeat(2, 1fr);
-
-            gap:
-                25px;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 25px;
         }
 
-
         .path-card {
-            position:
-                relative;
+            position: relative;
+            overflow: hidden;
 
-            overflow:
-                hidden;
+            min-height: 500px;
 
-            min-height:
-                500px;
+            background: rgba(255,255,255,.96);
 
-            background:
-                rgba(255,255,255,.96);
+            border: 1px solid var(--border);
+            border-radius: 28px;
 
-            border:
-                1px solid var(--border);
+            padding: 35px;
 
-            border-radius:
-                28px;
-
-            padding:
-                35px;
-
-            box-shadow:
-                var(--shadow);
+            box-shadow: var(--shadow);
 
             transition:
                 transform .3s ease,
@@ -358,10 +287,8 @@
                 border .3s ease;
         }
 
-
         .path-card:hover {
-            transform:
-                translateY(-8px);
+            transform: translateY(-8px);
 
             box-shadow:
                 0 30px 75px rgba(10,46,107,.16);
@@ -370,82 +297,48 @@
                 rgba(0,198,255,.40);
         }
 
-
         .path-card::after {
-            content:
-                "";
+            content: "";
 
-            position:
-                absolute;
+            position: absolute;
 
-            width:
-                230px;
+            width: 230px;
+            height: 230px;
 
-            height:
-                230px;
+            border-radius: 50%;
 
-            border-radius:
-                50%;
-
-            left:
-                -110px;
-
-            bottom:
-                -130px;
+            inset-inline-start: -110px;
+            bottom: -130px;
 
             background:
                 rgba(0,198,255,.06);
         }
 
-
         .card-top {
             display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
 
-            justify-content:
-                space-between;
-
-            align-items:
-                flex-start;
-
-            margin-bottom:
-                26px;
+            margin-bottom: 26px;
         }
-
 
         .path-number {
-            color:
-                #A8B6C2;
+            color: #A8B6C2;
 
-            font-family:
-                "Poppins",
-                sans-serif;
-
-            font-size:
-                13px;
-
-            font-weight:
-                600;
+            font-family: "Poppins", sans-serif;
+            font-size: 13px;
+            font-weight: 600;
         }
 
-
         .icon-box {
-            width:
-                67px;
+            width: 67px;
+            height: 67px;
 
-            height:
-                67px;
+            border-radius: 20px;
 
-            border-radius:
-                20px;
-
-            display:
-                flex;
-
-            align-items:
-                center;
-
-            justify-content:
-                center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
 
             background:
                 linear-gradient(
@@ -454,206 +347,123 @@
                     #D5F4FF
                 );
 
-            color:
-                var(--navy);
+            color: var(--navy);
         }
-
 
         .icon-box svg {
-            width:
-                31px;
+            width: 31px;
+            height: 31px;
 
-            height:
-                31px;
-
-            stroke:
-                currentColor;
-
-            fill:
-                none;
-
-            stroke-width:
-                1.8;
+            stroke: currentColor;
+            fill: none;
+            stroke-width: 1.8;
         }
-
 
         .path-label {
-            display:
-                inline-block;
+            display: inline-block;
 
-            margin-bottom:
-                10px;
+            direction: ltr;
 
-            color:
-                var(--cyan);
+            margin-bottom: 10px;
 
-            font-size:
-                12px;
+            color: var(--cyan);
 
-            font-family:
-                "Poppins",
-                sans-serif;
+            font-family: "Poppins", sans-serif;
+            font-size: 12px;
+            font-weight: 700;
 
-            font-weight:
-                700;
-
-            letter-spacing:
-                .5px;
+            letter-spacing: .5px;
         }
-
 
         .path-card h2 {
-            color:
-                var(--heading);
+            color: var(--heading);
 
-            font-size:
-                27px;
+            font-size: 27px;
 
-            margin-bottom:
-                5px;
+            margin-bottom: 5px;
         }
-
 
         .path-card h3 {
-            color:
-                var(--navy);
+            color: var(--navy);
 
-            font-size:
-                15px;
+            font-size: 15px;
 
-            margin-bottom:
-                17px;
+            margin-bottom: 17px;
         }
-
 
         .description {
-            color:
-                var(--muted);
+            color: var(--muted);
 
-            font-size:
-                13.5px;
+            font-size: 13.5px;
+            line-height: 1.9;
 
-            line-height:
-                1.9;
+            min-height: 80px;
 
-            min-height:
-                80px;
-
-            margin-bottom:
-                23px;
+            margin-bottom: 23px;
         }
-
 
         /* ==========================
            FEATURES
         ========================== */
 
         .features {
-            display:
-                grid;
+            display: grid;
+            gap: 12px;
 
-            gap:
-                12px;
-
-            margin-bottom:
-                30px;
+            margin-bottom: 30px;
         }
-
 
         .feature {
-            display:
-                flex;
+            display: flex;
+            align-items: center;
+            gap: 11px;
 
-            align-items:
-                center;
-
-            gap:
-                11px;
-
-            font-size:
-                13px;
-
-            color:
-                #53616D;
+            font-size: 13px;
+            color: #53616D;
         }
-
 
         .check {
-            min-width:
-                25px;
+            flex: 0 0 25px;
 
-            width:
-                25px;
+            width: 25px;
+            height: 25px;
 
-            height:
-                25px;
+            border-radius: 8px;
 
-            border-radius:
-                8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
 
-            display:
-                flex;
+            background: var(--light-blue);
+            color: var(--navy);
 
-            align-items:
-                center;
-
-            justify-content:
-                center;
-
-            background:
-                var(--light-blue);
-
-            color:
-                var(--navy);
-
-            font-size:
-                12px;
-
-            font-weight:
-                bold;
+            font-family: Arial, sans-serif;
+            font-size: 12px;
+            font-weight: bold;
         }
 
-
         /* ==========================
-           BUTTON
+           BUTTONS
         ========================== */
 
         .path-btn {
-            position:
-                relative;
+            position: relative;
+            z-index: 2;
 
-            z-index:
-                2;
+            width: 100%;
+            min-height: 54px;
 
-            width:
-                100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
 
-            min-height:
-                54px;
+            border-radius: 14px;
 
-            display:
-                flex;
+            font-size: 14px;
+            font-weight: 700;
 
-            align-items:
-                center;
-
-            justify-content:
-                center;
-
-            gap:
-                10px;
-
-            border-radius:
-                14px;
-
-            font-size:
-                14px;
-
-            font-weight:
-                700;
-
-            transition:
-                .25s;
+            transition: .25s;
 
             background:
                 linear-gradient(
@@ -662,13 +472,11 @@
                     #0B5495
                 );
 
-            color:
-                white;
+            color: white;
 
             box-shadow:
                 0 12px 28px rgba(10,46,107,.16);
         }
-
 
         .career .path-btn {
             background:
@@ -682,23 +490,24 @@
                 0 12px 28px rgba(0,198,255,.20);
         }
 
-
         .path-btn:hover {
-            transform:
-                translateY(-2px);
+            transform: translateY(-2px);
 
             box-shadow:
                 0 17px 35px rgba(10,46,107,.23);
         }
 
+        .arrow {
+            direction: ltr;
+            display: inline-block;
+        }
 
         /* ==========================
            BOTTOM MESSAGE
         ========================== */
 
         .bottom-message {
-            margin-top:
-                35px;
+            margin-top: 35px;
 
             background:
                 linear-gradient(
@@ -707,74 +516,62 @@
                     var(--navy)
                 );
 
-            color:
-                white;
+            color: white;
 
-            border-radius:
-                22px;
+            border-radius: 22px;
 
-            padding:
-                25px 30px;
+            padding: 25px 30px;
 
-            display:
-                flex;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
 
-            justify-content:
-                space-between;
-
-            align-items:
-                center;
-
-            gap:
-                20px;
+            gap: 20px;
         }
-
 
         .bottom-message strong {
-            display:
-                block;
+            display: block;
 
-            font-size:
-                17px;
+            font-size: 17px;
 
-            margin-bottom:
-                5px;
+            margin-bottom: 5px;
         }
-
 
         .bottom-message p {
-            color:
-                #C9E4F5;
+            color: #C9E4F5;
 
-            font-size:
-                12px;
-
-            line-height:
-                1.7;
+            font-size: 12px;
+            line-height: 1.7;
         }
-
 
         .bottom-tag {
-            direction:
-                ltr;
+            direction: ltr;
 
-            font-family:
-                "Poppins",
-                sans-serif;
+            font-family: "Poppins", sans-serif;
 
-            color:
-                var(--light-cyan);
+            color: var(--light-cyan);
 
-            white-space:
-                nowrap;
+            white-space: nowrap;
 
-            font-size:
-                12px;
-
-            letter-spacing:
-                1px;
+            font-size: 12px;
+            letter-spacing: 1px;
         }
 
+        /* ==========================
+           ENGLISH
+        ========================== */
+
+        html[dir="ltr"] .feature {
+            text-align: left;
+        }
+
+        html[dir="ltr"] .path-card {
+            text-align: left;
+        }
+
+        html[dir="rtl"] .path-card {
+            text-align: right;
+        }
 
         /* ==========================
            RESPONSIVE
@@ -783,69 +580,58 @@
         @media(max-width: 800px) {
 
             .paths {
-                grid-template-columns:
-                    1fr;
+                grid-template-columns: 1fr;
             }
-
 
             .path-card {
-                min-height:
-                    auto;
+                min-height: auto;
             }
-
 
             .description {
-                min-height:
-                    auto;
+                min-height: auto;
             }
-
 
             .bottom-message {
-                flex-direction:
-                    column;
-
-                text-align:
-                    center;
+                flex-direction: column;
+                text-align: center;
             }
-
         }
-
 
         @media(max-width: 550px) {
 
             .topbar {
-                padding:
-                    14px 18px;
+                padding: 14px 18px;
             }
-
 
             .brand-info span {
-                display:
-                    none;
+                display: none;
             }
 
+            .top-actions {
+                gap: 5px;
+            }
+
+            .language-switcher {
+                padding: 6px 9px;
+            }
+
+            .logout-btn {
+                padding: 8px;
+                font-size: 11px;
+            }
 
             .page {
-                width:
-                    calc(100% - 26px);
-
-                padding-top:
-                    35px;
+                width: calc(100% - 26px);
+                padding-top: 35px;
             }
-
 
             .path-card {
-                padding:
-                    27px 23px;
-
-                border-radius:
-                    22px;
+                padding: 27px 23px;
+                border-radius: 22px;
             }
-
         }
 
     </style>
-
 </head>
 
 
@@ -853,6 +639,8 @@
 
 
 <header class="topbar">
+
+    <!-- BRAND -->
 
     <div class="brand">
 
@@ -876,12 +664,39 @@
     </div>
 
 
-    <button
-        class="logout-btn"
-        onclick="logout()"
-    >
-        تسجيل الخروج
-    </button>
+    <!-- ACTIONS -->
+
+    <div class="top-actions">
+
+        <div class="language-switcher">
+
+            <a
+                href="{{ route('language.switch', 'ar') }}"
+                class="{{ app()->getLocale() === 'ar' ? 'active' : '' }}"
+            >
+                AR
+            </a>
+
+            <span>|</span>
+
+            <a
+                href="{{ route('language.switch', 'en') }}"
+                class="{{ app()->getLocale() === 'en' ? 'active' : '' }}"
+            >
+                EN
+            </a>
+
+        </div>
+
+
+        <button
+            class="logout-btn"
+            onclick="logout()"
+        >
+            {{ __('common.logout') }}
+        </button>
+
+    </div>
 
 </header>
 
@@ -890,13 +705,15 @@
 <main class="page">
 
 
-    <!-- INTRO -->
+    <!-- ==========================
+         INTRO
+    ========================== -->
 
     <section class="intro">
 
         <div class="intro-badge">
 
-            <span></span>
+            <span class="dot"></span>
 
             Jisr AI · Your Opportunity Journey
 
@@ -904,19 +721,12 @@
 
 
         <h1>
-
-            أي طريق تريد أن تبدأ منه
-            <b>اليوم؟</b>
-
+            {{ __('common.choose_path_heading') }}
         </h1>
 
 
         <p>
-
-            جسر يربط ملفك ومهاراتك ومؤهلاتك بالفرص المناسبة لك.
-            اختر مسارك الآن، ويمكنك الانتقال بين التعليم والعمل
-            في أي وقت.
-
+            {{ __('common.choose_path_description') }}
         </p>
 
 
@@ -924,14 +734,16 @@
             class="user-welcome"
             id="userWelcome"
         >
-            مرحباً بك في Jisr AI
+            {{ __('common.welcome') }}
         </div>
 
     </section>
 
 
 
-    <!-- PATHS -->
+    <!-- ==========================
+         PATHS
+    ========================== -->
 
     <section class="paths">
 
@@ -941,6 +753,7 @@
         ========================== -->
 
         <article class="path-card education">
+
 
             <div class="card-top">
 
@@ -974,21 +787,17 @@
 
 
             <h2>
-                مسار التعليم
+                {{ __('common.education_path') }}
             </h2>
 
 
             <h3>
-                اكتشف المنح المناسبة لملفك
+                {{ __('common.education_heading') }}
             </h3>
 
 
             <p class="description">
-
-                استخدم ملفك الأكاديمي وسيرتك الذاتية
-                للوصول إلى منح دراسية تتناسب مع تخصصك،
-                مستواك، مؤهلاتك واهتماماتك.
-
+                {{ __('common.education_description') }}
             </p>
 
 
@@ -996,36 +805,44 @@
 
                 <div class="feature">
 
-                    <span class="check">✓</span>
+                    <span class="check">
+                        ✓
+                    </span>
 
-                    مطابقة ذكية مع المنح الدراسية
-
-                </div>
-
-
-                <div class="feature">
-
-                    <span class="check">✓</span>
-
-                    Match Score وتفسير أسباب المطابقة
+                    {{ __('common.scholarship_matching') }}
 
                 </div>
 
 
                 <div class="feature">
 
-                    <span class="check">✓</span>
+                    <span class="check">
+                        ✓
+                    </span>
 
-                    Gap Analysis للمتطلبات الناقصة
+                    {{ __('common.match_explanation') }}
 
                 </div>
 
 
                 <div class="feature">
 
-                    <span class="check">✓</span>
+                    <span class="check">
+                        ✓
+                    </span>
 
-                    تجهيز ومتابعة طلبات التقديم
+                    {{ __('common.gap_analysis') }}
+
+                </div>
+
+
+                <div class="feature">
+
+                    <span class="check">
+                        ✓
+                    </span>
+
+                    {{ __('common.application_tracking') }}
 
                 </div>
 
@@ -1037,10 +854,10 @@
                 class="path-btn"
             >
 
-                ابدأ مسار التعليم
+                {{ __('common.start_education') }}
 
-                <span>
-                    ←
+                <span class="arrow">
+                    →
                 </span>
 
             </a>
@@ -1054,6 +871,7 @@
         ========================== -->
 
         <article class="path-card career">
+
 
             <div class="card-top">
 
@@ -1095,21 +913,17 @@
 
 
             <h2>
-                مسار العمل
+                {{ __('common.career_path') }}
             </h2>
 
 
             <h3>
-                حوّل مهاراتك إلى فرص مهنية
+                {{ __('common.career_heading') }}
             </h3>
 
 
             <p class="description">
-
-                اكتشف الوظائف التي تتوافق مع مهاراتك
-                وتعليمك ومؤهلاتك، واعرف نقاط قوتك
-                والمهارات التي تحتاج إلى تطويرها.
-
+                {{ __('common.career_description') }}
             </p>
 
 
@@ -1117,36 +931,44 @@
 
                 <div class="feature">
 
-                    <span class="check">✓</span>
+                    <span class="check">
+                        ✓
+                    </span>
 
-                    مطابقة الوظائف مع الملف والسيرة الذاتية
-
-                </div>
-
-
-                <div class="feature">
-
-                    <span class="check">✓</span>
-
-                    AI Job Matching
+                    {{ __('common.job_matching_profile') }}
 
                 </div>
 
 
                 <div class="feature">
 
-                    <span class="check">✓</span>
+                    <span class="check">
+                        ✓
+                    </span>
 
-                    Skill Gap Analysis
+                    {{ __('common.ai_job_matching') }}
 
                 </div>
 
 
                 <div class="feature">
 
-                    <span class="check">✓</span>
+                    <span class="check">
+                        ✓
+                    </span>
 
-                    حفظ ومتابعة طلبات العمل
+                    {{ __('common.skill_gap_analysis') }}
+
+                </div>
+
+
+                <div class="feature">
+
+                    <span class="check">
+                        ✓
+                    </span>
+
+                    {{ __('common.job_application_tracking') }}
 
                 </div>
 
@@ -1158,10 +980,10 @@
                 class="path-btn"
             >
 
-                ابدأ المسار المهني
+                {{ __('common.start_career') }}
 
-                <span>
-                    ←
+                <span class="arrow">
+                    →
                 </span>
 
             </a>
@@ -1173,19 +995,20 @@
 
 
 
-    <!-- BOTTOM -->
+    <!-- ==========================
+         BOTTOM MESSAGE
+    ========================== -->
 
     <section class="bottom-message">
 
         <div>
 
             <strong>
-                جسر واحد. فرص أكثر.
+                {{ __('common.one_bridge_more_opportunities') }}
             </strong>
 
             <p>
-                من التعليم إلى سوق العمل، نساعد الشباب على
-                الوصول إلى الفرص التي تناسب إمكاناتهم.
+                {{ __('common.brand_message') }}
             </p>
 
         </div>
@@ -1211,30 +1034,24 @@
     */
 
     const token =
-        localStorage.getItem(
-            'auth_token'
-        );
+        localStorage.getItem('auth_token');
 
 
     if (!token) {
 
-        window.location.href =
-            '/login';
+        window.location.href = '/login';
 
     }
 
 
-
     /*
     |--------------------------------------------------------------------------
-    | Show User Name
+    | User Information
     |--------------------------------------------------------------------------
     */
 
     const storedUser =
-        localStorage.getItem(
-            'auth_user'
-        );
+        localStorage.getItem('auth_user');
 
 
     if (storedUser) {
@@ -1242,9 +1059,7 @@
         try {
 
             const user =
-                JSON.parse(
-                    storedUser
-                );
+                JSON.parse(storedUser);
 
 
             if (
@@ -1252,16 +1067,23 @@
                 user.full_name
             ) {
 
+                const welcomeTemplate =
+                    @json(__('common.welcome_user', [
+                        'name' => '__USER_NAME__'
+                    ]));
+
+
                 document.getElementById(
                     'userWelcome'
                 ).textContent =
-                    `مرحباً ${user.full_name}، اختر المسار الذي يناسب هدفك`;
+                    welcomeTemplate.replace(
+                        '__USER_NAME__',
+                        user.full_name
+                    );
 
             }
 
-        }
-
-        catch (error) {
+        } catch (error) {
 
             console.error(
                 'Could not read user information.',
@@ -1271,7 +1093,6 @@
         }
 
     }
-
 
 
     /*
@@ -1287,30 +1108,18 @@
             await fetch(
                 '/api/logout',
                 {
-
-                    method:
-                        'POST',
+                    method: 'POST',
 
                     headers: {
-
-                        'Accept':
-                            'application/json',
-
-                        'Authorization':
-                            `Bearer ${token}`
-
+                        'Accept': 'application/json',
+                        'Authorization': `Bearer ${token}`
                     }
-
                 }
             );
 
-        }
+        } catch (error) {
 
-        catch (error) {
-
-            console.error(
-                error
-            );
+            console.error(error);
 
         }
 

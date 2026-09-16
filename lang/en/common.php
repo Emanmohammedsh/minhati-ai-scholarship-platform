@@ -1,0 +1,198 @@
+<?php
+
+return [
+    // General
+    'brand' => 'Jisr AI',
+    'logout' => 'Logout',
+    'arabic' => 'العربية',
+    'english' => 'English',
+
+    // Choose Path
+    'choose_path_title' => 'Choose Your Path',
+    'choose_path_heading' => 'Which path would you like to start today?',
+    'choose_path_description' => 'Jisr connects your profile, skills, and qualifications with opportunities that fit you. Choose your path now, and switch between education and career anytime.',
+    'welcome' => 'Welcome to Jisr AI',
+    'welcome_user' => 'Welcome :name, choose the path that matches your goal.',
+
+    // Education
+    'education_path' => 'Education Path',
+    'education_heading' => 'Discover scholarships that match your profile',
+    'education_description' => 'Use your academic profile and CV to discover scholarships that match your field, education level, qualifications, and interests.',
+    'scholarship_matching' => 'Smart scholarship matching',
+    'match_explanation' => 'Match Score with clear match explanations',
+    'gap_analysis' => 'Gap Analysis for missing requirements',
+    'application_tracking' => 'Prepare and track your applications',
+    'start_education' => 'Start Education Path',
+
+    // Career
+    'career_path' => 'Career Path',
+    'career_heading' => 'Turn your skills into career opportunities',
+    'career_description' => 'Discover jobs that match your skills, education, and qualifications, and identify your strengths and the skills you need to develop.',
+    'job_matching_profile' => 'Job matching based on your profile and CV',
+    'ai_job_matching' => 'AI Job Matching',
+    'skill_gap_analysis' => 'Skill Gap Analysis',
+    'job_application_tracking' => 'Save and track job applications',
+    'start_career' => 'Start Career Path',
+
+    // Brand message
+    'one_bridge_more_opportunities' => 'One Bridge. More Opportunities.',
+    'brand_message' => 'From education to employment, we help young people connect with opportunities that match their potential.',
+    // Career Dashboard
+    'switch_path' => 'Switch Path',
+    'profile' => 'Profile',
+    'my_cv' => 'My CV',
+
+    'career_badge' => 'Jisr AI Career Path',
+    'career_hero_title' => 'Turn your skills into opportunities.',
+    'career_hero_description' => 'Jisr AI helps graduates and job seekers discover career opportunities aligned with their skills, qualifications, education and experience. Soon, your profile and CV will be intelligently matched with job requirements to help you understand where you fit — and what you can improve.',
+    'complete_profile' => 'Complete My Profile',
+    'review_cv' => 'Review My CV',
+
+    'job_matches' => 'Job Matches',
+    'applications' => 'Applications',
+    'cv_status' => 'CV Status',
+    'connected' => 'Connected',
+    'profile_label' => 'profile',
+    'career_path_status' => 'Career Path',
+    'building' => 'Building',
+    'phase' => 'phase',
+
+    'your_journey' => 'YOUR JOURNEY',
+    'journey_title' => 'From potential to opportunity',
+    'journey_description' => 'One guided path to discover opportunities, understand your readiness and manage your career applications.',
+
+    'discover_jobs' => 'Discover Jobs',
+    'discover_jobs_description' => 'Explore opportunities relevant to your education, skills, interests and professional direction.',
+
+    'job_matching' => 'AI Job Matching',
+    'job_matching_description' => 'Compare your profile and CV with structured job requirements to find relevant opportunities.',
+
+    'skill_gap' => 'Skill Gap Analysis',
+    'skill_gap_description' => 'Understand which job requirements you already meet and identify skills that may need improvement.',
+
+    'track_applications' => 'Track Applications',
+    'track_applications_description' => 'Save opportunities and monitor your application journey from preparation to submission.',
+
+    'career_development_title' => 'Career Path is being built 🚀',
+    'career_development_description' => 'We are expanding Jisr AI from scholarship matching into a complete education-to-employment platform. Your existing profile and CV will become the foundation for job matching, skill-gap analysis and career readiness.',
+    'career_module' => 'Career Module',
+    'in_development' => 'In Development',
+
+    'more_opportunities' => 'More Opportunities Ahead.',
+        // Scholarship Dashboard
+    'student_dashboard' => 'Education Path',
+    'welcome_back' => 'Welcome back, :name',
+    'education_intro' => 'Discover the right opportunities, understand your match, and keep your scholarship journey moving forward.',
+    'upload_cv' => 'Upload CV',
+    'refresh_matches' => 'Refresh AI Matches',
+
+    'ai_scholarship_matches' => 'AI Scholarship Matches',
+    'matches_note' => 'Opportunities matched to your profile',
+    'my_applications' => 'My Applications',
+    'applications_note' => 'Saved and tracked applications',
+    'profile_completion' => 'Profile Completion',
+    'profile_completion_note' => 'Based on your academic profile',
+    'upcoming_deadline' => 'Upcoming Deadline',
+    'deadline_note' => 'From your tracked applications',
+    'no_upcoming_deadline' => 'No upcoming tracked deadline',
+
+    'best_opportunity' => 'Your Best Opportunity',
+    'best_opportunity_note' => 'Highest result from the current matching engine',
+    'ai_match' => 'AI MATCH',
+
+    'scholarship_journey' => 'Your Journey',
+    'application_progress' => 'Application progress',
+    'build_profile' => 'Build Profile',
+    'build_profile_note' => 'Academic background and interests',
+    'discover_matches' => 'Discover Matches',
+    'discover_matches_note' => 'AI-powered scholarship matching',
+    'prepare_application' => 'Prepare Application',
+    'prepare_application_note' => 'CV and cover letter preparation',
+    'apply_track' => 'Apply & Track',
+    'apply_track_note' => 'Follow application progress',
+
+    'top_ai_matches' => 'Top AI Matches',
+    'top_matches_note' => 'Scholarships ranked using your current profile',
+    'matching_engine' => 'MATCHING ENGINE',
+
+    'applications_section_note' => 'Keep track of opportunities you are pursuing',
+    'quick_actions' => 'Quick Actions',
+    'quick_actions_note' => 'Continue your scholarship journey',
+    'update_profile' => 'Update Profile',
+    'update_profile_note' => 'Keep your academic information accurate.',
+    'manage_cv' => 'Manage CV',
+    'manage_cv_note' => 'Upload your CV and review AI extraction.',
+    'generate_matches' => 'Generate Matches',
+    'generate_matches_note' => 'Re-run scholarship matching using your latest data.',
+
+    'why_match' => 'Why this match?',
+    'hide_analysis' => 'Hide analysis',
+    'analyzing' => 'Analyzing...',
+    'matched_criteria' => 'Matched Criteria',
+    'missing_criteria' => 'Missing / Unmet Criteria',
+    'analysis_notes' => 'Analysis Notes',
+    'gaps' => 'Gaps',
+    'matched' => 'matched',
+    'gap_count' => 'gaps',
+    'analysis' => 'Analysis',
+    'cv_connected' => 'Connected',
+    'cv_not_connected' => 'Not connected',
+    'mandatory' => 'Mandatory',
+    'optional' => 'Optional',
+    'next_step' => 'Next step',
+    'no_unmet_criteria' => 'No unmet stored scholarship criteria.',
+
+    'no_matches_generated' => 'No matches generated yet',
+    'no_matches_generated_note' => 'Generate your scholarship recommendations to see your strongest opportunity.',
+    'no_ai_matches' => 'No AI matches available',
+    'no_ai_matches_note' => 'Use Refresh AI Matches to generate recommendations from your current profile.',
+    'no_saved_applications' => 'No saved applications yet',
+    'no_saved_applications_note' => 'When you save a scholarship, its application progress will appear here.',
+
+    'preparing_dashboard' => 'Preparing your scholarship dashboard...',
+    'dashboard_load_failed' => 'Dashboard could not be loaded',
+    'scholarship_opportunity' => 'Scholarship Opportunity',
+    'scholarship' => 'Scholarship',
+    'provider_not_specified' => 'Provider not specified',
+    'international' => 'International',
+    'international_not_specified' => 'International / Not specified',
+    'description_not_available' => 'No scholarship description is available.',
+    'not_specified' => 'Not specified',
+    'deadline' => 'Deadline',
+    'updated' => 'Updated',
+    'today' => 'Today',
+    'one_day' => '1 day',
+    'days' => ':count days',
+    // Career Matching
+    'refresh_job_matches' => 'Refresh Job Matches',
+    'top_job_matches' => 'Top Job Matches',
+    'top_job_matches_note' => 'Jobs ranked by how their requirements match your profile and CV',
+    'job_matching_engine' => 'JOB MATCHING ENGINE',
+
+    'match_score' => 'Match Score',
+    'company' => 'Company',
+    'location' => 'Location',
+    'employment_type' => 'Employment Type',
+    'work_mode' => 'Work Mode',
+
+    'matched_requirements' => 'Matched Requirements',
+    'missing_requirements' => 'Missing Requirements',
+    'total_requirements' => 'Total Requirements',
+
+    'skill_gaps' => 'Skill Gaps',
+    'no_skill_gaps' => 'No unmet requirements were found for this job.',
+    'cv_connected_job' => 'CV connected to this match',
+
+    'no_job_matches' => 'No job matches available',
+    'no_job_matches_note' => 'Refresh your matches to generate job recommendations from your profile and CV.',
+
+    'generating_job_matches' => 'Refreshing job matches...',
+    'job_matches_updated' => 'Job matches updated successfully',
+    'job_matches_failed' => 'Job matches could not be updated',
+    'job_dashboard_load_failed' => 'Career dashboard data could not be loaded',
+
+    'view_match_analysis' => 'Why this match?',
+    'hide_match_analysis' => 'Hide analysis',
+    'loading_match_analysis' => 'Loading analysis...',
+ 
+];

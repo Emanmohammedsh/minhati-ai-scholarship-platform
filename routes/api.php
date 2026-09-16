@@ -13,6 +13,8 @@ use App\Http\Controllers\SavedApplicationController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\AdminActionLogController;
 use App\Http\Controllers\AdminUserController;
+use App\Http\Controllers\AdminDashboardController;
+use App\Http\Controllers\Api\JobRecommendationController;
 
 /*
 |--------------------------------------------------------------------------
@@ -54,7 +56,11 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/recommendations/generate', [RecommendationController::class, 'generate']);
     Route::delete('/recommendations/{recommendation}', [RecommendationController::class, 'destroy']);
     Route::get('/recommendations/{recommendation}/criteria-matches', [RecommendationCriteriaMatchController::class, 'index']);
-
+    Route::get('/recommendations/{recommendation}/gap-analysis', [RecommendationController::class, 'gapAnalysis']);
+   // Job Recommendations - Career Path
+    Route::get('/job-recommendations',[JobRecommendationController::class, 'index']);
+    Route::post('/job-recommendations/generate',[JobRecommendationController::class, 'generate']);
+    Route::get('/job-recommendations/{recommendation}/gap-analysis',[JobRecommendationController::class, 'gapAnalysis']);
     // Cover Letters
     Route::get('/cover-letters', [CoverLetterController::class, 'index']);
     Route::get('/cover-letters/{coverLetter}', [CoverLetterController::class, 'show']);
@@ -93,6 +99,7 @@ Route::middleware(['auth:sanctum', 'admin'])->group(function () {
     // Admin Action Logs (read-only, audit trail)
     Route::get('/admin/action-logs', [AdminActionLogController::class, 'index']);
     Route::get('/admin/action-logs/{adminActionLog}', [AdminActionLogController::class, 'show']);
+    Route::get('/admin/dashboard-stats',[AdminDashboardController::class, 'stats']);
     // User Management
     Route::get('/admin/users', [AdminUserController::class, 'index']);
     Route::get('/admin/users/{user}', [AdminUserController::class, 'show']);
