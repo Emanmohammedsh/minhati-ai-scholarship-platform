@@ -1286,6 +1286,21 @@
             cursor: pointer;
         }
 
+
+        .job-actions { display:flex; flex-wrap:wrap; gap:9px; margin-top:4px; align-items:center; }
+        .save-job-btn,.apply-job-btn,.remove-job-btn,.status-select {
+            border-radius:10px; font-family:inherit; font-size:12px; font-weight:600;
+        }
+        .save-job-btn,.apply-job-btn,.remove-job-btn { padding:10px 15px; cursor:pointer; }
+        .save-job-btn { border:1px solid #BCEBDE; color:#08735E; background:#ECFBF6; }
+        .apply-job-btn { border:none; color:white; background:var(--success); }
+        .remove-job-btn { border:1px solid #F2CACA; color:#9E3030; background:#FFF3F3; }
+        .status-select { padding:9px 11px; color:var(--primary); background:#F6FBFE; border:1px solid var(--border); }
+        .application-state {
+            padding:7px 10px; border-radius:999px; font-size:11px; font-weight:600;
+            color:#08735E; background:#ECFBF6; border:1px solid #BCEBDE;
+        }
+
         .analysis-panel {
             display: none;
             margin-top: 18px;
@@ -1772,7 +1787,7 @@
                 {{ __('common.applications') }}
             </div>
 
-            <div class="stat-value">
+            <div class="stat-value" id="applicationsCount">
                 —
             </div>
 
@@ -2173,8 +2188,22 @@
         generating: @json(__('common.generating_job_matches')),
         updated: @json(__('common.job_matches_updated')),
         updateFailed: @json(__('common.job_matches_failed')),
-        loadFailed: @json(__('common.job_dashboard_load_failed'))
+        loadFailed: @json(__('common.job_dashboard_load_failed')),
+        saveJob: document.documentElement.lang === 'ar' ? 'حفظ الوظيفة' : 'Save Job',
+        saved: document.documentElement.lang === 'ar' ? 'محفوظة' : 'Saved',
+        markApplied: document.documentElement.lang === 'ar' ? 'تم التقديم' : 'Mark as Applied',
+        applied: document.documentElement.lang === 'ar' ? 'تم التقديم' : 'Applied',
+        interview: document.documentElement.lang === 'ar' ? 'مقابلة' : 'Interview',
+        accepted: document.documentElement.lang === 'ar' ? 'مقبول' : 'Accepted',
+        rejected: document.documentElement.lang === 'ar' ? 'مرفوض' : 'Rejected',
+        remove: document.documentElement.lang === 'ar' ? 'إزالة' : 'Remove',
+        applicationSaved: document.documentElement.lang === 'ar' ? 'تم حفظ الوظيفة' : 'Job saved successfully',
+        applicationUpdated: document.documentElement.lang === 'ar' ? 'تم تحديث حالة الطلب' : 'Application status updated',
+        applicationRemoved: document.documentElement.lang === 'ar' ? 'تمت إزالة الوظيفة من طلباتك' : 'Job removed',
+        applicationFailed: document.documentElement.lang === 'ar' ? 'تعذر تحديث طلب الوظيفة' : 'Job application could not be updated'
     };
+
+    let jobApplicationsByJobId = new Map();
 
 
     function escapeHtml(value) {
@@ -2352,6 +2381,97 @@
     }
 
 
+
+    async function loadJobApplications() {
+        try {
+            const data = await apiRequest('/api/job-applications');
+            const applications = Array.isArray(data.applications) ? data.applications : [];
+            jobApplicationsByJobId = new Map(applications.map(a => [Number(a.job_id), a]));
+            document.getElementById('applicationsCount').textContent = data.count ?? applications.length;
+        } catch (error) {
+            console.error(error);
+            document.getElementById('applicationsCount').textContent = '—';
+        }
+    }
+
+    function applicationStatusLabel(status) {
+        return translations[status] || status || translations.saved;
+    }
+
+    function renderApplicationControls(jobId) {
+        const application = jobApplicationsByJobId.get(Number(jobId));
+        if (!application) {
+            return `<button type="button" class="save-job-btn" onclick="saveJob(${Number(jobId)})">${escapeHtml(translations.saveJob)}</button>`;
+        }
+
+        const id = Number(application.job_application_id);
+        const status = String(application.status || 'saved');
+
+        return `
+            <span class="application-state">${escapeHtml(applicationStatusLabel(status))}</span>
+            ${status === 'saved'
+                ? `<button type="button" class="apply-job-btn" onclick="updateApplicationStatus(${id}, 'applied')">${escapeHtml(translations.markApplied)}</button>`
+                : `<select class="status-select" onchange="updateApplicationStatus(${id}, this.value)">
+                    ${['applied','interview','accepted','rejected'].map(option =>
+                        `<option value="${option}" ${status === option ? 'selected' : ''}>${escapeHtml(applicationStatusLabel(option))}</option>`
+                    ).join('')}
+                   </select>`
+            }
+            <button type="button" class="remove-job-btn" onclick="removeJobApplication(${id})">${escapeHtml(translations.remove)}</button>
+        `;
+    }
+
+    async function saveJob(jobId) {
+        try {
+            await apiRequest('/api/job-applications', {
+                method: 'POST',
+                headers: {'Content-Type':'application/json'},
+                body: JSON.stringify({job_id:Number(jobId)})
+            });
+            await refreshApplicationUi();
+            showMessage(translations.applicationSaved, 'success');
+        } catch (error) {
+            console.error(error);
+            showMessage(translations.applicationFailed, 'error');
+        }
+    }
+
+    async function updateApplicationStatus(applicationId, status) {
+        try {
+            await apiRequest(`/api/job-applications/${Number(applicationId)}/status`, {
+                method:'PATCH',
+                headers:{'Content-Type':'application/json'},
+                body:JSON.stringify({status})
+            });
+            await refreshApplicationUi();
+            showMessage(translations.applicationUpdated, 'success');
+        } catch (error) {
+            console.error(error);
+            showMessage(translations.applicationFailed, 'error');
+            await refreshApplicationUi();
+        }
+    }
+
+    async function removeJobApplication(applicationId) {
+        try {
+            await apiRequest(`/api/job-applications/${Number(applicationId)}`, {method:'DELETE'});
+            await refreshApplicationUi();
+            showMessage(translations.applicationRemoved, 'success');
+        } catch (error) {
+            console.error(error);
+            showMessage(translations.applicationFailed, 'error');
+        }
+    }
+
+    async function refreshApplicationUi() {
+        await loadJobApplications();
+        document.querySelectorAll('[data-job-application-actions]').forEach(container => {
+            const jobId = Number(container.dataset.jobApplicationActions);
+            container.innerHTML = renderApplicationControls(jobId);
+        });
+    }
+
+
     async function loadJobMatches() {
 
         const container =
@@ -2511,6 +2631,11 @@
                                 recommendation.job_recommendation_id
                             );
 
+                        const jobId =
+                            Number(
+                                job.job_id
+                            );
+
                         const score =
                             Number(
                                 recommendation.match_score || 0
@@ -2625,6 +2750,13 @@
                                         translations.viewAnalysis
                                     )}
                                 </button>
+
+                                <div
+                                    class="job-actions"
+                                    data-job-application-actions="${jobId}"
+                                >
+                                    ${renderApplicationControls(jobId)}
+                                </div>
 
 
                                 <div
@@ -3051,7 +3183,12 @@
     }
 
 
-    loadJobMatches();
+    async function initializeCareerDashboard() {
+        await loadJobApplications();
+        await loadJobMatches();
+    }
+
+    initializeCareerDashboard();
 
 
     /*

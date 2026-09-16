@@ -15,6 +15,7 @@ use App\Http\Controllers\AdminActionLogController;
 use App\Http\Controllers\AdminUserController;
 use App\Http\Controllers\AdminDashboardController;
 use App\Http\Controllers\Api\JobRecommendationController;
+use App\Http\Controllers\Api\JobApplicationController;
 
 /*
 |--------------------------------------------------------------------------
@@ -61,6 +62,11 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/job-recommendations',[JobRecommendationController::class, 'index']);
     Route::post('/job-recommendations/generate',[JobRecommendationController::class, 'generate']);
     Route::get('/job-recommendations/{recommendation}/gap-analysis',[JobRecommendationController::class, 'gapAnalysis']);
+    // Job Applications
+    Route::get('/job-applications', [JobApplicationController::class, 'index']);
+    Route::post('/job-applications', [JobApplicationController::class, 'store']);
+    Route::patch('/job-applications/{application}/status', [JobApplicationController::class, 'updateStatus']);
+    Route::delete('/job-applications/{application}', [JobApplicationController::class, 'destroy']);
     // Cover Letters
     Route::get('/cover-letters', [CoverLetterController::class, 'index']);
     Route::get('/cover-letters/{coverLetter}', [CoverLetterController::class, 'show']);
