@@ -13,7 +13,10 @@ use App\Http\Controllers\SavedApplicationController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\AdminActionLogController;
 use App\Http\Controllers\AdminUserController;
-
+use App\Http\Controllers\AdminDashboardController;
+use App\Http\Controllers\Api\JobRecommendationController;
+use App\Http\Controllers\Api\JobApplicationController;
+use App\Http\Controllers\Api\AdminJobController;
 /*
 |--------------------------------------------------------------------------
 | Public routes (no auth required)
@@ -54,7 +57,16 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/recommendations/generate', [RecommendationController::class, 'generate']);
     Route::delete('/recommendations/{recommendation}', [RecommendationController::class, 'destroy']);
     Route::get('/recommendations/{recommendation}/criteria-matches', [RecommendationCriteriaMatchController::class, 'index']);
-
+    Route::get('/recommendations/{recommendation}/gap-analysis', [RecommendationController::class, 'gapAnalysis']);
+   // Job Recommendations - Career Path
+    Route::get('/job-recommendations',[JobRecommendationController::class, 'index']);
+    Route::post('/job-recommendations/generate',[JobRecommendationController::class, 'generate']);
+    Route::get('/job-recommendations/{recommendation}/gap-analysis',[JobRecommendationController::class, 'gapAnalysis']);
+    // Job Applications
+    Route::get('/job-applications', [JobApplicationController::class, 'index']);
+    Route::post('/job-applications', [JobApplicationController::class, 'store']);
+    Route::patch('/job-applications/{application}/status', [JobApplicationController::class, 'updateStatus']);
+    Route::delete('/job-applications/{application}', [JobApplicationController::class, 'destroy']);
     // Cover Letters
     Route::get('/cover-letters', [CoverLetterController::class, 'index']);
     Route::get('/cover-letters/{coverLetter}', [CoverLetterController::class, 'show']);
@@ -93,17 +105,28 @@ Route::middleware(['auth:sanctum', 'admin'])->group(function () {
     // Admin Action Logs (read-only, audit trail)
     Route::get('/admin/action-logs', [AdminActionLogController::class, 'index']);
     Route::get('/admin/action-logs/{adminActionLog}', [AdminActionLogController::class, 'show']);
+    Route::get('/admin/dashboard-stats',[AdminDashboardController::class, 'stats']);
     // User Management
     Route::get('/admin/users', [AdminUserController::class, 'index']);
     Route::get('/admin/users/{user}', [AdminUserController::class, 'show']);
     Route::patch('/admin/users/{user}/status', [AdminUserController::class, 'updateStatus']);
     Route::patch('/admin/users/{user}/role', [AdminUserController::class, 'updateRole']);
-});
+    // Admin Job Management
+    Route::get('/admin/jobs', [AdminJobController::class, 'index']);
+    Route::post('/admin/jobs', [AdminJobController::class, 'store']);
+    Route::get('/admin/jobs/{job}', [AdminJobController::class, 'show']);
+    Route::put('/admin/jobs/{job}', [AdminJobController::class, 'update']);
+    Route::patch('/admin/jobs/{job}/status', [AdminJobController::class, 'updateStatus']);
+    Route::delete('/admin/jobs/{job}', [AdminJobController::class, 'destroy']);
+
+    });
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::get('/me', [AuthController::class, 'me']);
-});
+
+
+    });
 

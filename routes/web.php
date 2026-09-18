@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\App;
 
 Route::get('/', function () {
     return view('welcome');
@@ -43,3 +44,12 @@ Route::get('/choose-path', function () {
 Route::get('/jobs/dashboard', function () {
     return view('jobs.dashboard');
 })->name('jobs.dashboard');
+Route::get('/language/{locale}', function ($locale) {
+    if (!in_array($locale, ['ar', 'en'])) {
+        abort(400);
+    }
+
+    session(['locale' => $locale]);
+
+    return redirect()->back();
+})->name('language.switch');

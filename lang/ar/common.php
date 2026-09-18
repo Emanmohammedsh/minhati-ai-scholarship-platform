@@ -1,0 +1,197 @@
+<?php
+
+return [
+    // عام
+    'brand' => 'Jisr AI',
+    'logout' => 'تسجيل الخروج',
+    'arabic' => 'العربية',
+    'english' => 'English',
+
+    // اختيار المسار
+    'choose_path_title' => 'اختر مسارك',
+    'choose_path_heading' => 'أي طريق تريد أن تبدأ منه اليوم؟',
+    'choose_path_description' => 'جسر يربط ملفك ومهاراتك ومؤهلاتك بالفرص المناسبة لك. اختر مسارك الآن، ويمكنك الانتقال بين التعليم والعمل في أي وقت.',
+    'welcome' => 'مرحباً بك في Jisr AI',
+    'welcome_user' => 'مرحباً :name، اختر المسار الذي يناسب هدفك.',
+
+    // مسار التعليم
+    'education_path' => 'مسار التعليم',
+    'education_heading' => 'اكتشف المنح المناسبة لملفك',
+    'education_description' => 'استخدم ملفك الأكاديمي وسيرتك الذاتية للوصول إلى منح دراسية تتناسب مع تخصصك، مستواك، مؤهلاتك واهتماماتك.',
+    'scholarship_matching' => 'مطابقة ذكية مع المنح الدراسية',
+    'match_explanation' => 'Match Score وتفسير أسباب المطابقة',
+    'gap_analysis' => 'Gap Analysis للمتطلبات الناقصة',
+    'application_tracking' => 'تجهيز ومتابعة طلبات التقديم',
+    'start_education' => 'ابدأ مسار التعليم',
+
+    // مسار العمل
+    'career_path' => 'مسار العمل',
+    'career_heading' => 'حوّل مهاراتك إلى فرص مهنية',
+    'career_description' => 'اكتشف الوظائف التي تتوافق مع مهاراتك وتعليمك ومؤهلاتك، واعرف نقاط قوتك والمهارات التي تحتاج إلى تطويرها.',
+    'job_matching_profile' => 'مطابقة الوظائف مع الملف والسيرة الذاتية',
+    'ai_job_matching' => 'AI Job Matching',
+    'skill_gap_analysis' => 'Skill Gap Analysis',
+    'job_application_tracking' => 'حفظ ومتابعة طلبات العمل',
+    'start_career' => 'ابدأ المسار المهني',
+
+    // رسالة جسر
+    'one_bridge_more_opportunities' => 'جسر واحد. فرص أكثر.',
+    'brand_message' => 'من التعليم إلى سوق العمل، نساعد الشباب على الوصول إلى الفرص التي تناسب إمكاناتهم.',
+    // لوحة المسار المهني
+    'switch_path' => 'تغيير المسار',
+    'profile' => 'الملف الشخصي',
+    'my_cv' => 'سيرتي الذاتية',
+
+    'career_badge' => 'المسار المهني في Jisr AI',
+    'career_hero_title' => 'حوّل مهاراتك إلى فرص.',
+    'career_hero_description' => 'يساعدك Jisr AI على اكتشاف فرص العمل التي تتناسب مع مهاراتك، مؤهلاتك، تعليمك وخبراتك. وسيتم ربط ملفك الشخصي وسيرتك الذاتية بمتطلبات الوظائف لمساعدتك على معرفة الفرص المناسبة لك والمهارات التي يمكنك تطويرها.',
+    'complete_profile' => 'أكمل ملفي الشخصي',
+    'review_cv' => 'مراجعة سيرتي الذاتية',
+
+    'job_matches' => 'الوظائف المطابقة',
+    'applications' => 'طلبات التقديم',
+    'cv_status' => 'حالة السيرة الذاتية',
+    'connected' => 'مرتبطة',
+    'profile_label' => 'بالملف',
+    'career_path_status' => 'المسار المهني',
+    'building' => 'قيد البناء',
+    'phase' => 'مرحلة',
+
+    'your_journey' => 'رحلتك المهنية',
+    'journey_title' => 'من إمكاناتك إلى الفرصة المناسبة',
+    'journey_description' => 'مسار واحد يساعدك على اكتشاف الفرص، وفهم مدى جاهزيتك، ومتابعة طلبات التوظيف.',
+
+    'discover_jobs' => 'اكتشف الوظائف',
+    'discover_jobs_description' => 'استكشف فرص العمل المرتبطة بتعليمك ومهاراتك واهتماماتك وتوجهك المهني.',
+
+    'job_matching' => 'المطابقة الذكية للوظائف',
+    'job_matching_description' => 'قارن ملفك الشخصي وسيرتك الذاتية بمتطلبات الوظائف المنظمة للوصول إلى الفرص الأكثر ملاءمة.',
+
+    'skill_gap' => 'تحليل فجوة المهارات',
+    'skill_gap_description' => 'اعرف متطلبات الوظيفة التي تحققها بالفعل، وحدد المهارات التي قد تحتاج إلى تطويرها.',
+
+    'track_applications' => 'متابعة طلبات التوظيف',
+    'track_applications_description' => 'احفظ الفرص وتابع رحلة التقديم من مرحلة التجهيز وحتى إرسال الطلب.',
+
+    'career_development_title' => 'نعمل على بناء المسار المهني 🚀',
+    'career_development_description' => 'نعمل على توسيع Jisr AI من منصة لمطابقة المنح إلى منصة متكاملة تربط التعليم بسوق العمل. وسيكون ملفك الحالي وسيرتك الذاتية أساسًا لمطابقة الوظائف وتحليل فجوة المهارات والاستعداد المهني.',
+    'career_module' => 'المسار المهني',
+    'in_development' => 'قيد التطوير',
+
+    'more_opportunities' => 'فرص أكثر في انتظارك.',
+        // لوحة المنح الدراسية
+    'student_dashboard' => 'مسار التعليم',
+    'welcome_back' => 'مرحباً بعودتك، :name',
+    'education_intro' => 'اكتشف الفرص المناسبة لك، وافهم أسباب المطابقة، وتابع رحلتك في التقديم للمنح الدراسية.',
+    'upload_cv' => 'رفع السيرة الذاتية',
+    'refresh_matches' => 'تحديث المطابقات الذكية',
+
+    'ai_scholarship_matches' => 'المنح المطابقة',
+    'matches_note' => 'فرص دراسية متوافقة مع ملفك',
+    'my_applications' => 'طلبات التقديم',
+    'applications_note' => 'الطلبات المحفوظة والتي تتابعها',
+    'profile_completion' => 'اكتمال الملف الشخصي',
+    'profile_completion_note' => 'بناءً على معلومات ملفك الأكاديمي',
+    'upcoming_deadline' => 'أقرب موعد نهائي',
+    'deadline_note' => 'من طلبات التقديم التي تتابعها',
+    'no_upcoming_deadline' => 'لا يوجد موعد نهائي قادم ضمن طلباتك',
+
+    'best_opportunity' => 'أفضل فرصة لك',
+    'best_opportunity_note' => 'أعلى نتيجة من محرك المطابقة الحالي',
+    'ai_match' => 'مطابقة ذكية',
+
+    'scholarship_journey' => 'رحلتك',
+    'application_progress' => 'تقدمك في رحلة التقديم',
+    'build_profile' => 'بناء الملف الشخصي',
+    'build_profile_note' => 'الخلفية الأكاديمية والاهتمامات',
+    'discover_matches' => 'اكتشاف الفرص المناسبة',
+    'discover_matches_note' => 'مطابقة المنح مع بيانات ملفك',
+    'prepare_application' => 'تجهيز طلب التقديم',
+    'prepare_application_note' => 'تجهيز السيرة الذاتية وخطاب التغطية',
+    'apply_track' => 'التقديم والمتابعة',
+    'apply_track_note' => 'متابعة تقدم طلبات التقديم',
+
+    'top_ai_matches' => 'أفضل المنح المطابقة',
+    'top_matches_note' => 'منح مرتبة بناءً على توافقها مع ملفك الحالي',
+    'matching_engine' => 'محرك المطابقة',
+
+    'applications_section_note' => 'تابع الفرص التي تعمل على التقديم لها',
+    'quick_actions' => 'إجراءات سريعة',
+    'quick_actions_note' => 'أكمل رحلتك في البحث والتقديم للمنح',
+    'update_profile' => 'تحديث الملف الشخصي',
+    'update_profile_note' => 'حافظ على دقة معلوماتك الأكاديمية.',
+    'manage_cv' => 'إدارة السيرة الذاتية',
+    'manage_cv_note' => 'ارفع سيرتك الذاتية وراجع البيانات المستخرجة.',
+    'generate_matches' => 'إنشاء مطابقات جديدة',
+    'generate_matches_note' => 'أعد تشغيل المطابقة باستخدام أحدث بيانات ملفك.',
+
+    'why_match' => 'لماذا هذه المطابقة؟',
+    'hide_analysis' => 'إخفاء التحليل',
+    'analyzing' => 'جاري التحليل...',
+    'matched_criteria' => 'المعايير المتطابقة',
+    'missing_criteria' => 'المعايير الناقصة أو غير المتحققة',
+    'analysis_notes' => 'ملاحظات التحليل',
+    'gaps' => 'الفجوات',
+    'matched' => 'متطابق',
+    'gap_count' => 'فجوات',
+    'analysis' => 'التحليل',
+    'cv_connected' => 'مرتبطة',
+    'cv_not_connected' => 'غير مرتبطة',
+    'mandatory' => 'إلزامي',
+    'optional' => 'اختياري',
+    'next_step' => 'الخطوة التالية',
+    'no_unmet_criteria' => 'لا توجد معايير محفوظة غير متحققة.',
+
+    'no_matches_generated' => 'لم يتم إنشاء مطابقات بعد',
+    'no_matches_generated_note' => 'أنشئ توصيات المنح لعرض أقوى فرصة مناسبة لك.',
+    'no_ai_matches' => 'لا توجد منح مطابقة حالياً',
+    'no_ai_matches_note' => 'استخدم تحديث المطابقات الذكية لإنشاء توصيات اعتماداً على ملفك الحالي.',
+    'no_saved_applications' => 'لا توجد طلبات محفوظة بعد',
+    'no_saved_applications_note' => 'عندما تحفظ منحة، سيظهر تقدم طلبها هنا.',
+
+    'preparing_dashboard' => 'جاري تجهيز لوحة المنح الدراسية...',
+    'dashboard_load_failed' => 'تعذر تحميل لوحة التحكم',
+    'scholarship_opportunity' => 'فرصة منحة دراسية',
+    'scholarship' => 'منحة دراسية',
+    'provider_not_specified' => 'الجهة المقدمة غير محددة',
+    'international' => 'دولية',
+    'international_not_specified' => 'دولية / غير محدد',
+    'description_not_available' => 'لا يوجد وصف متاح لهذه المنحة.',
+    'not_specified' => 'غير محدد',
+    'deadline' => 'الموعد النهائي',
+    'updated' => 'آخر تحديث',
+    'today' => 'اليوم',
+    'one_day' => 'يوم واحد',
+    'days' => ':count أيام',
+    // Career Matching
+    'refresh_job_matches' => 'تحديث مطابقات الوظائف',
+    'top_job_matches' => 'أفضل الوظائف المطابقة',
+    'top_job_matches_note' => 'وظائف مرتبة بناءً على توافق متطلباتها مع ملفك وسيرتك الذاتية',
+    'job_matching_engine' => 'محرك مطابقة الوظائف',
+
+    'match_score' => 'نسبة المطابقة',
+    'company' => 'الشركة',
+    'location' => 'الموقع',
+    'employment_type' => 'نوع العمل',
+    'work_mode' => 'نظام العمل',
+
+    'matched_requirements' => 'المتطلبات المتحققة',
+    'missing_requirements' => 'المتطلبات غير المتحققة',
+    'total_requirements' => 'إجمالي المتطلبات',
+
+    'skill_gaps' => 'فجوات المهارات',
+    'no_skill_gaps' => 'لا توجد متطلبات غير متحققة لهذه الوظيفة.',
+    'cv_connected_job' => 'السيرة الذاتية مرتبطة بالمطابقة',
+
+    'no_job_matches' => 'لا توجد وظائف مطابقة حالياً',
+    'no_job_matches_note' => 'حدّث المطابقات لإنشاء توصيات وظيفية بناءً على ملفك وسيرتك الذاتية.',
+
+    'generating_job_matches' => 'جاري تحديث مطابقات الوظائف...',
+    'job_matches_updated' => 'تم تحديث مطابقات الوظائف',
+    'job_matches_failed' => 'تعذر تحديث مطابقات الوظائف',
+    'job_dashboard_load_failed' => 'تعذر تحميل بيانات المسار المهني',
+
+    'view_match_analysis' => 'لماذا هذه المطابقة؟',
+    'hide_match_analysis' => 'إخفاء التحليل',
+    'loading_match_analysis' => 'جاري تحميل التحليل...',
+    ];
