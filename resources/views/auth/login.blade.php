@@ -266,8 +266,7 @@
 
 <script>
   const API_BASE_URL = "{{ url('/api') }}";
-  const DASHBOARD_URL = "{{ route('dashboard') }}";
-
+const DASHBOARD_URL = "{{ route('choose-path') }}";
   document.getElementById('toggleEye').addEventListener('click', function() {
     const pw = document.getElementById('password');
     pw.type = pw.type === 'password' ? 'text' : 'password';
