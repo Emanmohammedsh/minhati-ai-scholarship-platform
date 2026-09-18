@@ -64,37 +64,6 @@ class RecommendationController extends Controller
             ->first();
 
         $scholarships = Scholarship::where('is_active', true)->with('criteria')->get();
-<<<<<<< HEAD
-        // Avoid piling up duplicate rows on every regeneration.
-        Recommendation::where('user_id', Auth::id())->delete();
-        $ranked = $this->matchingService->generateRecommendations($profile, $cv, $scholarships);
-
-        $saved = [];
-
-        foreach ($ranked as $result) {
-            $recommendation = Recommendation::create([
-                'user_id'        => Auth::id(),
-                'scholarship_id' => $result['scholarship']->scholarship_id,
-                'cv_id'          => $cv?->cv_id,
-                'match_score'    => $result['score'],
-                'generated_at'   => now(),
-            ]);
-
-            // FR-11: persist which criteria contributed to this score so
-            // the breakdown survives past this request (shown later via
-            // show()'s criteriaMatches.criterion).
-            foreach ($result['criteria_results'] as $criteriaResult) {
-                RecommendationCriteriaMatch::create([
-                    'recommendation_id'   => $recommendation->recommendation_id,
-                    'criterion_id'        => $criteriaResult['criterion']->criterion_id,
-                    'is_satisfied'        => $criteriaResult['satisfied'],
-                    'contribution_points' => $criteriaResult['satisfied'] ? $criteriaResult['criterion']->weight : 0,
-                ]);
-            }
-
-            $saved[] = $recommendation;
-        }
-=======
 
         $ranked = $this->matchingService->generateRecommendations($profile, $cv, $scholarships);
 
@@ -134,7 +103,6 @@ class RecommendationController extends Controller
 
             return $saved;
         });
->>>>>>> hackathon-upgrade
 
         return response()->json([
             'message' => 'Recommendations generated successfully.',
