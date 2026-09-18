@@ -9,28 +9,54 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('cvs', function (Blueprint $table) {
-            $table->foreignId('user_id')->after('id')->constrained()->cascadeOnDelete();
-            $table->string('file_path');
-            $table->string('original_filename');
-            $table->unsignedBigInteger('file_size_bytes');
-            $table->string('mime_type');
-            $table->boolean('is_active')->default(false);
+            if (! Schema::hasColumn('cvs', 'user_id')) {
+                $table->foreignId('user_id')->after('cv_id')->constrained()->cascadeOnDelete();
+            }
+            if (! Schema::hasColumn('cvs', 'file_path')) {
+                $table->string('file_path');
+            }
+            if (! Schema::hasColumn('cvs', 'original_filename')) {
+                $table->string('original_filename');
+            }
+            if (! Schema::hasColumn('cvs', 'file_size_bytes')) {
+                $table->unsignedBigInteger('file_size_bytes');
+            }
+            if (! Schema::hasColumn('cvs', 'mime_type')) {
+                $table->string('mime_type');
+            }
+            if (! Schema::hasColumn('cvs', 'is_active')) {
+                $table->boolean('is_active')->default(false);
+            }
 
             // FR-07 / FR-08: AI extraction lifecycle
             // pending -> processing -> completed / failed -> confirmed
-            $table->string('extraction_status')->default('pending');
-            $table->json('extracted_skills')->nullable();
-            $table->json('extracted_education')->nullable();
-            $table->json('extracted_qualifications')->nullable();
-            $table->text('extraction_error')->nullable();
-            $table->timestamp('confirmed_at')->nullable();
+            if (! Schema::hasColumn('cvs', 'extraction_status')) {
+                $table->string('extraction_status')->default('pending');
+            }
+            if (! Schema::hasColumn('cvs', 'extracted_skills')) {
+                $table->json('extracted_skills')->nullable();
+            }
+            if (! Schema::hasColumn('cvs', 'extracted_education')) {
+                $table->json('extracted_education')->nullable();
+            }
+            if (! Schema::hasColumn('cvs', 'extracted_qualifications')) {
+                $table->json('extracted_qualifications')->nullable();
+            }
+            if (! Schema::hasColumn('cvs', 'extraction_error')) {
+                $table->text('extraction_error')->nullable();
+            }
+            if (! Schema::hasColumn('cvs', 'confirmed_at')) {
+                $table->timestamp('confirmed_at')->nullable();
+            }
         });
     }
 
     public function down(): void
     {
         Schema::table('cvs', function (Blueprint $table) {
-            $table->dropForeign(['user_id']);
+            if (Schema::hasColumn('cvs', 'user_id')) {
+                $table->dropForeign(['user_id']);
+            }
             $table->dropColumn([
                 'user_id',
                 'file_path',
