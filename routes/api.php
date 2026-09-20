@@ -17,6 +17,7 @@ use App\Http\Controllers\AdminDashboardController;
 use App\Http\Controllers\Api\JobRecommendationController;
 use App\Http\Controllers\Api\JobApplicationController;
 use App\Http\Controllers\Api\AdminJobController;
+use App\Http\Controllers\Api\AdminJobRequirementController;
 /*
 |--------------------------------------------------------------------------
 | Public routes (no auth required)
@@ -118,7 +119,16 @@ Route::middleware(['auth:sanctum', 'admin'])->group(function () {
     Route::put('/admin/jobs/{job}', [AdminJobController::class, 'update']);
     Route::patch('/admin/jobs/{job}/status', [AdminJobController::class, 'updateStatus']);
     Route::delete('/admin/jobs/{job}', [AdminJobController::class, 'destroy']);
+    // Admin Job Requirements Management
+    Route::get('/admin/jobs/{job}/requirements',[AdminJobRequirementController::class, 'index']);
 
+    Route::post('/admin/jobs/{job}/requirements',[AdminJobRequirementController::class, 'store']);
+
+    Route::get('/admin/jobs/{job}/requirements/{requirement}',[AdminJobRequirementController::class, 'show']);
+
+    Route::put('/admin/jobs/{job}/requirements/{requirement}',[AdminJobRequirementController::class, 'update']);
+
+    Route::delete('/admin/jobs/{job}/requirements/{requirement}',[AdminJobRequirementController::class, 'destroy']);
     });
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
