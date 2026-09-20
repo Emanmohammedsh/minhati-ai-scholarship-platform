@@ -18,6 +18,7 @@ use App\Http\Controllers\Api\JobRecommendationController;
 use App\Http\Controllers\Api\JobApplicationController;
 use App\Http\Controllers\Api\AdminJobController;
 use App\Http\Controllers\Api\AdminJobRequirementController;
+use App\Http\Controllers\Api\GapFillerController;
 /*
 |--------------------------------------------------------------------------
 | Public routes (no auth required)
@@ -79,7 +80,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/saved-applications', [SavedApplicationController::class, 'store']);
     Route::patch('/saved-applications/{savedApplication}/status', [SavedApplicationController::class, 'updateStatus']);
     Route::delete('/saved-applications/{savedApplication}', [SavedApplicationController::class, 'destroy']);
-
+    // Jisr AI Smart Gap Filler
+    Route::post('/job-recommendations/{recommendation}/gap-filler',[GapFillerController::class, 'generate']);
     // Notifications
     Route::get('/notifications', [NotificationController::class, 'index']);
     Route::get('/notifications/{notification}', [NotificationController::class, 'show']);

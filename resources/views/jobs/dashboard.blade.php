@@ -1574,7 +1574,117 @@
             }
 
         }
+    /* ======================================
+    JISR AI SMART GAP FILLER
+    ====================================== */
 
+    .gap-item {
+        width: 100%;
+        padding: 14px;
+        border-radius: 14px;
+        background: #FFF9ED;
+        border: 1px solid #F2DCAC;
+    }
+
+    .gap-item-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 12px;
+        flex-wrap: wrap;
+    }
+
+    .gap-filler-btn {
+        border: none;
+        padding: 9px 13px;
+        border-radius: 10px;
+        cursor: pointer;
+        font-family: inherit;
+        font-size: 11px;
+        font-weight: 700;
+        color: white;
+        background: linear-gradient(
+            135deg,
+            var(--primary),
+            #0878C9
+        );
+        transition: .2s ease;
+    }
+
+    .gap-filler-btn:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 7px 18px rgba(10,46,107,.16);
+    }
+
+    .gap-filler-btn:disabled {
+        opacity: .65;
+        cursor: wait;
+        transform: none;
+    }
+
+    .gap-learning-plan {
+        display: none;
+        margin-top: 13px;
+        padding: 16px;
+        border-radius: 13px;
+        background: white;
+        border: 1px solid #DCEEF8;
+    }
+
+    .gap-learning-plan.open {
+        display: block;
+    }
+
+    .ai-plan-badge {
+        display: inline-block;
+        margin-bottom: 10px;
+        padding: 5px 9px;
+        border-radius: 999px;
+        color: var(--primary);
+        background: #EAF6FF;
+        font-size: 10px;
+        font-weight: 700;
+    }
+
+    .gap-learning-plan h5 {
+        color: var(--heading);
+        font-size: 12px;
+        margin: 12px 0 5px;
+    }
+
+    .gap-learning-plan p {
+        color: #687985;
+        font-size: 11.5px;
+        line-height: 1.7;
+    }
+
+    .gap-learning-plan ol {
+        padding-inline-start: 20px;
+        margin-top: 6px;
+    }
+
+    .gap-learning-plan li {
+        color: #687985;
+        font-size: 11.5px;
+        line-height: 1.7;
+        margin-bottom: 4px;
+    }
+
+    .learning-keywords {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+        margin-top: 7px;
+    }
+
+    .learning-keyword {
+        padding: 5px 8px;
+        border-radius: 8px;
+        background: #F2FAFE;
+        border: 1px solid #D5EDF8;
+        color: #55717F;
+        font-size: 10px;
+    }
     </style>
 
 </head>
@@ -3028,9 +3138,11 @@
                             ? gaps
                                 .map(
                                     item =>
-                                        requirementPill(
+                                        gapFillerItem(
                                             item,
-                                            'gap'
+                                            Number(
+                                                data.job_recommendation_id
+                                            )
                                         )
                                 )
                                 .join('')
@@ -3097,7 +3209,294 @@
 
     }
 
+function gapFillerItem(
+    item,
+    recommendationId
+) {
+    const requirementId =
+        Number(item.requirement_id);
 
+    const requirementType =
+        item.type
+            ? String(item.type)
+                .replaceAll('_', ' ')
+            : '';
+
+    const requirementStatus =
+        item.mandatory
+            ? translations.mandatory
+            : translations.optional;
+
+    const buttonText =
+        document.documentElement.lang === 'ar'
+            ? '✨ عالج هذه الفجوة مع Jisr AI'
+            : '✨ Fill This Gap with Jisr AI';
+
+    return `
+        <div class="gap-item">
+
+            <div class="gap-item-header">
+
+                <span class="requirement-pill gap">
+
+                    ${escapeHtml(item.value)}
+
+                    ${
+                        requirementType
+                            ? ` · ${escapeHtml(
+                                requirementType
+                            )}`
+                            : ''
+                    }
+
+                    · ${escapeHtml(
+                        requirementStatus
+                    )}
+
+                </span>
+
+                <button
+                    type="button"
+                    class="gap-filler-btn"
+                    id="gapFillerButton-${recommendationId}-${requirementId}"
+                    onclick="generateGapPlan(
+                        ${recommendationId},
+                        ${requirementId}
+                    )"
+                >
+                    ${escapeHtml(buttonText)}
+                </button>
+
+            </div>
+
+            <div
+                class="gap-learning-plan"
+                id="gapPlan-${recommendationId}-${requirementId}"
+            ></div>
+
+        </div>
+    `;
+}
+
+
+async function generateGapPlan(
+    recommendationId,
+    requirementId
+) {
+    const button =
+        document.getElementById(
+            `gapFillerButton-${recommendationId}-${requirementId}`
+        );
+
+    const container =
+        document.getElementById(
+            `gapPlan-${recommendationId}-${requirementId}`
+        );
+
+    if (!button || !container) {
+        return;
+    }
+
+    const originalText =
+        button.textContent;
+
+    button.disabled = true;
+
+    button.textContent =
+        document.documentElement.lang === 'ar'
+            ? 'Jisr AI يفكر...'
+            : 'Jisr AI is thinking...';
+
+    container.classList.add('open');
+
+    container.innerHTML = `
+        <div class="loading-state">
+            ${
+                document.documentElement.lang === 'ar'
+                    ? 'جاري إنشاء خطة تعلم مخصصة...'
+                    : 'Creating your personalized learning plan...'
+            }
+        </div>
+    `;
+
+    try {
+        const data =
+            await apiRequest(
+                `/api/job-recommendations/${recommendationId}/gap-filler`,
+                {
+                    method: 'POST',
+
+                    headers: {
+                        'Content-Type':
+                            'application/json'
+                    },
+
+                    body: JSON.stringify({
+                        requirement_id:
+                            Number(
+                                requirementId
+                            )
+                    })
+                }
+            );
+
+        renderGapLearningPlan(
+            container,
+            data
+        );
+    }
+
+    catch (error) {
+        console.error(error);
+
+        container.innerHTML = `
+            <p>
+                ${
+                    escapeHtml(
+                        document.documentElement.lang === 'ar'
+                            ? 'تعذر إنشاء خطة التعلم الآن. حاولي مرة أخرى.'
+                            : 'The learning plan could not be generated. Please try again.'
+                    )
+                }
+            </p>
+        `;
+    }
+
+    finally {
+        button.disabled = false;
+        button.textContent = originalText;
+    }
+}
+
+
+function renderGapLearningPlan(
+    container,
+    data
+) {
+    const plan =
+        data.learning_plan || {};
+
+    const steps =
+        Array.isArray(plan.steps)
+            ? plan.steps
+            : [];
+
+    const keywords =
+        Array.isArray(
+            plan.search_keywords
+        )
+            ? plan.search_keywords
+            : [];
+
+    const isArabic =
+        document.documentElement.lang === 'ar';
+
+    container.innerHTML = `
+
+        <span class="ai-plan-badge">
+            ✨ Jisr AI Smart Gap Filler
+        </span>
+
+        <h5>
+            ${
+                isArabic
+                    ? 'لماذا هذه المهارة مهمة؟'
+                    : 'Why does this matter?'
+            }
+        </h5>
+
+        <p>
+            ${escapeHtml(
+                plan.why_it_matters || '—'
+            )}
+        </p>
+
+        <h5>
+            ${
+                isArabic
+                    ? 'هدف التعلم'
+                    : 'Learning Goal'
+            }
+        </h5>
+
+        <p>
+            ${escapeHtml(
+                plan.learning_goal || '—'
+            )}
+        </p>
+
+        ${
+            steps.length
+                ? `
+                    <h5>
+                        ${
+                            isArabic
+                                ? 'خطة التعلم'
+                                : 'Learning Steps'
+                        }
+                    </h5>
+
+                    <ol>
+                        ${
+                            steps.map(
+                                step =>
+                                    `<li>${escapeHtml(step)}</li>`
+                            ).join('')
+                        }
+                    </ol>
+                `
+                : ''
+        }
+
+        ${
+            plan.practice_task
+                ? `
+                    <h5>
+                        ${
+                            isArabic
+                                ? 'مهمة عملية'
+                                : 'Practice Task'
+                        }
+                    </h5>
+
+                    <p>
+                        ${escapeHtml(
+                            plan.practice_task
+                        )}
+                    </p>
+                `
+                : ''
+        }
+
+        ${
+            keywords.length
+                ? `
+                    <h5>
+                        ${
+                            isArabic
+                                ? 'ابحث عن'
+                                : 'Learning Search Keywords'
+                        }
+                    </h5>
+
+                    <div class="learning-keywords">
+
+                        ${
+                            keywords.map(
+                                keyword => `
+                                    <span class="learning-keyword">
+                                        ${escapeHtml(keyword)}
+                                    </span>
+                                `
+                            ).join('')
+                        }
+
+                    </div>
+                `
+                : ''
+        }
+    `;
+}
     async function refreshJobMatches() {
 
         const button =
