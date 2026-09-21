@@ -14,7 +14,7 @@ class ScholarshipDiscoveryService
     public function __construct()
     {
         $this->apiKey = (string) config('services.gemini.key');
-        $this->model = (string) config('services.gemini.model', 'gemini-2.0-flash');
+        $this->model = (string) config('services.gemini.model', 'gemini-3.6-flash');
 
         if ($this->apiKey === '') {
             throw new \RuntimeException('GEMINI_API_KEY is not set. Add it to your .env file.');
