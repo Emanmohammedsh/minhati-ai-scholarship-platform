@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html
     lang="{{ app()->getLocale() }}"
     dir="{{ app()->getLocale() === 'ar' ? 'rtl' : 'ltr' }}"
@@ -1331,13 +1331,42 @@
                 2px solid var(--warning);
         }
 
-
         .gap-suggestion {
             display: block;
 
             color: var(--muted);
 
             margin-top: 4px;
+        }
+
+
+        .gap-course {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 6px;
+
+            margin-top: 8px;
+            padding: 8px 9px;
+
+            border-radius: 9px;
+
+            background: rgba(22,160,133,.06);
+            border: 1px solid rgba(22,160,133,.20);
+
+            font-size: 11px;
+        }
+
+
+        .gap-course-link {
+            color: var(--success);
+            font-weight: 700;
+            text-decoration: underline;
+        }
+
+
+        .gap-course-meta {
+            color: var(--muted);
         }
 
 
@@ -3160,7 +3189,6 @@
 
                                 )}
 
-
                                 ${
                                     item.suggestion
 
@@ -3177,6 +3205,39 @@
                                                 )}
 
                                             </span>
+
+                                        `
+
+                                        : ''
+                                }
+
+                                ${
+                                    item.course
+
+                                        ? `
+
+                                            <div class="gap-course">
+
+                                                🎓
+                                                <a
+                                                    href="${escapeHtml(item.course.url || '#')}"
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                    class="gap-course-link"
+                                                >
+
+                                                    ${escapeHtml(item.course.course_title || '')}
+
+                                                </a>
+
+                                                <span class="gap-course-meta">
+
+                                                    ${escapeHtml(item.course.platform || '')}
+                                                    ${item.course.estimated_duration ? ' · ' + escapeHtml(item.course.estimated_duration) : ''}
+
+                                                </span>
+
+                                            </div>
 
                                         `
 

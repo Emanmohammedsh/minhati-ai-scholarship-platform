@@ -52,8 +52,7 @@ class CvExtractionService
     private function extractWithGemini(string $cvText, Cv $cv): array
     {
         $apiKey = config('services.gemini.key');
-        $model = config('services.gemini.model', 'gemini-3.5-flash');
-
+$model = config('services.gemini.model', 'gemini-3.6-flash');
         if (! $apiKey) {
             throw new \RuntimeException('GEMINI_API_KEY is not configured.');
         }
@@ -100,23 +99,42 @@ class CvExtractionService
         // FR-07 acceptance criterion: return within 30 seconds. NFR-02
         // backs this with a 30s timeout so a hung request fails fast
         // instead of blocking the student indefinitely.
-        $response = Http::timeout(30)
-            ->withHeaders(['x-goog-api-key' => $apiKey])
-            ->post("https://generativelanguage.googleapis.com/v1beta/models/{$model}:generateContent", [
-                'contents' => [
-                    ['parts' => [['text' => $prompt]]],
-                ],
-                'generationConfig' => [
-                    'responseMimeType' => 'application/json',
-                    'responseSchema' => $schema,
-                ],
-            ]);
+       
+        $maxAttempts = 3;
+        $attempt = 0;
 
-        if ($response->failed()) {
+        do {
+            $attempt++;
+
+            $response = Http::timeout(30)
+                ->withHeaders(['x-goog-api-key' => $apiKey])
+                ->post("https://generativelanguage.googleapis.com/v1beta/models/{$model}:generateContent", [
+                    'contents' => [
+                        ['parts' => [['text' => $prompt]]],
+                    ],
+                    'generationConfig' => [
+                        'responseMimeType' => 'application/json',
+                        'responseSchema' => $schema,
+                    ],
+                ]);
+
+            if ($response->successful()) {
+                break;
+            }
+
+            // Only retry when Gemini is temporarily overloaded (503).
+            if ($response->status() !== 503 || $attempt >= $maxAttempts) {
+                break;
+            }
+
+            sleep(2);
+        } while ($attempt < $maxAttempts); 
+             if ($response->failed()) {
             Log::error('Gemini extraction request failed', [
                 'cv_id' => $cv->cv_id,
                 'status' => $response->status(),
                 'body' => $response->body(),
+                'attempts' => $attempt,
             ]);
 
             throw new \RuntimeException('Gemini API request failed: ' . $response->status());

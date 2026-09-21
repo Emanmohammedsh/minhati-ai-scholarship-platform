@@ -5,13 +5,16 @@ namespace App\Http\Controllers;
 use App\Models\Recommendation;
 use App\Models\StudentProfile;
 use App\Services\MatchingService;
+use App\Services\CourseRecommendationService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class RecommendationController extends Controller
 {
-    public function __construct(private MatchingService $matchingService)
-    {
+    public function __construct(
+        private MatchingService $matchingService,
+        private CourseRecommendationService $courseRecommendationService
+    ) {
     }
 
     /**
@@ -129,6 +132,10 @@ class RecommendationController extends Controller
                         $criterion->criterion_value
                     ),
                     'suggestion' => $this->gapSuggestion(
+                        $criterion->criterion_type,
+                        $criterion->criterion_value
+                    ),
+                    'course' => $this->courseSuggestionFor(
                         $criterion->criterion_type,
                         $criterion->criterion_value
                     ),
@@ -306,6 +313,20 @@ class RecommendationController extends Controller
             default =>
                 'Review the scholarship requirement and update your profile or CV if relevant information is missing.',
         };
+    }
+
+    /**
+     * For skill/qualification gaps, ask Gemini for a real free course
+     * that covers the missing item. Returns null if not a skill/qualification gap,
+     * or if the AI service is unavailable.
+     */
+    private function courseSuggestionFor(string $type, string $value): ?array
+    {
+        if (! in_array($type, ['skill', 'qualification'])) {
+            return null;
+        }
+
+        return $this->courseRecommendationService->suggestForSkill($value);
     }
 
     /**
