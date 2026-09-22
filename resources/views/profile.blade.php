@@ -7,163 +7,277 @@
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&display=swap');
 
-  *{ box-sizing:border-box; margin:0; padding:0; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
 
-  body{
-    font-family:'Inter', system-ui, sans-serif;
-    min-height:100vh;
+  /* -------------------------------------------------
+     Theme tokens (light = default, dark = .theme-dark)
+  ------------------------------------------------- */
+  :root {
+    --primary: #0E7C90;
+    --accent-a: #38DFEA;
+    --accent-b: #4F8CFF;
+
+    --text: rgba(15, 23, 42, .75);
+    --heading: #0F172A;
+    --muted: rgba(15, 23, 42, .55);
+    --placeholder: rgba(15, 23, 42, .35);
+
+    --border: rgba(15, 23, 42, .14);
+
+    --topbar-bg: rgba(255, 255, 255, .82);
+    --topbar-border: rgba(15, 23, 42, .10);
+    --topbar-text: rgba(15, 23, 42, .75);
+    --topbar-heading: #0F172A;
+    --topbar-hover: rgba(15, 23, 42, .06);
+
+    --card-bg: rgba(255, 255, 255, .82);
+    --card-border: rgba(15, 23, 42, .12);
+    --card-shadow: 0 24px 60px rgba(15, 23, 42, .14);
+
+    --input-bg: rgba(15, 23, 42, .04);
+    --input-border: rgba(15, 23, 42, .16);
+    --input-focus-bg: rgba(15, 23, 42, .06);
+
+    --overlay-1: rgba(244, 247, 251, .80);
+    --overlay-2: rgba(244, 247, 251, .45);
+    --overlay-3: rgba(244, 247, 251, .15);
+
+    --error: #DC2626;
+    --error-bg: rgba(220, 38, 38, .10);
+    --error-border: rgba(220, 38, 38, .30);
+    --success: #16A34A;
+    --success-bg: rgba(22, 163, 74, .10);
+    --success-border: rgba(22, 163, 74, .30);
+
+    --toggle-icon-color: #0F172A;
+  }
+
+  body.theme-dark {
+    --text: rgba(255, 255, 255, .78);
+    --heading: #FFFFFF;
+    --muted: rgba(255, 255, 255, .6);
+    --placeholder: rgba(255, 255, 255, .35);
+
+    --border: rgba(255, 255, 255, .14);
+
+    --topbar-bg: rgba(13, 20, 38, .72);
+    --topbar-border: rgba(255, 255, 255, .12);
+    --topbar-text: rgba(255, 255, 255, .85);
+    --topbar-heading: #FFFFFF;
+    --topbar-hover: rgba(255, 255, 255, .10);
+
+    --card-bg: rgba(13, 20, 38, .68);
+    --card-border: rgba(255, 255, 255, .14);
+    --card-shadow: 0 24px 60px rgba(0, 0, 0, .45);
+
+    --input-bg: rgba(255, 255, 255, .06);
+    --input-border: rgba(255, 255, 255, .16);
+    --input-focus-bg: rgba(255, 255, 255, .09);
+
+    --overlay-1: rgba(6, 10, 20, .55);
+    --overlay-2: rgba(6, 10, 20, .15);
+    --overlay-3: rgba(6, 10, 20, .05);
+
+    --error: #FCA5A5;
+    --error-bg: rgba(239, 68, 68, .16);
+    --error-border: rgba(239, 68, 68, .35);
+    --success: #86EFAC;
+    --success-bg: rgba(34, 197, 94, .16);
+    --success-border: rgba(34, 197, 94, .35);
+  }
+
+  body {
+    font-family: 'Inter', system-ui, sans-serif;
+    min-height: 100vh;
+    color: var(--text);
     background:
-      linear-gradient(90deg, rgba(6,10,20,0.55) 0%, rgba(6,10,20,0.15) 42%, rgba(6,10,20,0.05) 60%),
+      linear-gradient(90deg, var(--overlay-1) 0%, var(--overlay-2) 42%, var(--overlay-3) 60%),
       url('/images/minhati.jpg') center/cover no-repeat;
+    background-attachment: fixed;
+    transition: background-color .25s ease, color .25s ease;
   }
 
-  #appShell{ display:none; }
+  #appShell { display: none; }
 
-  .topbar{
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    padding:1.25rem 2rem;
-    background:rgba(13,20,38,0.72);
-    backdrop-filter:blur(18px);
-    -webkit-backdrop-filter:blur(18px);
-    border-bottom:1px solid rgba(255,255,255,0.12);
+  /* Topbar */
+  .topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.25rem 2rem;
+    background: var(--topbar-bg);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+    border-bottom: 1px solid var(--topbar-border);
+    transition: background-color .25s ease, border-color .25s ease;
   }
-  .brand{
-    display:flex;
-    align-items:center;
-    gap:0.55rem;
-    font-family:'Space Grotesk', sans-serif;
-    font-weight:600;
-    font-size:1.05rem;
-    color:#fff;
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 0.55rem;
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 600;
+    font-size: 1.05rem;
+    color: var(--topbar-heading);
   }
-  .brand .mark{
-    width:26px; height:26px;
-    border-radius:8px;
-    background:linear-gradient(135deg, #38DFEA, #4F8CFF);
-    display:flex; align-items:center; justify-content:center;
-    font-size:0.85rem; font-weight:700; color:#0B1220;
+  .brand .mark {
+    width: 26px;
+    height: 26px;
+    border-radius: 8px;
+    background: linear-gradient(135deg, var(--accent-a), var(--accent-b));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: #0B1220;
   }
-  .topbar-links{ display:flex; align-items:center; gap:0.75rem; }
-  .back-link{
-    color:rgba(255,255,255,0.75);
-    text-decoration:none;
-    font-size:0.85rem;
-    font-weight:600;
+  .topbar-links { display: flex; align-items: center; gap: 0.6rem; }
+  .back-link {
+    color: var(--topbar-text);
+    text-decoration: none;
+    font-size: 0.85rem;
+    font-weight: 600;
+    padding: 0.5rem 0.7rem;
+    border-radius: 8px;
+    transition: background-color .2s ease, color .2s ease;
   }
-  .back-link:hover{ color:#fff; }
+  .back-link:hover { color: var(--topbar-heading); background: var(--topbar-hover); }
 
-  main{
-    max-width:640px;
-    margin:3rem auto;
-    padding:0 2rem;
+  .theme-toggle-btn {
+    width: 36px;
+    height: 36px;
+    flex: 0 0 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    border: 1px solid var(--topbar-border);
+    background: var(--topbar-hover);
+    color: var(--topbar-text);
+    font-size: 15px;
+    cursor: pointer;
+    transition: background-color .2s ease, transform .2s ease;
   }
+  .theme-toggle-btn:hover { transform: translateY(-1px); }
 
-  .card{
-    background:rgba(13,20,38,0.68);
-    backdrop-filter:blur(18px);
-    -webkit-backdrop-filter:blur(18px);
-    border:1px solid rgba(255,255,255,0.14);
-    border-radius:20px;
-    padding:2.25rem 2rem;
-    box-shadow:0 24px 60px rgba(0,0,0,0.45);
-    color:#fff;
-  }
-
-  h1{
-    font-family:'Space Grotesk', sans-serif;
-    font-weight:700;
-    font-size:1.5rem;
-    margin-bottom:0.4rem;
-  }
-  .sub{
-    color:rgba(255,255,255,0.6);
-    font-size:0.88rem;
-    margin-bottom:1.75rem;
-  }
-
-  .form-group{ margin-bottom:1.15rem; }
-  label{
-    display:block;
-    font-size:0.78rem;
-    font-weight:600;
-    color:rgba(255,255,255,0.75);
-    margin-bottom:0.45rem;
-  }
-  input, select, textarea{
-    width:100%;
-    padding:0.75rem 0.9rem;
-    background:rgba(255,255,255,0.06);
-    border:1px solid rgba(255,255,255,0.16);
-    border-radius:10px;
-    color:#fff;
-    font-size:0.92rem;
-    font-family:'Inter', sans-serif;
-    transition:border-color .15s, background .15s;
-  }
-  textarea{ resize:vertical; min-height:80px; }
-  input::placeholder, textarea::placeholder{ color:rgba(255,255,255,0.35); }
-  input:focus, select:focus, textarea:focus{
-    outline:none;
-    border-color:#38DFEA;
-    background:rgba(255,255,255,0.09);
-  }
-  input.invalid, select.invalid, textarea.invalid{ border-color:#FCA5A5; }
-
-  select option{ background:#0B1220; color:#fff; }
-
-  .field-error{
-    display:none;
-    color:#FCA5A5;
-    font-size:0.75rem;
-    margin-top:0.35rem;
-  }
-  .field-error.show{ display:block; }
-
-  .save-btn{
-    width:100%;
-    padding:0.8rem;
-    margin-top:0.4rem;
-    background:linear-gradient(135deg, #38DFEA, #4F8CFF);
-    color:#0B1220;
-    border:none;
-    border-radius:10px;
-    font-size:0.95rem;
-    font-weight:700;
-    font-family:'Inter', sans-serif;
-    cursor:pointer;
-    transition:filter .15s;
-  }
-  .save-btn:hover{ filter:brightness(1.08); }
-  .save-btn:disabled{ opacity:0.6; cursor:not-allowed; }
-
-  .alert{
-    padding:0.65rem 0.85rem;
-    border-radius:8px;
-    margin-bottom:1.1rem;
-    font-size:0.82rem;
-    display:none;
-  }
-  .alert-error{ background:rgba(239,68,68,0.16); color:#FCA5A5; border:1px solid rgba(239,68,68,0.35); }
-  .alert-success{ background:rgba(34,197,94,0.16); color:#86EFAC; border:1px solid rgba(34,197,94,0.35); }
-
-  .loading-screen{
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    min-height:100vh;
-    color:#fff;
-    font-size:0.9rem;
-    opacity:0.7;
+  /* Layout */
+  main {
+    max-width: 640px;
+    margin: 3rem auto;
+    padding: 0 2rem;
   }
 
-  @media (max-width: 720px){
-    main{ padding:0 1.25rem; margin:1.5rem auto; }
+  .card {
+    background: var(--card-bg);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+    border: 1px solid var(--card-border);
+    border-radius: 20px;
+    padding: 2.25rem 2rem;
+    box-shadow: var(--card-shadow);
+    color: var(--text);
+    transition: background-color .25s ease, border-color .25s ease, box-shadow .25s ease;
+  }
+
+  h1 {
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700;
+    font-size: 1.5rem;
+    margin-bottom: 0.4rem;
+    color: var(--heading);
+  }
+  .sub { color: var(--muted); font-size: 0.88rem; margin-bottom: 1.75rem; }
+
+  /* Form */
+  .form-group { margin-bottom: 1.15rem; }
+  label {
+    display: block;
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 0.45rem;
+  }
+  input, select, textarea {
+    width: 100%;
+    padding: 0.75rem 0.9rem;
+    background: var(--input-bg);
+    border: 1px solid var(--input-border);
+    border-radius: 10px;
+    color: var(--heading);
+    font-size: 0.92rem;
+    font-family: 'Inter', sans-serif;
+    transition: border-color .15s, background .15s;
+  }
+  textarea { resize: vertical; min-height: 80px; }
+  input::placeholder, textarea::placeholder { color: var(--placeholder); }
+  input:focus, select:focus, textarea:focus {
+    outline: none;
+    border-color: var(--accent-a);
+    background: var(--input-focus-bg);
+  }
+  input.invalid, select.invalid, textarea.invalid { border-color: #FCA5A5; }
+
+  select option { background: #0B1220; color: #fff; }
+  body:not(.theme-dark) select option { background: #FFFFFF; color: #0F172A; }
+
+  .field-error { display: none; color: var(--error); font-size: 0.75rem; margin-top: 0.35rem; }
+  .field-error.show { display: block; }
+
+  .save-btn {
+    width: 100%;
+    padding: 0.8rem;
+    margin-top: 0.4rem;
+    background: linear-gradient(135deg, var(--accent-a), var(--accent-b));
+    color: #0B1220;
+    border: none;
+    border-radius: 10px;
+    font-size: 0.95rem;
+    font-weight: 700;
+    font-family: 'Inter', sans-serif;
+    cursor: pointer;
+    transition: filter .15s;
+  }
+  .save-btn:hover { filter: brightness(1.08); }
+  .save-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+
+  .alert {
+    padding: 0.65rem 0.85rem;
+    border-radius: 8px;
+    margin-bottom: 1.1rem;
+    font-size: 0.82rem;
+    display: none;
+  }
+  .alert-error { background: var(--error-bg); color: var(--error); border: 1px solid var(--error-border); }
+  .alert-success { background: var(--success-bg); color: var(--success); border: 1px solid var(--success-border); }
+
+  .loading-screen {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    color: var(--heading);
+    font-size: 0.9rem;
+    opacity: 0.7;
+  }
+
+  @media (max-width: 720px) {
+    main { padding: 0 1.25rem; margin: 1.5rem auto; }
   }
 </style>
 </head>
 <body>
+
+<script>
+  // Apply saved theme before first paint to avoid a light/dark flash.
+  (function () {
+    try {
+      if (localStorage.getItem('jisr_theme') === 'dark') {
+        document.body.classList.add('theme-dark');
+      }
+    } catch (e) {}
+  })();
+</script>
 
   <div class="loading-screen" id="loadingScreen">Loading...</div>
 
@@ -174,7 +288,8 @@
         AI StudyPort
       </div>
       <div class="topbar-links">
-        <a href="{{ route('dashboard') }}" class="back-link">ط£آ¢أ¢â‚¬آ ط¹آ¯ Back to dashboard</a>
+        <a href="{{ route('dashboard') }}" class="back-link">&larr; Back to dashboard</a>
+        <button id="themeToggleBtn" class="theme-toggle-btn" type="button" title="Dark / Light">🌙</button>
       </div>
     </div>
 
@@ -232,9 +347,9 @@
 <script>
   const API_BASE_URL = "{{ url('/api') }}";
   const LOGIN_URL = "{{ route('login') }}";
+  const CONTINUE_URL = "{{ route('cv-upload') }}";
 
   let profileExists = false;
-  const CONTINUE_URL = "{{ route('cv-upload') }}";
 
   function goToLogin() {
     localStorage.removeItem('auth_token');
@@ -244,23 +359,23 @@
 
   function authHeaders(token) {
     return {
-      'Accept': 'application/json',
-      'Authorization': `Bearer ${token}`
+      Accept: 'application/json',
+      Authorization: `Bearer ${token}`,
     };
   }
 
   function clearFieldErrors() {
-    document.querySelectorAll('.field-error').forEach(function(el) {
+    document.querySelectorAll('.field-error').forEach((el) => {
       el.textContent = '';
       el.classList.remove('show');
     });
-    document.querySelectorAll('input, select, textarea').forEach(function(el) {
+    document.querySelectorAll('input, select, textarea').forEach((el) => {
       el.classList.remove('invalid');
     });
   }
 
   function showFieldError(field, message) {
-    const errEl = document.getElementById('err_' + field);
+    const errEl = document.getElementById(`err_${field}`);
     const inputEl = document.getElementById(field);
     if (errEl) {
       errEl.textContent = message;
@@ -281,7 +396,6 @@
 
   async function loadProfile() {
     const token = localStorage.getItem('auth_token');
-
     if (!token) {
       goToLogin();
       return;
@@ -289,7 +403,7 @@
 
     try {
       const response = await fetch(`${API_BASE_URL}/student-profile`, {
-        headers: authHeaders(token)
+        headers: authHeaders(token),
       });
 
       if (response.status === 401) {
@@ -298,13 +412,13 @@
       }
 
       if (response.status === 404) {
-        // US-04 main scenario: first time filling the profile.
+        // First time filling the profile — nothing to prefill.
         profileExists = false;
       } else if (response.ok) {
         const profile = await response.json();
         fillForm(profile);
         profileExists = true;
-      document.getElementById('continueBtn').style.display = 'block';
+        document.getElementById('continueBtn').style.display = 'block';
       }
 
       document.getElementById('loadingScreen').style.display = 'none';
@@ -314,7 +428,7 @@
     }
   }
 
-  document.getElementById('profileForm').addEventListener('submit', async function(e) {
+  document.getElementById('profileForm').addEventListener('submit', async (e) => {
     e.preventDefault();
 
     const token = localStorage.getItem('auth_token');
@@ -340,28 +454,27 @@
     saveBtn.textContent = 'Saving...';
 
     try {
-      // US-04: create on first save, update independently afterwards ط£آ¢أ¢â€ڑآ¬أ¢â‚¬â€Œ
-      // each field updates without affecting the others.
+      // Create on first save, update independently afterwards.
       const response = await fetch(`${API_BASE_URL}/student-profile`, {
         method: profileExists ? 'PUT' : 'POST',
         headers: {
           ...authHeaders(token),
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
         },
-        body: JSON.stringify(payload)
+        body: JSON.stringify(payload),
       });
 
       const data = await response.json();
 
       if (response.ok) {
         profileExists = true;
-      document.getElementById('continueBtn').style.display = 'block';
+        document.getElementById('continueBtn').style.display = 'block';
         alertBox.textContent = 'Profile saved successfully.';
         alertBox.className = 'alert alert-success';
         alertBox.style.display = 'block';
       } else if (response.status === 422 && data.errors) {
-        // NFR-12: validation message adjacent to each failed field.
-        Object.entries(data.errors).forEach(function([field, messages]) {
+        // Validation message rendered adjacent to each failed field.
+        Object.entries(data.errors).forEach(([field, messages]) => {
           showFieldError(field, messages[0]);
         });
       } else {
@@ -379,9 +492,32 @@
     }
   });
 
-  window.addEventListener('pageshow', function() {
-    loadProfile();
+  function applyTheme(theme) {
+    document.body.classList.toggle('theme-dark', theme === 'dark');
+    try {
+      localStorage.setItem('jisr_theme', theme);
+    } catch (_) {}
+
+    const toggleBtn = document.getElementById('themeToggleBtn');
+    if (toggleBtn) {
+      toggleBtn.textContent = theme === 'dark' ? '☀️' : '🌙';
+    }
+  }
+
+  (function initTheme() {
+    let savedTheme = 'light';
+    try {
+      savedTheme = localStorage.getItem('jisr_theme') || 'light';
+    } catch (_) {}
+    applyTheme(savedTheme);
+  })();
+
+  document.getElementById('themeToggleBtn').addEventListener('click', () => {
+    const isDark = document.body.classList.contains('theme-dark');
+    applyTheme(isDark ? 'light' : 'dark');
   });
+
+  window.addEventListener('pageshow', loadProfile);
 </script>
 
 </body>

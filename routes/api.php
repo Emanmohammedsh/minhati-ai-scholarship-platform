@@ -6,6 +6,7 @@ use App\Http\Controllers\ScholarshipController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ScholarshipCriterionController;
 use App\Http\Controllers\CvController;
+use App\Http\Controllers\CvTailorController;
 use App\Http\Controllers\RecommendationController;
 use App\Http\Controllers\RecommendationCriteriaMatchController;
 use App\Http\Controllers\CoverLetterController;
@@ -17,6 +18,7 @@ use App\Http\Controllers\AdminDashboardController;
 use App\Http\Controllers\Api\JobRecommendationController;
 use App\Http\Controllers\Api\JobApplicationController;
 use App\Http\Controllers\Api\AdminJobController;
+
 /*
 |--------------------------------------------------------------------------
 | Public routes (no auth required)
@@ -26,12 +28,21 @@ Route::get('/scholarships', [ScholarshipController::class, 'index']);
 Route::get('/scholarships/{scholarship}', [ScholarshipController::class, 'show']);
 Route::get('/scholarships/{scholarship}/criteria', [ScholarshipCriterionController::class, 'index']);
 
+Route::post('/register', [AuthController::class, 'register']);
+Route::post('/login', [AuthController::class, 'login']);
+Route::get('/auth/google/redirect', [AuthController::class, 'redirectToGoogle']);
+Route::get('/auth/google/callback', [AuthController::class, 'handleGoogleCallback']);
+
 /*
 |--------------------------------------------------------------------------
 | Authenticated routes (any logged-in user — student or admin)
 |--------------------------------------------------------------------------
 */
 Route::middleware('auth:sanctum')->group(function () {
+
+    // Auth
+    Route::post('/logout', [AuthController::class, 'logout']);
+    Route::get('/me', [AuthController::class, 'me']);
 
     // Student Profile
     Route::get('/student-profile', [StudentProfileController::class, 'show']);
@@ -42,6 +53,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/profile', [StudentProfileController::class, 'store']);
     Route::put('/profile', [StudentProfileController::class, 'update']);
     Route::delete('/profile', [StudentProfileController::class, 'destroy']);
+
     // CVs
     Route::get('/cvs', [CvController::class, 'index']);
     Route::get('/cvs/{cv}', [CvController::class, 'show']);
@@ -51,22 +63,30 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::delete('/cvs/{cv}', [CvController::class, 'destroy']);
     Route::post('/cvs/{cv}/extract', [CvController::class, 'extract']);
     Route::put('/cvs/{cv}/confirm', [CvController::class, 'confirm']);
-    // Recommendations
+
+    // CV Tailor (تحسين الـ CV)
+    Route::post('/cv/tailor/save', [CvTailorController::class, 'save']);
+    Route::post('/cv/tailor', [CvTailorController::class, 'tailor']);
+    // RecommendationsRoute::post('/cv/tailor/save', [CvTailorController::class, 'save']);
+
     Route::get('/recommendations', [RecommendationController::class, 'index']);
     Route::get('/recommendations/{recommendation}', [RecommendationController::class, 'show']);
     Route::post('/recommendations/generate', [RecommendationController::class, 'generate']);
     Route::delete('/recommendations/{recommendation}', [RecommendationController::class, 'destroy']);
     Route::get('/recommendations/{recommendation}/criteria-matches', [RecommendationCriteriaMatchController::class, 'index']);
     Route::get('/recommendations/{recommendation}/gap-analysis', [RecommendationController::class, 'gapAnalysis']);
-   // Job Recommendations - Career Path
-    Route::get('/job-recommendations',[JobRecommendationController::class, 'index']);
-    Route::post('/job-recommendations/generate',[JobRecommendationController::class, 'generate']);
-    Route::get('/job-recommendations/{recommendation}/gap-analysis',[JobRecommendationController::class, 'gapAnalysis']);
+
+    // Job Recommendations - Career Path
+    Route::get('/job-recommendations', [JobRecommendationController::class, 'index']);
+    Route::post('/job-recommendations/generate', [JobRecommendationController::class, 'generate']);
+    Route::get('/job-recommendations/{recommendation}/gap-analysis', [JobRecommendationController::class, 'gapAnalysis']);
+
     // Job Applications
     Route::get('/job-applications', [JobApplicationController::class, 'index']);
     Route::post('/job-applications', [JobApplicationController::class, 'store']);
     Route::patch('/job-applications/{application}/status', [JobApplicationController::class, 'updateStatus']);
     Route::delete('/job-applications/{application}', [JobApplicationController::class, 'destroy']);
+
     // Cover Letters
     Route::get('/cover-letters', [CoverLetterController::class, 'index']);
     Route::get('/cover-letters/{coverLetter}', [CoverLetterController::class, 'show']);
@@ -105,12 +125,14 @@ Route::middleware(['auth:sanctum', 'admin'])->group(function () {
     // Admin Action Logs (read-only, audit trail)
     Route::get('/admin/action-logs', [AdminActionLogController::class, 'index']);
     Route::get('/admin/action-logs/{adminActionLog}', [AdminActionLogController::class, 'show']);
-    Route::get('/admin/dashboard-stats',[AdminDashboardController::class, 'stats']);
+    Route::get('/admin/dashboard-stats', [AdminDashboardController::class, 'stats']);
+
     // User Management
     Route::get('/admin/users', [AdminUserController::class, 'index']);
     Route::get('/admin/users/{user}', [AdminUserController::class, 'show']);
     Route::patch('/admin/users/{user}/status', [AdminUserController::class, 'updateStatus']);
     Route::patch('/admin/users/{user}/role', [AdminUserController::class, 'updateRole']);
+
     // Admin Job Management
     Route::get('/admin/jobs', [AdminJobController::class, 'index']);
     Route::post('/admin/jobs', [AdminJobController::class, 'store']);
@@ -118,15 +140,4 @@ Route::middleware(['auth:sanctum', 'admin'])->group(function () {
     Route::put('/admin/jobs/{job}', [AdminJobController::class, 'update']);
     Route::patch('/admin/jobs/{job}/status', [AdminJobController::class, 'updateStatus']);
     Route::delete('/admin/jobs/{job}', [AdminJobController::class, 'destroy']);
-
-    });
-Route::post('/register', [AuthController::class, 'register']);
-Route::post('/login', [AuthController::class, 'login']);
-
-Route::middleware('auth:sanctum')->group(function () {
-    Route::post('/logout', [AuthController::class, 'logout']);
-    Route::get('/me', [AuthController::class, 'me']);
-
-
-    });
-
+});

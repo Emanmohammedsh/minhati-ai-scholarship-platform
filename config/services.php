@@ -41,6 +41,17 @@ return [
 'scholarship_api' => [
     'key' => env('SCHOLARSHIP_API_KEY'),
 ],
+
+   'google' => [
+       'client_id' => env('GOOGLE_CLIENT_ID'),
+       'client_secret' => env('GOOGLE_CLIENT_SECRET'),
+       'redirect' => env('GOOGLE_REDIRECT_URI'),
+   ], 
+   
+   'gemini' => [
+    'key'   => env('GEMINI_API_KEY'),
+    'model' => env('GEMINI_MODEL'),
+],
 ];
 
 
