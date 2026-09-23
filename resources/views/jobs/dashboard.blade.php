@@ -3376,6 +3376,9 @@ function renderGapLearningPlan(
     const plan =
         data.learning_plan || {};
 
+    const course =
+        data.recommended_course || null;
+
     const steps =
         Array.isArray(plan.steps)
             ? plan.steps
@@ -3390,6 +3393,29 @@ function renderGapLearningPlan(
 
     const isArabic =
         document.documentElement.lang === 'ar';
+
+    /*
+     * Only allow normal HTTP/HTTPS URLs
+     * before placing the course link in the page.
+     */
+    let safeCourseUrl = '';
+
+    if (course && course.url) {
+        try {
+            const parsedUrl =
+                new URL(course.url);
+
+            if (
+                parsedUrl.protocol === 'https:' ||
+                parsedUrl.protocol === 'http:'
+            ) {
+                safeCourseUrl =
+                    parsedUrl.href;
+            }
+        } catch (error) {
+            safeCourseUrl = '';
+        }
+    }
 
     container.innerHTML = `
 
@@ -3495,8 +3521,112 @@ function renderGapLearningPlan(
                 `
                 : ''
         }
+
+        ${
+            course
+                ? `
+                    <div
+                        style="
+                            margin-top: 20px;
+                            padding: 16px;
+                            border: 1px solid #dbeafe;
+                            border-radius: 12px;
+                            background: #f8fbff;
+                        "
+                    >
+                        <h5 style="margin-top: 0;">
+                            📚 ${
+                                isArabic
+                                    ? 'كورس مقترح'
+                                    : 'Recommended Course'
+                            }
+                        </h5>
+
+                        <p>
+                            <strong>
+                                ${escapeHtml(
+                                    course.course_title
+                                    || (
+                                        isArabic
+                                            ? 'مورد تعليمي مقترح'
+                                            : 'Suggested Learning Resource'
+                                    )
+                                )}
+                            </strong>
+                        </p>
+
+                        ${
+                            course.platform
+                                ? `
+                                    <p>
+                                        ${
+                                            isArabic
+                                                ? 'المنصة:'
+                                                : 'Platform:'
+                                        }
+                                        ${escapeHtml(
+                                            course.platform
+                                        )}
+                                    </p>
+                                `
+                                : ''
+                        }
+
+                        ${
+                            course.estimated_duration
+                                ? `
+                                    <p>
+                                        ${
+                                            isArabic
+                                                ? 'المدة المتوقعة:'
+                                                : 'Estimated Duration:'
+                                        }
+                                        ${escapeHtml(
+                                            course.estimated_duration
+                                        )}
+                                    </p>
+                                `
+                                : ''
+                        }
+
+                        ${
+                            safeCourseUrl
+                                ? `
+                                    <a
+                                        href="${escapeHtml(safeCourseUrl)}"
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        class="gap-filler-btn"
+                                        style="
+                                            display: inline-block;
+                                            text-decoration: none;
+                                            margin-top: 6px;
+                                        "
+                                    >
+                                        ${
+                                            isArabic
+                                                ? 'فتح الكورس ↗'
+                                                : 'Open Course ↗'
+                                        }
+                                    </a>
+                                `
+                                : `
+                                    <p>
+                                        ${
+                                            isArabic
+                                                ? 'رابط الكورس غير متاح حاليًا.'
+                                                : 'Course link is currently unavailable.'
+                                        }
+                                    </p>
+                                `
+                        }
+                    </div>
+                `
+                : ''
+        }
     `;
 }
+
     async function refreshJobMatches() {
 
         const button =
