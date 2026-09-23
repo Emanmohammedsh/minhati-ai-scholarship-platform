@@ -115,12 +115,71 @@ class GapFillerController extends Controller
          * Suggest a learning resource for the
          * already verified missing requirement.
          *
-         * This does NOT change the match score.
+         * This does NOT change the real match score.
          */
         $recommendedCourse =
             $courseRecommendationService->suggestForSkill(
                 $requirement->required_value
             );
+
+        /*
+         * Calculate the potential match score
+         * if this specific verified gap were
+         * satisfied.
+         *
+         * This follows the same weighted scoring
+         * principle used by JobMatchingService:
+         *
+         * earned weight / total weight * 100
+         *
+         * Gemini is NOT involved in this calculation.
+         */
+        $totalWeight = (float) $recommendation
+            ->job
+            ->requirements
+            ->sum(function ($item) {
+                return (float) $item->weight;
+            });
+
+        /*
+         * Sum only the contribution points already
+         * earned in the persisted matching result.
+         */
+        $currentEarnedWeight = (float) $recommendation
+            ->requirementMatches
+            ->sum(function ($item) {
+                return (float) $item->contribution_points;
+            });
+
+        /*
+         * The selected requirement is already
+         * verified as unsatisfied above, so its
+         * current contribution is zero.
+         *
+         * Simulate satisfying this one requirement
+         * by adding its configured weight.
+         */
+        $potentialEarnedWeight =
+            $currentEarnedWeight
+            + (float) $requirement->weight;
+
+        /*
+         * Calculate the hypothetical score and
+         * never allow it to exceed 100%.
+         */
+        $potentialMatchScore =
+            $totalWeight > 0
+                ? round(
+                    min(
+                        100,
+                        (
+                            $potentialEarnedWeight
+                            / $totalWeight
+                        ) * 100
+                    ),
+                    2
+                )
+                : (float) $recommendation->match_score;
 
         return response()->json([
             'recommendation_id' =>
@@ -137,8 +196,22 @@ class GapFillerController extends Controller
                     $recommendation->job->company_name,
             ],
 
+            /*
+             * Actual persisted match score.
+             */
             'current_match_score' =>
                 (float) $recommendation->match_score,
+
+            /*
+             * Hypothetical deterministic score if
+             * this one missing requirement becomes
+             * satisfied.
+             */
+            'potential_match_score' =>
+                $potentialMatchScore,
+
+            'potential_score_note' =>
+                'Estimated score if this specific gap becomes satisfied.',
 
             'gap' => [
                 'requirement_id' =>
@@ -157,8 +230,16 @@ class GapFillerController extends Controller
                     (float) $requirement->weight,
             ],
 
-            'learning_plan' => $plan,
+            /*
+             * AI-generated explanation and
+             * personalized learning steps.
+             */
+            'learning_plan' =>
+                $plan,
 
+            /*
+             * Suggested learning resource.
+             */
             'recommended_course' =>
                 $recommendedCourse,
         ]);

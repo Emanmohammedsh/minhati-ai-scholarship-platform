@@ -3378,12 +3378,21 @@ function renderGapLearningPlan(
 
     const course =
         data.recommended_course || null;
+   const currentScore =
+    Number(data.current_match_score);
+
+    const potentialScore =
+        Number(data.potential_match_score);
+
+    const hasPotentialScore =
+        Number.isFinite(currentScore)
+        && Number.isFinite(potentialScore)
+        && potentialScore >= currentScore;
 
     const steps =
         Array.isArray(plan.steps)
             ? plan.steps
             : [];
-
     const keywords =
         Array.isArray(
             plan.search_keywords
@@ -3422,7 +3431,63 @@ function renderGapLearningPlan(
         <span class="ai-plan-badge">
             ✨ Jisr AI Smart Gap Filler
         </span>
+${
+    hasPotentialScore
+        ? `
+            <div
+                style="
+                    margin-top: 16px;
+                    margin-bottom: 18px;
+                    padding: 16px;
+                    border-radius: 12px;
+                    background: #EAF6FF;
+                    border: 1px solid #87DFFF;
+                "
+            >
+                <h5 style="margin-top: 0;">
+                    🎯 ${
+                        isArabic
+                            ? 'تأثير سد هذه الفجوة'
+                            : 'Gap Impact'
+                    }
+                </h5>
 
+                <div
+                    style="
+                        display: flex;
+                        align-items: center;
+                        gap: 12px;
+                        flex-wrap: wrap;
+                    "
+                >
+                    <strong>
+                        ${currentScore.toFixed(1)}%
+                    </strong>
+
+                    <span>→</span>
+
+                    <strong>
+                        ${potentialScore.toFixed(1)}%
+                    </strong>
+                </div>
+
+                <p
+                    style="
+                        margin-top: 8px;
+                        margin-bottom: 0;
+                        font-size: 13px;
+                    "
+                >
+                    ${
+                        isArabic
+                            ? 'النتيجة المحتملة إذا تم استيفاء هذه الفجوة المحددة.'
+                            : 'Potential match if this specific gap is satisfied.'
+                    }
+                </p>
+            </div>
+        `
+        : ''
+}
         <h5>
             ${
                 isArabic
