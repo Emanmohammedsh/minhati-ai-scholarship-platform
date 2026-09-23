@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\JobRecommendation;
+use App\Services\CourseRecommendationService;
 use App\Services\GapFillerService;
 use Illuminate\Http\Request;
 
@@ -12,7 +13,8 @@ class GapFillerController extends Controller
     public function generate(
         Request $request,
         JobRecommendation $recommendation,
-        GapFillerService $gapFillerService
+        GapFillerService $gapFillerService,
+        CourseRecommendationService $courseRecommendationService
     ) {
         /*
          * Security:
@@ -109,6 +111,17 @@ class GapFillerController extends Controller
             $currentSkills
         );
 
+        /*
+         * Suggest a learning resource for the
+         * already verified missing requirement.
+         *
+         * This does NOT change the match score.
+         */
+        $recommendedCourse =
+            $courseRecommendationService->suggestForSkill(
+                $requirement->required_value
+            );
+
         return response()->json([
             'recommendation_id' =>
                 $recommendation->job_recommendation_id,
@@ -145,6 +158,9 @@ class GapFillerController extends Controller
             ],
 
             'learning_plan' => $plan,
+
+            'recommended_course' =>
+                $recommendedCourse,
         ]);
     }
 }
