@@ -2939,7 +2939,16 @@
 
                     const scholarship =
                         item.scholarship || {};
+const schId = Number(
+    scholarship.scholarship_id ?? item.scholarship_id
+);
 
+const existingApp = applications.find(
+    a => Number(a.scholarship_id) === schId
+);
+
+const alreadyApplied =
+    existingApp && existingApp.status !== 'saved';
 
                     return `
 
@@ -3011,7 +3020,17 @@
 
                                 </button>
 
-
+<button
+    type="button"
+    class="why-match-btn apply-btn"
+    data-scholarship-id="${schId}"
+    onclick="applyToScholarship(this)"
+    ${alreadyApplied ? 'disabled' : ''}
+>
+    ${alreadyApplied
+        ? '✓ ' + escapeHtml(TEXT.applied || 'Applied')
+        : escapeHtml(TEXT.apply || 'Apply')}
+</button> 
                                 <div
                                     id="gap-analysis-${item.recommendation_id}"
                                     class="gap-panel hidden"
@@ -3045,7 +3064,59 @@
 
     }
 
+async function applyToScholarship(btn) {
 
+    const scholarshipId =
+        Number(btn.dataset.scholarshipId);
+
+    if (!scholarshipId) return;
+
+    btn.disabled = true;
+
+    try {
+
+        const response = await fetch(
+            `${API_BASE_URL}/saved-applications`,
+            {
+                method: 'POST',
+                headers: {
+                    ...authHeaders(),
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify({
+                    scholarship_id: scholarshipId,
+                    status: 'submitted'
+                })
+            }
+        );
+
+        // 409 = مقدَّم عليها من قبل، مش خطأ حقيقي
+        if (!response.ok && response.status !== 409) {
+            throw new Error(
+                'Apply failed: ' + response.status
+            );
+        }
+
+        const fresh = await requestJson(
+            `${API_BASE_URL}/saved-applications`,
+            { headers: authHeaders() }
+        );
+
+        applications = normalizeCollection(fresh);
+
+        renderMatches();
+        renderApplications();
+
+    } catch (error) {
+
+        console.error(error);
+        btn.disabled = false;
+        alert('Could not submit the application. Please try again.');
+
+    }
+
+} 
     function renderGapAnalysis(data) {
 
         const summary =
