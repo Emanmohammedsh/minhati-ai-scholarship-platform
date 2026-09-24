@@ -266,7 +266,34 @@
 
 <script>
   const API_BASE_URL = "{{ url('/api') }}";
-  const DASHBOARD_URL = "{{ route('dashboard') }}";
+  const DASHBOARD_URL = "{{ route('choose-path') }}";
+
+  // التحقق من وجود توكن Google بالـ URL (بعد الرجوع من Google OAuth)
+  (function checkGoogleLoginToken() {
+    const params = new URLSearchParams(window.location.search);
+    const googleToken = params.get('token');
+
+    if (googleToken) {
+      fetch(`${API_BASE_URL}/me`, {
+        headers: {
+          'Authorization': `Bearer ${googleToken}`,
+          'Accept': 'application/json'
+        }
+      })
+      .then(res => res.json())
+      .then(user => {
+        localStorage.setItem('auth_token', googleToken);
+        localStorage.setItem('auth_user', JSON.stringify(user));
+        window.location.href = DASHBOARD_URL;
+      })
+      .catch(() => {
+        const alertBox = document.getElementById('globalAlert');
+        alertBox.textContent = 'Google sign-in failed. Please try again.';
+        alertBox.className = 'alert alert-error';
+        alertBox.style.display = 'block';
+      });
+    }
+  })();
 
   document.getElementById('toggleEye').addEventListener('click', function() {
     const pw = document.getElementById('password');

@@ -39,18 +39,13 @@ class CvController extends Controller
         $file = $request->file('file');
         $storedPath = $file->store('cvs/' . Auth::id(), 'local');
 
-        // US-01 alt scenario: the newly uploaded CV becomes the active one.
-        Cv::where('user_id', Auth::id())
-            ->where('is_active', true)
-            ->update(['is_active' => false]);
-
         $cv = Cv::create([
             'user_id'           => Auth::id(),
             'file_path'         => $storedPath,
             'original_filename' => $file->getClientOriginalName(),
             'file_size_bytes'   => $file->getSize(),
             'mime_type'         => $file->getClientMimeType(),
-            'is_active'         => true,
+            'is_active'         => false,
             'extraction_status' => 'pending',
         ]);
 
@@ -108,12 +103,20 @@ class CvController extends Controller
             'qualifications'   => ['array'],
         ]);
 
+        // US-01 alt scenario: a CV only becomes the active one once the
+        // student has reviewed and confirmed its extracted data.
+        Cv::where('user_id', Auth::id())
+            ->where('cv_id', '!=', $cv->cv_id)
+            ->where('is_active', true)
+            ->update(['is_active' => false]);
+
         $cv->update([
             'extracted_skills'         => $data['skills'] ?? [],
             'extracted_education'      => $data['education'] ?? [],
             'extracted_qualifications' => $data['qualifications'] ?? [],
             'reviewed_by_student'      => true,
             'reviewed_at'              => now(),
+            'is_active'                => true,
         ]);
 
         return response()->json($cv->fresh());

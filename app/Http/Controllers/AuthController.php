@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
+use Laravel\Socialite\Facades\Socialite;
 
 class AuthController extends Controller
 {
@@ -91,5 +92,53 @@ class AuthController extends Controller
     public function me(Request $request)
     {
         return response()->json($request->user());
+    }
+
+    /**
+     * GET /api/auth/google/redirect
+     */
+    public function redirectToGoogle()
+    {
+        return Socialite::driver('google')->stateless()->redirect();
+    }
+
+    /**
+     * GET /api/auth/google/callback
+     */
+    public function handleGoogleCallback()
+    {
+        $googleUser = Socialite::driver('google')->stateless()->user();
+
+        $user = User::where('email', $googleUser->getEmail())->first();
+
+        if ($user) {
+            // مستخدم موجود مسبقاً — نربط google_id إذا لسا مش مربوط
+            if (! $user->google_id) {
+                $user->forceFill(['google_id' => $googleUser->getId()])->save();
+            }
+        } else {
+            // مستخدم جديد — ننشئه
+            $user = User::create([
+                'full_name'     => $googleUser->getName(),
+                'email'         => $googleUser->getEmail(),
+                'google_id'     => $googleUser->getId(),
+                'password_hash' => null,
+                'role'          => 'student',
+                'is_active'     => true,
+            ]);
+        }
+
+        if (! $user->is_active) {
+            return response()->json(['message' => 'This account has been deactivated.'], 403);
+        }
+
+        $user->forceFill(['last_login_at' => now()])->save();
+
+        $token = $user->createToken('auth_token')->plainTextToken;
+
+        // بدل ما نرجع JSON، نوجه المستخدم لصفحة تسجيل الدخول بالفرونت اند مع التوكن
+        $frontendUrl = env('APP_URL', 'http://localhost:8000');
+
+        return redirect($frontendUrl . '/login?token=' . urlencode($token));
     }
 }
