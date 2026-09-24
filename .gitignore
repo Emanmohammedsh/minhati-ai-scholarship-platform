@@ -22,3 +22,9 @@
 Homestead.json
 Homestead.yaml
 Thumbs.db
+
+out.txt
+result.txt
+fix_bom.ps1
+erd.mwb.bak
+erd.mwb.beforefix
