@@ -1,12 +1,5 @@
-﻿<!DOCTYPE html>
-<<<<<<< HEAD
+<!DOCTYPE html>
 <html lang="{{ app()->getLocale() }}" dir="{{ app()->getLocale() === 'ar' ? 'rtl' : 'ltr' }}">
-=======
-<html
-    lang="{{ app()->getLocale() }}"
-    dir="{{ app()->getLocale() === 'ar' ? 'rtl' : 'ltr' }}"
->
->>>>>>> origin/main
 
 <head>
     <meta charset="UTF-8">
@@ -14,28 +7,13 @@
     <title>{{ __('common.student_dashboard') }} | Jisr AI</title>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
-<<<<<<< HEAD
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
-=======
-
-    <link
-        rel="preconnect"
-        href="https://fonts.gstatic.com"
-        crossorigin
-    >
-
-    <link
-        href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap"
-        rel="stylesheet"
-    >
->>>>>>> origin/main
 
     <link rel="stylesheet" href="{{ asset('css/theme.css') }}">
 
     <style>
         :root {
-<<<<<<< HEAD
             --primary: #0A2E6B;
             --primary-dark: #061F49;
             --secondary: #00C6FF;
@@ -51,117 +29,6 @@
             --warning: #E6A817;
             --danger: #D9534F;
             --shadow: 0 18px 55px rgba(10, 46, 107, .09);
-=======
-            --primary: #0E7C90;
-            --primary-dark: #1B4965;
-            --secondary: #4F8CFF;
-            --accent: #7DD3FC;
-
-            --background: rgba(15,23,42,.05);
-            --surface: #FFFFFF;
-            --surface-soft: #F3F6FB;
-
-            --text: rgba(15,23,42,.75);
-            --heading: #0F172A;
-            --muted: rgba(15,23,42,.55);
-
-            --border: rgba(15,23,42,.10);
-
-            --success: #16A672;
-            --warning: #B7791F;
-            --danger: #E4574C;
-
-            --shadow:
-                0 18px 40px rgba(15,23,42,.08);
-
-            --page-bg: #F4F7FB;
-            --page-glow-1: rgba(14,124,144,.06);
-            --page-glow-2: rgba(79,140,255,.07);
-
-            --loader-ring: rgba(15,23,42,.10);
-            --location-text: rgba(15,23,42,.45);
-            --journey-circle-border: rgba(15,23,42,.15);
-            --journey-circle-bg: rgba(15,23,42,.03);
-            --journey-line: rgba(15,23,42,.12);
-            --match-score-border: rgba(14,124,144,.18);
-            --match-score-bg: rgba(14,124,144,.05);
-            --match-score-shadow: rgba(15,23,42,.08);
-            --gap-chip-bg: rgba(15,23,42,.05);
-            --gap-item-bg: rgba(15,23,42,.035);
-            --empty-border: rgba(15,23,42,.18);
-
-            --topbar-bg: rgba(255,255,255,.85);
-            --topbar-border: rgba(15,23,42,.08);
-            --topbar-text: rgba(15,23,42,.75);
-            --topbar-heading: #0F172A;
-            --topbar-muted: rgba(15,23,42,.55);
-            --topbar-hover-bg: rgba(15,23,42,.06);
-            --topbar-chip-bg: rgba(15,23,42,.05);
-            --topbar-chip-border: rgba(15,23,42,.10);
-            --topbar-divider: rgba(15,23,42,.20);
-        }
-
-
-        body.theme-dark {
-            --primary: #38DFEA;
-            --primary-dark: #1B4965;
-            --secondary: #4F8CFF;
-            --accent: #7DD3FC;
-
-            --background: rgba(255,255,255,.06);
-            --surface: rgba(13,20,38,.68);
-            --surface-soft: rgba(255,255,255,.03);
-
-            --text: rgba(255,255,255,.78);
-            --heading: #FFFFFF;
-            --muted: rgba(255,255,255,.55);
-
-            --border: rgba(255,255,255,.14);
-
-            --success: #34D399;
-            --warning: #FBBF24;
-            --danger: #F87171;
-
-            --shadow:
-                0 24px 60px rgba(0,0,0,.45);
-
-            --page-bg: #0B1220;
-            --page-glow-1: rgba(56,223,234,.13);
-            --page-glow-2: rgba(79,140,255,.16);
-
-            --loader-ring: rgba(255,255,255,.10);
-            --location-text: rgba(255,255,255,.45);
-            --journey-circle-border: rgba(255,255,255,.18);
-            --journey-circle-bg: rgba(255,255,255,.04);
-            --journey-line: rgba(255,255,255,.14);
-            --match-score-border: rgba(56,223,234,.22);
-            --match-score-bg: rgba(255,255,255,.06);
-            --match-score-shadow: rgba(0,0,0,.35);
-            --gap-chip-bg: rgba(255,255,255,.06);
-            --gap-item-bg: rgba(255,255,255,.04);
-            --empty-border: rgba(255,255,255,.18);
-
-            --topbar-bg: rgba(11,18,32,.75);
-            --topbar-border: rgba(255,255,255,.10);
-            --topbar-text: rgba(255,255,255,.85);
-            --topbar-heading: #FFFFFF;
-            --topbar-muted: rgba(255,255,255,.55);
-            --topbar-hover-bg: rgba(255,255,255,.10);
-            --topbar-chip-bg: rgba(255,255,255,.08);
-            --topbar-chip-border: rgba(255,255,255,.20);
-            --topbar-divider: rgba(255,255,255,.22);
-        }
-
-
-        body.theme-dark .glass {
-            background: var(--surface);
-
-            backdrop-filter:
-                blur(18px);
-
-            -webkit-backdrop-filter:
-                blur(18px);
->>>>>>> origin/main
         }
 
         * { box-sizing: border-box; }
@@ -172,37 +39,11 @@
             margin: 0;
             min-height: 100vh;
             color: var(--text);
-<<<<<<< HEAD
             font-family: {{ app()->getLocale() === 'ar' ? 'Arial, sans-serif' : '"Poppins", Arial, sans-serif' }};
             background:
                 radial-gradient(circle at 92% 5%, rgba(0, 198, 255, .13), transparent 26%),
                 radial-gradient(circle at 5% 65%, rgba(135, 223, 255, .18), transparent 25%),
                 #F8FCFF;
-=======
-
-            font-family:
-                {{ app()->getLocale() === 'ar'
-                    ? "'Cairo', Arial, sans-serif"
-                    : "'Poppins', 'Inter', Arial, sans-serif"
-                }};
-
-            background:
-                radial-gradient(
-                    circle at 92% 5%,
-                    var(--page-glow-1),
-                    transparent 26%
-                ),
-                radial-gradient(
-                    circle at 5% 65%,
-                    var(--page-glow-2),
-                    transparent 25%
-                ),
-                var(--page-bg);
-
-            transition:
-                background-color .25s ease,
-                color .25s ease;
->>>>>>> origin/main
         }
 
         button, a { font-family: inherit; }
@@ -224,18 +65,8 @@
         .loader {
             width: 48px;
             height: 48px;
-<<<<<<< HEAD
             border: 4px solid rgba(10, 46, 107, .10);
             border-top-color: var(--secondary);
-=======
-
-            border:
-                4px solid var(--loader-ring);
-
-            border-top-color:
-                var(--secondary);
-
->>>>>>> origin/main
             border-radius: 50%;
             animation: spin .8s linear infinite;
         }
@@ -249,28 +80,9 @@
             position: sticky;
             top: 0;
             z-index: 30;
-<<<<<<< HEAD
             border-bottom: 1px solid rgba(10,46,107,.08);
             background: rgba(255,255,255,.90);
             backdrop-filter: blur(20px);
-=======
-
-            border-bottom:
-                1px solid var(--topbar-border);
-
-            background:
-                var(--topbar-bg);
-
-            backdrop-filter:
-                blur(20px);
-
-            -webkit-backdrop-filter:
-                blur(20px);
-
-            transition:
-                background-color .25s ease,
-                border-color .25s ease;
->>>>>>> origin/main
         }
 
         .topbar-inner {
@@ -285,50 +97,14 @@
 
         .brand { display: flex; align-items: center; gap: 12px; }
 
-<<<<<<< HEAD
         .brand-logo { width: 50px; height: 50px; object-fit: contain; border-radius: 13px; }
-=======
-        .brand {
-            display: flex;
-            align-items: center;
-
-            gap: 12px;
-        }
-
-
-        .brand-logo {
-            width: 50px;
-            height: 50px;
-
-            object-fit: contain;
-
-            border-radius: 13px;
-
-            transition: opacity .18s ease;
-        }
-
-
-        .brand-copy {
-            line-height: 1.1;
-        }
->>>>>>> origin/main
 
         .brand-copy { line-height: 1.1; }
 
         .brand-name {
             display: block;
-<<<<<<< HEAD
             font-family: "Poppins", sans-serif;
             color: var(--primary);
-=======
-
-            font-family:
-                "Poppins",
-                sans-serif;
-
-            color: var(--heading);
-
->>>>>>> origin/main
             font-size: 19px;
             font-weight: 700;
         }
@@ -336,18 +112,8 @@
         .brand-slogan {
             display: block;
             margin-top: 5px;
-<<<<<<< HEAD
             color: #7B8794;
             font-family: "Poppins", sans-serif;
-=======
-
-            color: var(--muted);
-
-            font-family:
-                "Poppins",
-                sans-serif;
-
->>>>>>> origin/main
             font-size: 9px;
             letter-spacing: 1.25px;
         }
@@ -364,20 +130,7 @@
 
         .nav-link { color: var(--primary); }
 
-<<<<<<< HEAD
         .nav-link:hover { background: var(--background); }
-=======
-        .nav-link {
-            color: var(--topbar-text);
-        }
-
-
-        .nav-link:hover {
-            background: var(--topbar-hover-bg);
-            color: var(--topbar-heading);
-        }
-
->>>>>>> origin/main
 
         .language-switcher {
             display: flex;
@@ -386,123 +139,27 @@
             direction: ltr;
             padding: 7px 10px;
             border-radius: 10px;
-<<<<<<< HEAD
             background: var(--background);
             font-family: "Poppins", sans-serif;
-=======
-
-            background: var(--topbar-chip-bg);
-
-            font-family:
-                "Poppins",
-                sans-serif;
-
->>>>>>> origin/main
             font-size: 11px;
             font-weight: 600;
         }
 
         .language-switcher a { color: #8293A0; }
 
-<<<<<<< HEAD
         .language-switcher a.active { color: var(--primary); font-weight: 700; }
-=======
-        .language-switcher a {
-            color: var(--topbar-muted);
-        }
->>>>>>> origin/main
 
         .language-switcher span { color: #BCD2DF; }
 
         .logout-btn { border: none; color: white; background: var(--primary); cursor: pointer; }
 
-<<<<<<< HEAD
         .logout-btn:hover { transform: translateY(-1px); box-shadow: 0 8px 20px rgba(10,46,107,.18); }
-=======
-            font-weight: 700;
-        }
-
-
-        .language-switcher span {
-            color: var(--topbar-divider);
-        }
-
-
-        .logout-btn {
-            border: 1px solid var(--topbar-chip-border);
-
-            color: var(--topbar-text);
-
-            background: var(--topbar-chip-bg);
-
-            cursor: pointer;
-        }
-
-
-        .logout-btn:hover {
-            transform: translateY(-1px);
-
-            background: var(--topbar-hover-bg);
-
-            color: var(--topbar-heading);
-        }
-
-
-        .theme-toggle-btn {
-            width: 36px;
-            height: 36px;
-
-            flex: 0 0 36px;
-
-            display: flex;
-
-            align-items: center;
-            justify-content: center;
-
-            border-radius: 10px;
-
-            border: 1px solid var(--topbar-chip-border);
-
-            background: var(--topbar-chip-bg);
-
-            color: var(--topbar-text);
-
-            font-size: 15px;
-
-            cursor: pointer;
-
-            transition: .2s ease;
-        }
-
-
-        .theme-toggle-btn:hover {
-            background: var(--topbar-hover-bg);
-
-            transform: translateY(-1px);
-        }
-
-
-        /* =====================================
-           MAIN
-        ===================================== */
->>>>>>> origin/main
 
         /* ===== MAIN ===== */
         main {
-<<<<<<< HEAD
             width: min(1180px, calc(100% - 32px));
             margin: 0 auto;
             padding: 42px 0 70px;
-=======
-            width:
-                min(1180px, calc(100% - 32px));
-
-            margin:
-                0 auto;
-
-            padding:
-                22px 0 36px;
->>>>>>> origin/main
         }
 
         /* ===== HERO ===== */
@@ -513,37 +170,12 @@
             justify-content: space-between;
             gap: 30px;
             align-items: center;
-<<<<<<< HEAD
             margin-bottom: 28px;
             padding: 37px 40px;
             border-radius: 25px;
             color: white;
             background: linear-gradient(125deg, #061F49 0%, #0A2E6B 58%, #075A8D 100%);
             box-shadow: 0 25px 65px rgba(10,46,107,.20);
-=======
-
-            margin-bottom: 16px;
-
-            padding: 22px 30px;
-
-            border-radius: 20px;
-
-            color: white;
-
-            background:
-                linear-gradient(
-                    125deg,
-                    #0B1220 0%,
-                    #123057 58%,
-                    #175A8A 100%
-                );
-
-            border:
-                1px solid var(--border);
-
-            box-shadow:
-                0 25px 65px rgba(0,0,0,.45);
->>>>>>> origin/main
         }
 
         .hero::after {
@@ -554,22 +186,7 @@
             border-radius: 50%;
             inset-inline-end: -100px;
             top: -170px;
-<<<<<<< HEAD
             background: rgba(0,198,255,.17);
-=======
-
-            background:
-                rgba(56,223,234,.16);
-        }
-
-
-        .hero-content {
-            position: relative;
-
-            z-index: 2;
-
-            max-width: 690px;
->>>>>>> origin/main
         }
 
         .hero-content { position: relative; z-index: 2; max-width: 690px; }
@@ -585,41 +202,13 @@
 
         .hero h1 {
             margin: 0;
-<<<<<<< HEAD
             font-family: {{ app()->getLocale() === 'ar' ? 'Arial, sans-serif' : '"Poppins", Arial, sans-serif' }};
             font-size: clamp(29px, 4vw, 43px);
-=======
-
-            font-family:
-                {{ app()->getLocale() === 'ar'
-                    ? "'Cairo', Arial, sans-serif"
-                    : "'Poppins', Arial, sans-serif"
-                }};
-
-            font-size:
-                clamp(22px, 3vw, 32px);
-
->>>>>>> origin/main
             line-height: 1.15;
             letter-spacing: -.8px;
         }
 
-<<<<<<< HEAD
         .hero p { margin: 12px 0 0; color: #D8ECF8; line-height: 1.8; font-size: 14px; }
-=======
-
-        .hero p {
-            margin:
-                8px 0 0;
-
-            color: #D8ECF8;
-
-            line-height: 1.6;
-
-            font-size: 13px;
-        }
-
->>>>>>> origin/main
 
         .hero-actions {
             position: relative;
@@ -647,23 +236,9 @@
         .btn:hover { transform: translateY(-1px); }
 
         .btn-primary {
-<<<<<<< HEAD
             background: linear-gradient(135deg, var(--secondary), #008FE8);
             color: white;
             box-shadow: 0 10px 25px rgba(0,198,255,.20);
-=======
-            background:
-                linear-gradient(
-                    135deg,
-                    var(--secondary),
-                    #38DFEA
-                );
-
-            color: #06131F;
-
-            box-shadow:
-                0 10px 25px rgba(56,223,234,.22);
->>>>>>> origin/main
         }
 
         .btn-secondary {
@@ -676,49 +251,22 @@
 
         /* ===== CARDS ===== */
         .glass {
-<<<<<<< HEAD
             background: rgba(255,255,255,.94);
             border: 1px solid var(--border);
-=======
-            background: #FFFFFF;
-
-            border:
-                1px solid var(--border);
-
->>>>>>> origin/main
             box-shadow: var(--shadow);
         }
 
         .stats-grid {
             display: grid;
-<<<<<<< HEAD
             grid-template-columns: repeat(4,1fr);
             gap: 14px;
             margin-bottom: 24px;
-=======
-
-            grid-template-columns:
-                repeat(4,1fr);
-
-            gap: 12px;
-
-            margin-bottom: 14px;
->>>>>>> origin/main
         }
 
         .stat-card {
-<<<<<<< HEAD
             border-radius: 17px;
             padding: 21px;
             min-height: 126px;
-=======
-            border-radius: 14px;
-
-            padding: 14px 16px;
-
-            min-height: 88px;
-
->>>>>>> origin/main
             position: relative;
             overflow: hidden;
         }
@@ -730,51 +278,19 @@
             height: 100px;
             inset-inline-end: -35px;
             bottom: -50px;
-<<<<<<< HEAD
             background: radial-gradient(circle, rgba(0,198,255,.14), transparent 70%);
-=======
-
-            background:
-                radial-gradient(
-                    circle,
-                    rgba(56,223,234,.16),
-                    transparent 70%
-                );
-        }
-
-
-        .stat-label {
-            color: var(--muted);
-
-            font-size: 11px;
-
-            font-weight: 600;
-
-            margin-bottom: 8px;
->>>>>>> origin/main
         }
 
         .stat-label { color: var(--muted); font-size: 12px; font-weight: 600; margin-bottom: 17px; }
 
         .stat-value {
             color: var(--primary);
-<<<<<<< HEAD
             font-family: "Poppins", sans-serif;
             font-size: 29px;
-=======
-
-            font-family:
-                "Poppins",
-                sans-serif;
-
-            font-size: 23px;
-
->>>>>>> origin/main
             font-weight: 700;
             line-height: 1;
         }
 
-<<<<<<< HEAD
         .stat-note { color: var(--muted); font-size: 11px; margin-top: 10px; line-height: 1.5; }
 
         .dashboard-grid {
@@ -785,51 +301,13 @@
         }
 
         .section-card { border-radius: 19px; padding: 24px; }
-=======
-
-        .stat-note {
-            color: var(--muted);
-
-            font-size: 10px;
-
-            margin-top: 6px;
-
-            line-height: 1.4;
-        }
-
-
-        .dashboard-grid {
-            display: grid;
-
-            grid-template-columns:
-                minmax(0,1.45fr)
-                minmax(280px,.75fr);
-
-            gap: 14px;
-
-            margin-bottom: 14px;
-        }
-
-
-        .section-card {
-            border-radius: 16px;
-
-            padding: 16px 18px;
-        }
-
->>>>>>> origin/main
 
         .section-heading {
             display: flex;
             align-items: center;
             justify-content: space-between;
             gap: 15px;
-<<<<<<< HEAD
             margin-bottom: 20px;
-=======
-
-            margin-bottom: 14px;
->>>>>>> origin/main
         }
 
         .section-heading h2 { margin: 0; color: var(--heading); font-size: 18px; }
@@ -841,83 +319,24 @@
             color: var(--primary);
             padding: 7px 10px;
             border-radius: 999px;
-<<<<<<< HEAD
             background: rgba(0,198,255,.08);
             border: 1px solid rgba(0,198,255,.18);
-=======
-
-            background:
-                rgba(56,223,234,.08);
-
-            border:
-                1px solid rgba(56,223,234,.20);
-
->>>>>>> origin/main
             white-space: nowrap;
         }
 
         /* ===== BEST OPPORTUNITY ===== */
         .best-opportunity {
-<<<<<<< HEAD
             border-radius: 16px;
             padding: 22px;
             background: linear-gradient(135deg, rgba(0,198,255,.09), rgba(10,46,107,.04));
             border: 1px solid #D4EFF9;
-=======
-            border-radius: 14px;
-
-            padding: 16px;
-
-            background:
-                linear-gradient(
-                    135deg,
-                    rgba(56,223,234,.09),
-                    rgba(79,140,255,.05)
-                );
-
-            border:
-                1px solid var(--border);
->>>>>>> origin/main
         }
 
         .opportunity-top { display: flex; justify-content: space-between; gap: 20px; }
 
         .opportunity-title { margin: 0 0 7px; color: var(--heading); font-size: 21px; }
 
-<<<<<<< HEAD
         .provider { color: var(--muted); font-size: 13px; }
-=======
-            justify-content: space-between;
-
-            gap: 20px;
-        }
-
-
-        .opportunity-title {
-            margin:
-                0 0 7px;
-
-            color: var(--heading);
-
-            font-size: 21px;
-        }
-
-
-        .provider {
-            color: var(--muted);
-
-            font-size: 13px;
-        }
-
-
-        .location {
-            color: var(--location-text);
-
-            margin-top: 12px;
-
-            font-size: 13px;
-        }
->>>>>>> origin/main
 
         .location { color: #607383; margin-top: 12px; font-size: 13px; }
 
@@ -930,20 +349,9 @@
             align-items: center;
             justify-content: center;
             flex-direction: column;
-<<<<<<< HEAD
             border: 6px solid rgba(0,198,255,.20);
             background: white;
             box-shadow: 0 8px 25px rgba(10,46,107,.08);
-=======
-
-            border:
-                6px solid var(--match-score-border);
-
-            background: var(--match-score-bg);
-
-            box-shadow:
-                0 8px 20px var(--match-score-shadow);
->>>>>>> origin/main
         }
 
         .match-score strong { font-family: "Poppins", sans-serif; font-size: 19px; color: var(--primary); }
@@ -957,67 +365,7 @@
 
         .journey-item { display: grid; grid-template-columns: 30px 1fr; gap: 12px; min-height: 59px; }
 
-<<<<<<< HEAD
         html[dir="rtl"] .journey-item { grid-template-columns: 30px 1fr; }
-=======
-        .match-score small {
-            color: var(--muted);
-
-            font-size: 9px;
-        }
-
-
-        .opportunity-description {
-            color: var(--muted);
-
-            line-height: 1.6;
-
-            font-size: 12px;
-
-            margin:
-                12px 0 0;
-        }
-
-
-        /* =====================================
-           JOURNEY
-        ===================================== */
-
-        .journey {
-            display: flex;
-
-            flex-direction: column;
-
-            gap: 0;
-        }
-
-
-        .journey-item {
-            display: grid;
-
-            grid-template-columns:
-                30px 1fr;
-
-            gap: 12px;
-
-            min-height: 44px;
-        }
-
-
-        html[dir="rtl"] .journey-item {
-            grid-template-columns:
-                30px 1fr;
-        }
-
-
-        .journey-marker {
-            display: flex;
-
-            flex-direction: column;
-
-            align-items: center;
-        }
->>>>>>> origin/main
 
         .journey-marker { display: flex; flex-direction: column; align-items: center; }
 
@@ -1026,39 +374,18 @@
             height: 25px;
             flex: 0 0 25px;
             border-radius: 50%;
-<<<<<<< HEAD
             border: 1px solid #CFE1EA;
-=======
-
-            border:
-                1px solid var(--journey-circle-border);
-
->>>>>>> origin/main
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 11px;
             color: var(--primary);
-<<<<<<< HEAD
             background: #F2FAFE;
-=======
-
-            background: var(--journey-circle-bg);
->>>>>>> origin/main
         }
 
         .journey-item.done .journey-circle {
-<<<<<<< HEAD
             background: rgba(22,160,133,.10);
             border-color: rgba(22,160,133,.35);
-=======
-            background:
-                rgba(52,211,153,.12);
-
-            border-color:
-                rgba(52,211,153,.40);
-
->>>>>>> origin/main
             color: var(--success);
         }
 
@@ -1066,67 +393,15 @@
 
         .journey-content strong { display: block; color: var(--heading); font-size: 13px; margin-top: 3px; }
 
-<<<<<<< HEAD
         .journey-content small { display: block; color: var(--muted); margin-top: 4px; font-size: 11px; }
-=======
-            flex: 1;
-
-            background: var(--journey-line);
-        }
-
-
-        .journey-content strong {
-            display: block;
-
-            color: var(--heading);
-
-            font-size: 13px;
-
-            margin-top: 3px;
-        }
-
-
-        .journey-content small {
-            display: block;
-
-            color: var(--muted);
-
-            margin-top: 4px;
-
-            font-size: 11px;
-        }
-
-
-        /* =====================================
-           MATCHES
-        ===================================== */
-
-        .matches-grid {
-            display: grid;
-
-            grid-template-columns:
-                repeat(3,1fr);
-
-            gap: 14px;
-        }
->>>>>>> origin/main
 
         /* ===== MATCHES ===== */
         .matches-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 14px; }
 
         .match-card {
-<<<<<<< HEAD
             min-height: 190px;
             padding: 18px;
             border-radius: 15px;
-=======
-            min-height: 150px;
-
-            padding: 14px;
-
-            border-radius: 13px;
-
->>>>>>> origin/main
             background: var(--surface-soft);
             border: 1px solid var(--border);
             display: flex;
@@ -1134,22 +409,7 @@
             transition: .25s ease;
         }
 
-<<<<<<< HEAD
         .match-card:hover { transform: translateY(-3px); box-shadow: 0 14px 35px rgba(10,46,107,.08); }
-=======
-
-        .match-card:hover {
-            transform:
-                translateY(-3px);
-
-            box-shadow:
-                0 14px 35px rgba(0,0,0,.35);
-
-            border-color:
-                rgba(56,223,234,.30);
-        }
-
->>>>>>> origin/main
 
         .match-percent {
             width: fit-content;
@@ -1158,50 +418,14 @@
             font-weight: 700;
             padding: 6px 9px;
             border-radius: 999px;
-<<<<<<< HEAD
             background: rgba(0,198,255,.09);
-=======
-
-            background:
-                rgba(56,223,234,.10);
->>>>>>> origin/main
         }
 
         .match-card h3 { margin: 15px 0 7px; color: var(--heading); font-size: 15px; line-height: 1.4; }
 
         .match-card .provider { font-size: 11px; }
 
-<<<<<<< HEAD
         .match-country { margin-top: auto; padding-top: 16px; color: #657885; font-size: 11px; }
-=======
-            color: var(--heading);
-
-            font-size: 15px;
-
-            line-height: 1.4;
-        }
-
-
-        .match-card .provider {
-            font-size: 11px;
-        }
-
-
-        .match-country {
-            margin-top: auto;
-
-            padding-top: 16px;
-
-            color: var(--muted);
-
-            font-size: 11px;
-        }
-
-
-        /* =====================================
-           APPLICATIONS
-        ===================================== */
->>>>>>> origin/main
 
         /* ===== APPLICATIONS ===== */
         .application-card {
@@ -1224,14 +448,7 @@
             font-weight: 700;
             padding: 6px 9px;
             border-radius: 999px;
-<<<<<<< HEAD
             background: rgba(0,198,255,.10);
-=======
-
-            background:
-                rgba(56,223,234,.12);
-
->>>>>>> origin/main
             color: var(--primary);
             height: fit-content;
         }
@@ -1248,22 +465,8 @@
         /* ===== QUICK ACTIONS ===== */
         .quick-actions { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; }
 
-<<<<<<< HEAD
         .quick-action {
             border: 1px solid var(--border);
-=======
-        .quick-action,
-        a.quick-action {
-            display: block;
-
-            color: var(--heading) !important;
-
-            text-decoration: none !important;
-
-            border:
-                1px solid var(--border);
-
->>>>>>> origin/main
             border-radius: 14px;
             padding: 17px;
             background: var(--surface-soft);
@@ -1274,57 +477,9 @@
 
         .quick-action:hover { background: var(--background); transform: translateY(-2px); }
 
-<<<<<<< HEAD
         .quick-action strong { display: block; color: var(--heading); font-size: 13px; }
 
         .quick-action span { display: block; color: var(--muted); font-size: 11px; line-height: 1.5; margin-top: 5px; }
-=======
-        .quick-action:hover,
-        a.quick-action:hover {
-            background: var(--background);
-
-            border-color:
-                rgba(56,223,234,.30);
-
-            transform:
-                translateY(-2px);
-
-            text-decoration: none !important;
-        }
-
-
-        .quick-action strong {
-            display: block;
-
-            color: var(--heading) !important;
-
-            text-decoration: none !important;
-
-            font-size: 13px;
-
-            font-weight: 600;
-        }
-
-
-        .quick-action span {
-            display: block;
-
-            color: var(--muted) !important;
-
-            text-decoration: none !important;
-
-            font-size: 11px;
-
-            line-height: 1.5;
-
-            margin-top: 5px;
-        }
-
-
-        /* =====================================
-           GAP ANALYSIS
-        ===================================== */
->>>>>>> origin/main
 
         /* ===== GAP ANALYSIS + APPLY ===== */
         .match-actions {
@@ -1336,18 +491,8 @@
         .why-match-btn {
             display: block;
             width: 100%;
-<<<<<<< HEAD
             border: 1px solid rgba(0,198,255,.22);
             background: rgba(0,198,255,.07);
-=======
-
-            border:
-                1px solid rgba(56,223,234,.25);
-
-            background:
-                rgba(56,223,234,.08);
-
->>>>>>> origin/main
             color: var(--primary);
             border-radius: 10px;
             padding: 9px 11px;
@@ -1359,7 +504,6 @@
 
         .why-match-btn:hover { background: rgba(0,198,255,.13); }
 
-<<<<<<< HEAD
         .why-match-btn:disabled { opacity: .55; cursor: wait; }
 
         .apply-btn { margin-top: 8px; }
@@ -1370,28 +514,14 @@
             color: var(--success);
             border-color: rgba(22,160,133,.30);
             background: rgba(22,160,133,.08);
-=======
-        .why-match-btn:hover {
-            background:
-                rgba(56,223,234,.15);
->>>>>>> origin/main
         }
 
         .gap-panel {
             margin-top: 12px;
             padding: 13px;
             border-radius: 12px;
-<<<<<<< HEAD
             border: 1px solid var(--border);
             background: white;
-=======
-
-            border:
-                1px solid var(--border);
-
-            background: var(--surface-soft);
-
->>>>>>> origin/main
             font-size: 11px;
             line-height: 1.55;
         }
@@ -1401,46 +531,21 @@
         .gap-chip {
             padding: 5px 8px;
             border-radius: 999px;
-<<<<<<< HEAD
             background: #F3F8FB;
-=======
-
-            background: var(--gap-chip-bg);
-
->>>>>>> origin/main
             color: var(--muted);
             border: 1px solid var(--border);
         }
 
         .gap-chip.good {
             color: var(--success);
-<<<<<<< HEAD
             border-color: rgba(22,160,133,.20);
             background: rgba(22,160,133,.06);
-=======
-
-            border-color:
-                rgba(52,211,153,.25);
-
-            background:
-                rgba(52,211,153,.08);
->>>>>>> origin/main
         }
 
         .gap-chip.warning {
-<<<<<<< HEAD
             color: #A87800;
             border-color: rgba(230,168,23,.25);
             background: rgba(230,168,23,.07);
-=======
-            color: var(--warning);
-
-            border-color:
-                rgba(251,191,36,.28);
-
-            background:
-                rgba(251,191,36,.08);
->>>>>>> origin/main
         }
 
         .gap-block + .gap-block { margin-top: 12px; }
@@ -1457,7 +562,6 @@
 
         .gap-suggestion { display: block; color: var(--muted); margin-top: 4px; }
 
-<<<<<<< HEAD
         .gap-course {
             display: flex;
             align-items: center;
@@ -1469,49 +573,11 @@
             background: rgba(22,160,133,.06);
             border: 1px solid rgba(22,160,133,.20);
             font-size: 11px;
-=======
-        .gap-item {
-            color: var(--muted);
-
-            padding: 7px 9px;
-
-            border-radius: 9px;
-
-            background: var(--gap-item-bg);
->>>>>>> origin/main
         }
 
         .gap-course-link { color: var(--success); font-weight: 700; text-decoration: underline; }
 
-<<<<<<< HEAD
         .gap-course-meta { color: var(--muted); }
-=======
-        .gap-item +
-        .gap-item {
-            margin-top: 6px;
-        }
-
-
-        .gap-item.matched {
-            border-inline-start:
-                2px solid var(--success);
-        }
-
-
-        .gap-item.missing {
-            border-inline-start:
-                2px solid var(--warning);
-        }
-
-        .gap-suggestion {
-            display: block;
-
-            color: var(--muted);
-
-            margin-top: 4px;
-        }
-
->>>>>>> origin/main
 
         .gap-course {
             display: flex;
@@ -1547,20 +613,9 @@
             margin-top: 7px;
             padding: 8px 9px;
             border-radius: 9px;
-<<<<<<< HEAD
             color: #886300;
             background: rgba(249,199,79,.10);
             border: 1px solid rgba(249,199,79,.25);
-=======
-
-            color: var(--warning);
-
-            background:
-                rgba(251,191,36,.10);
-
-            border:
-                1px solid rgba(251,191,36,.28);
->>>>>>> origin/main
         }
 
         /* ===== EMPTY ===== */
@@ -1569,13 +624,7 @@
             text-align: center;
             color: var(--muted);
             border-radius: 14px;
-<<<<<<< HEAD
             border: 1px dashed #CADDE7;
-=======
-
-            border:
-                1px dashed var(--empty-border);
->>>>>>> origin/main
         }
 
         .empty-state strong { display: block; color: var(--heading); margin-bottom: 6px; }
@@ -1589,19 +638,8 @@
             min-width: 250px;
             max-width: 360px;
             padding: 14px 16px;
-<<<<<<< HEAD
             background: var(--primary);
             color: white;
-=======
-
-            background: rgba(15,23,42,.96);
-
-            border:
-                1px solid rgba(255,255,255,.12);
-
-            color: #FFFFFF;
-
->>>>>>> origin/main
             border-radius: 12px;
             box-shadow: var(--shadow);
             font-size: 13px;
@@ -1637,30 +675,34 @@
             .logout-btn { padding: 9px 10px; font-size: 11px; }
             .brand-logo { width: 44px; height: 44px; }
         }
+    
+        /* CV Tailor */
+        .tailor-btn { border-color:#00C6FF; color:#0A2E6B; background:#EAF6FF; }
+        .tailor-btn:hover { background:#d9f2ff; }
+        .tailor-modal { position:fixed; inset:0; z-index:1200; display:flex; align-items:center; justify-content:center; padding:20px; background:rgba(10,46,107,.38); }
+        .tailor-modal.hidden { display:none; }
+        .tailor-dialog { width:min(760px,100%); max-height:88vh; overflow:auto; background:#fff; border:1px solid rgba(10,46,107,.12); border-radius:22px; box-shadow:0 24px 70px rgba(10,46,107,.22); padding:24px; }
+        .tailor-head { display:flex; justify-content:space-between; gap:16px; align-items:flex-start; margin-bottom:16px; }
+        .tailor-head h2 { margin:0 0 6px; color:#0A2E6B; }
+        .tailor-head p { margin:0; color:#4B5563; }
+        .tailor-close { border:0; background:#EAF6FF; color:#0A2E6B; width:38px; height:38px; border-radius:50%; cursor:pointer; font-size:20px; }
+        .tailor-status { padding:14px 16px; border-radius:14px; background:#EAF6FF; color:#0A2E6B; margin:12px 0; }
+        .tailor-section { margin-top:18px; }
+        .tailor-section h3 { color:#0A2E6B; margin:0 0 10px; }
+        .tailor-option { display:flex; gap:12px; align-items:flex-start; padding:13px; margin:8px 0; border:1px solid rgba(10,46,107,.12); border-radius:14px; background:#fff; }
+        .tailor-option input { margin-top:4px; accent-color:#0A2E6B; }
+        .tailor-option strong { color:#0A2E6B; display:block; }
+        .tailor-option small { color:#4B5563; display:block; margin-top:4px; line-height:1.5; }
+        .tailor-warning { color:#9a6700 !important; }
+        .tailor-actions { display:flex; justify-content:flex-end; gap:10px; margin-top:20px; flex-wrap:wrap; }
+        .tailor-note { font-size:13px; color:#4B5563; margin-top:10px; }
+
     </style>
 </head>
 
 
 <body>
 
-<<<<<<< HEAD
-=======
-<script>
-    (function () {
-        try {
-            var savedTheme =
-                localStorage.getItem('jisr_theme');
-
-            if (savedTheme === 'dark') {
-                document.body.classList.add('theme-dark');
-            }
-        }
-        catch (e) {}
-    })();
-</script>
-
-
->>>>>>> origin/main
 <div id="loadingScreen">
     <div class="loader"></div>
     <div class="loading-text">{{ __('common.preparing_dashboard') }}</div>
@@ -1673,26 +715,8 @@
     <header class="topbar">
         <div class="topbar-inner">
 
-<<<<<<< HEAD
             <a href="{{ route('dashboard') }}" class="brand">
                 <img src="/images/jisr-logo.jpeg" class="brand-logo" alt="Jisr AI">
-=======
-
-            <a
-                href="{{ route('dashboard') }}"
-                class="brand"
-            >
-
-                <img
-                    id="brandLogo"
-                    src="/images/jisr-logo.jpeg"
-                    data-light-src="/images/jisr-logo.jpeg"
-                    data-dark-src="/images/jisr-logo.jpeg"
-                    class="brand-logo"
-                    alt="Jisr AI"
-                >
-
->>>>>>> origin/main
                 <div class="brand-copy">
                     <span class="brand-name">Jisr AI</span>
                     <span class="brand-slogan">BRIDGING TALENT TO OPPORTUNITY</span>
@@ -1713,31 +737,7 @@
                     <a href="{{ route('language.switch','en') }}" class="{{ app()->getLocale() === 'en' ? 'active' : '' }}">EN</a>
                 </div>
 
-<<<<<<< HEAD
                 <button id="logoutBtn" class="logout-btn" type="button">{{ __('common.logout') }}</button>
-=======
-
-
-                <button
-                    id="themeToggleBtn"
-                    class="theme-toggle-btn"
-                    type="button"
-                    title="Dark / Light"
-                >
-                    🌙
-                </button>
-
-
-
-                <button
-                    id="logoutBtn"
-                    class="logout-btn"
-                    type="button"
-                >
-                    {{ __('common.logout') }}
-                </button>
-
->>>>>>> origin/main
 
             </div>
         </div>
@@ -1824,7 +824,7 @@
 
                     <div class="journey-item" id="journeyProfile">
                         <div class="journey-marker">
-                            <div class="journey-circle">✓</div>
+                            <div class="journey-circle">?</div>
                             <div class="journey-line"></div>
                         </div>
                         <div class="journey-content">
@@ -1835,7 +835,7 @@
 
                     <div class="journey-item" id="journeyMatch">
                         <div class="journey-marker">
-                            <div class="journey-circle">✓</div>
+                            <div class="journey-circle">?</div>
                             <div class="journey-line"></div>
                         </div>
                         <div class="journey-content">
@@ -1939,6 +939,26 @@
 
 </div>
 
+
+
+<div id="cvTailorModal" class="tailor-modal hidden" role="dialog" aria-modal="true" aria-labelledby="cvTailorTitle">
+    <div class="tailor-dialog">
+        <div class="tailor-head">
+            <div>
+                <h2 id="cvTailorTitle">{{ app()->getLocale() === 'ar' ? 'خصّص سيرتك لهذه المنحة' : 'Tailor CV for this Scholarship' }}</h2>
+                <p id="cvTailorScholarship"></p>
+            </div>
+            <button type="button" class="tailor-close" onclick="closeCvTailor()" aria-label="Close">×</button>
+        </div>
+        <div id="cvTailorStatus" class="tailor-status">{{ app()->getLocale() === 'ar' ? 'جارٍ تجهيز الاقتراحات...' : 'Preparing suggestions...' }}</div>
+        <div id="cvTailorSuggestions"></div>
+        <div class="tailor-actions">
+            <button type="button" class="btn btn-secondary" onclick="closeCvTailor()">{{ app()->getLocale() === 'ar' ? 'إلغاء' : 'Cancel' }}</button>
+            <button type="button" id="saveTailoredCvBtn" class="btn btn-primary" onclick="saveTailoredCv()" disabled>{{ app()->getLocale() === 'ar' ? 'حفظ النسخة المخصّصة' : 'Save Tailored Version' }}</button>
+        </div>
+        <p class="tailor-note">{{ app()->getLocale() === 'ar' ? 'سيتم حفظ نسخة منفصلة. لن يتم تعديل السيرة الأصلية.' : 'A separate version will be saved. Your original CV will not be changed.' }}</p>
+    </div>
+</div>
 
 <div id="toast" class="toast hidden"></div>
 
@@ -2052,6 +1072,12 @@
     let recommendations = [];
 
     let applications = [];
+
+    let cvs = [];
+
+    let activeCv = null;
+
+    let tailorContext = null;
 
 
     function getToken() {
@@ -2363,8 +1389,18 @@
                             ${alreadyApplied ? 'disabled' : ''}
                         >
                             ${alreadyApplied
-                                ? '✓ ' + escapeHtml(TEXT.applied)
+                                ? '? ' + escapeHtml(TEXT.applied)
                                 : escapeHtml(TEXT.apply)}
+                        </button>
+
+                        <button
+                            type="button"
+                            class="why-match-btn tailor-btn"
+                            data-scholarship-id="${schId}"
+                            data-scholarship-title="${escapeHtml(scholarship.title || TEXT.scholarship)}"
+                            onclick="openCvTailor(this)"
+                        >
+                            ${CURRENT_LOCALE === 'ar' ? 'خصّص سيرتك' : 'Tailor CV'}
                         </button>
 
                         <div
@@ -2474,7 +1510,7 @@
                 <div class="gap-block">
 
                     <div class="gap-block-title">
-                        ✓ ${escapeHtml(TEXT.matchedCriteria)}
+                        ? ${escapeHtml(TEXT.matchedCriteria)}
                     </div>
 
                     ${matched.map(item => `
@@ -2496,109 +1532,8 @@
             ? `
                 <div class="gap-block">
 
-<<<<<<< HEAD
                     <div class="gap-block-title">
                         ! ${escapeHtml(TEXT.missingCriteria)}
-=======
-        const gapsHtml =
-            allGaps.length
-
-                ? `
-
-                    <div class="gap-block">
-
-                        <div class="gap-block-title">
-
-                            !
-                            ${escapeHtml(
-                                TEXT.missingCriteria
-                            )}
-
-                        </div>
-
-
-                        ${allGaps.map(item => `
-
-                            <div class="gap-item missing">
-
-                                <strong>
-
-                                    ${escapeHtml(
-                                        item.gapLabel
-                                    )}:
-
-                                </strong>
-
-
-                                ${escapeHtml(
-
-                                    item.message ||
-
-                                    `${item.type}: ${item.required_value}`
-
-                                )}
-
-                                ${
-                                    item.suggestion
-
-                                        ? `
-
-                                            <span class="gap-suggestion">
-
-                                                ${escapeHtml(
-                                                    TEXT.nextStep
-                                                )}:
-
-                                                ${escapeHtml(
-                                                    item.suggestion
-                                                )}
-
-                                            </span>
-
-                                        `
-
-                                        : ''
-                                }
-
-                                ${
-                                    item.course
-
-                                        ? `
-
-                                            <div class="gap-course">
-
-                                                🎓
-
-                                                <a
-                                                    href="${escapeHtml(item.course.url || '#')}"
-                                                    target="_blank"
-                                                    rel="noopener noreferrer"
-                                                    class="gap-course-link"
-                                                >
-
-                                                    ${escapeHtml(item.course.course_title || '')}
-
-                                                </a>
-
-                                                <span class="gap-course-meta">
-
-                                                    ${escapeHtml(item.course.platform || '')}
-                                                    ${item.course.estimated_duration ? ' · ' + escapeHtml(item.course.estimated_duration) : ''}
-
-                                                </span>
-
-                                            </div>
-
-                                        `
-
-                                        : ''
-                                }
-
-                            </div>
-
-                        `).join('')}
-
->>>>>>> origin/main
                     </div>
 
                     ${allGaps.map(item => `
@@ -2618,7 +1553,7 @@
 
                             ${item.course ? `
                                 <div class="gap-course">
-                                    🎓
+                                    ??
                                     <a
                                         href="${escapeHtml(item.course.url || '#')}"
                                         target="_blank"
@@ -2916,6 +1851,166 @@
     }
 
 
+    function closeCvTailor() {
+        document.getElementById('cvTailorModal').classList.add('hidden');
+        tailorContext = null;
+    }
+
+    function suggestionText(item) {
+        if (typeof item === 'string') return item;
+        return item?.suggested ?? item?.suggestion ?? item?.value ?? item?.text ?? item?.original ?? '';
+    }
+
+    function suggestionReason(item) {
+        if (!item || typeof item === 'string') return '';
+        return item.reason ?? item.why ?? item.explanation ?? '';
+    }
+
+    function suggestionFlagged(item) {
+        return Boolean(item && typeof item === 'object' && (item.flagged ?? item.warning ?? item.needs_review));
+    }
+
+    function getTailorSection(payload, section) {
+        const value = payload?.[section] ?? payload?.suggestions?.[section] ?? payload?.tailored?.[section] ?? [];
+        return Array.isArray(value) ? value : [];
+    }
+
+    function renderTailorSuggestions(payload) {
+        const skills = getTailorSection(payload, 'skills');
+        const qualifications = getTailorSection(payload, 'qualifications');
+        const container = document.getElementById('cvTailorSuggestions');
+        const status = document.getElementById('cvTailorStatus');
+        const saveBtn = document.getElementById('saveTailoredCvBtn');
+
+        const sectionHtml = (title, section, items) => {
+            if (!items.length) return '';
+            return `<div class="tailor-section"><h3>${escapeHtml(title)}</h3>${items.map((item, index) => {
+                const value = suggestionText(item);
+                const reason = suggestionReason(item);
+                const flagged = suggestionFlagged(item);
+                return `<label class="tailor-option">
+                    <input type="checkbox" class="tailor-choice" data-section="${section}" data-value="${escapeHtml(value)}" ${flagged ? '' : 'checked'}>
+                    <span><strong>${escapeHtml(value)}</strong>
+                    ${reason ? `<small>${escapeHtml(reason)}</small>` : ''}
+                    ${flagged ? `<small class="tailor-warning">${CURRENT_LOCALE === 'ar' ? 'يحتاج مراجعتك قبل الحفظ.' : 'Please review this suggestion before saving.'}</small>` : ''}
+                    </span></label>`;
+            }).join('')}</div>`;
+        };
+
+        container.innerHTML =
+            sectionHtml(CURRENT_LOCALE === 'ar' ? 'المهارات' : 'Skills', 'skills', skills) +
+            sectionHtml(CURRENT_LOCALE === 'ar' ? 'المؤهلات' : 'Qualifications', 'qualifications', qualifications);
+
+        if (!skills.length && !qualifications.length) {
+            status.textContent = CURRENT_LOCALE === 'ar'
+                ? 'لا توجد اقتراحات آمنة للتخصيص لهذه المنحة.'
+                : 'No safe tailoring suggestions were returned for this scholarship.';
+            saveBtn.disabled = true;
+            return;
+        }
+
+        status.textContent = CURRENT_LOCALE === 'ar'
+            ? 'راجعي الاقتراحات واختاري ما تريدين حفظه.'
+            : 'Review the suggestions and select what you want to save.';
+        saveBtn.disabled = false;
+    }
+
+    async function openCvTailor(btn) {
+        const scholarshipId = Number(btn.dataset.scholarshipId);
+        const scholarshipTitle = btn.dataset.scholarshipTitle || '';
+        const modal = document.getElementById('cvTailorModal');
+        const status = document.getElementById('cvTailorStatus');
+        const suggestions = document.getElementById('cvTailorSuggestions');
+        const saveBtn = document.getElementById('saveTailoredCvBtn');
+
+        modal.classList.remove('hidden');
+        document.getElementById('cvTailorScholarship').textContent = scholarshipTitle;
+        suggestions.innerHTML = '';
+        saveBtn.disabled = true;
+
+        if (!activeCv) {
+            status.textContent = CURRENT_LOCALE === 'ar'
+                ? 'لا توجد سيرة ذاتية نشطة. ارفعي سيرتك وراجعي البيانات ثم فعّليها أولًا.'
+                : 'No active CV was found. Upload, review, and activate a CV first.';
+            return;
+        }
+
+        status.textContent = CURRENT_LOCALE === 'ar' ? 'جارٍ تجهيز الاقتراحات...' : 'Preparing suggestions...';
+        tailorContext = { cvId: Number(activeCv.cv_id), scholarshipId };
+
+        try {
+            const response = await fetch(`${API_BASE_URL}/cv/tailor`, {
+                method: 'POST',
+                headers: { ...authHeaders(), 'Content-Type': 'application/json' },
+                body: JSON.stringify({ cv_id: tailorContext.cvId, scholarship_id: scholarshipId })
+            });
+
+            if (response.status === 401) { goToLogin(); return; }
+            const body = await response.json().catch(() => ({}));
+
+            if (!response.ok) {
+                if (response.status === 503) {
+                    status.textContent = CURRENT_LOCALE === 'ar'
+                        ? 'خدمة الذكاء الاصطناعي مشغولة مؤقتًا. جرّبي مرة أخرى بعد قليل.'
+                        : 'The AI service is temporarily busy. Please try again shortly.';
+                    return;
+                }
+                throw new Error(body?.message || `Tailoring failed: ${response.status}`);
+            }
+
+            renderTailorSuggestions(body);
+        } catch (error) {
+            console.error(error);
+            status.textContent = CURRENT_LOCALE === 'ar'
+                ? 'تعذر تجهيز اقتراحات السيرة الآن.'
+                : 'Could not prepare CV suggestions right now.';
+        }
+    }
+
+    async function saveTailoredCv() {
+        if (!tailorContext) return;
+
+        const selected = [...document.querySelectorAll('.tailor-choice:checked')];
+        const accepted = {};
+        selected.forEach(input => {
+            const section = input.dataset.section;
+            accepted[section] ??= [];
+            accepted[section].push(input.dataset.value);
+        });
+
+        if (!Object.keys(accepted).length) {
+            showToast(CURRENT_LOCALE === 'ar' ? 'اختاري اقتراحًا واحدًا على الأقل.' : 'Select at least one suggestion.');
+            return;
+        }
+
+        const saveBtn = document.getElementById('saveTailoredCvBtn');
+        saveBtn.disabled = true;
+
+        try {
+            const response = await fetch(`${API_BASE_URL}/cv/tailor/save`, {
+                method: 'POST',
+                headers: { ...authHeaders(), 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    cv_id: tailorContext.cvId,
+                    scholarship_id: tailorContext.scholarshipId,
+                    accepted
+                })
+            });
+            if (response.status === 401) { goToLogin(); return; }
+            const body = await response.json().catch(() => ({}));
+            if (!response.ok) throw new Error(body?.message || `Save failed: ${response.status}`);
+
+            closeCvTailor();
+            showToast(CURRENT_LOCALE === 'ar'
+                ? 'تم حفظ نسخة مخصّصة منفصلة، والسيرة الأصلية لم تتغير.'
+                : 'Tailored version saved separately. Your original CV was not changed.');
+        } catch (error) {
+            console.error(error);
+            showToast(error.message || (CURRENT_LOCALE === 'ar' ? 'تعذر حفظ النسخة المخصّصة.' : 'Could not save the tailored version.'));
+            saveBtn.disabled = false;
+        }
+    }
+
     async function loadDashboard() {
 
         const token = getToken();
@@ -2950,7 +2045,9 @@
 
                 requestJson(`${API_BASE_URL}/recommendations`, { headers: authHeaders() }),
 
-                requestJson(`${API_BASE_URL}/saved-applications`, { headers: authHeaders() })
+                requestJson(`${API_BASE_URL}/saved-applications`, { headers: authHeaders() }),
+
+                requestJson(`${API_BASE_URL}/cvs`, { headers: authHeaders() })
 
             ]);
 
@@ -2964,6 +2061,11 @@
 
             if (results[2].status === 'fulfilled') {
                 applications = normalizeCollection(results[2].value);
+            }
+
+            if (results[3].status === 'fulfilled') {
+                cvs = normalizeCollection(results[3].value);
+                activeCv = cvs.find(cv => cv.is_active === true || Number(cv.is_active) === 1) || null;
             }
 
             renderDashboard();
@@ -3029,7 +2131,7 @@
 
             showToast(
                 CURRENT_LOCALE === 'ar'
-                    ? `تم إنشاء ${recommendations.length} مطابقة للمنح بنجاح.`
+                    ? `تم إنشاء ${recommendations.length} مطابقة منحة بنجاح.`
                     : `${recommendations.length} scholarship matches generated successfully.`
             );
 
@@ -3042,7 +2144,7 @@
                 error.message ||
                 (
                     CURRENT_LOCALE === 'ar'
-                        ? 'تعذر تحديث مطابقات المنح.'
+                        ? 'تعذر تحديث المطابقات الآن.'
                         : 'Could not refresh recommendations.'
                 )
             );
@@ -3091,141 +2193,8 @@
     document.getElementById('refreshRecommendationsBtn')
         .addEventListener('click', refreshRecommendations);
 
-<<<<<<< HEAD
     document.getElementById('refreshRecommendationsQuick')
         .addEventListener('click', refreshRecommendations);
-=======
-    function applyTheme(theme) {
-
-        document.body.classList.toggle(
-            'theme-dark',
-            theme === 'dark'
-        );
-
-        try {
-
-            localStorage.setItem(
-                'jisr_theme',
-                theme
-            );
-
-        }
-
-        catch (_) {}
-
-
-        const toggleBtn =
-            document.getElementById(
-                'themeToggleBtn'
-            );
-
-        if (toggleBtn) {
-
-            toggleBtn.textContent =
-                theme === 'dark'
-                    ? '☀️'
-                    : '🌙';
-
-        }
-
-
-        const logoImg =
-            document.getElementById(
-                'brandLogo'
-            );
-
-        if (logoImg) {
-
-            const nextSrc =
-
-                theme === 'dark'
-
-                    ? (logoImg.dataset.darkSrc || logoImg.src)
-
-                    : (logoImg.dataset.lightSrc || logoImg.src);
-
-
-            if (
-                nextSrc &&
-                logoImg.getAttribute('src') !== nextSrc
-            ) {
-
-                logoImg.style.opacity =
-                    '0';
-
-
-                setTimeout(() => {
-
-                    logoImg.setAttribute(
-                        'src',
-                        nextSrc
-                    );
-
-                    logoImg.style.opacity =
-                        '1';
-
-                }, 120);
-
-            }
-
-        }
-
-    }
-
-
-    (function initTheme() {
-
-        let savedTheme = 'light';
-
-        try {
-
-            savedTheme =
-                localStorage.getItem(
-                    'jisr_theme'
-                ) || 'light';
-
-        }
-
-        catch (_) {}
-
-
-        applyTheme(savedTheme);
-
-    })();
-
-
-    document
-        .getElementById(
-            'themeToggleBtn'
-        )
-        .addEventListener(
-            'click',
-            () => {
-
-                const isDark =
-                    document.body.classList.contains(
-                        'theme-dark'
-                    );
-
-                applyTheme(
-                    isDark
-                        ? 'light'
-                        : 'dark'
-                );
-
-            }
-        );
-
-
-    document
-        .getElementById(
-            'refreshRecommendationsBtn'
-        )
-        .addEventListener(
-            'click',
-            refreshRecommendations
-        );
->>>>>>> origin/main
 
     window.addEventListener('pageshow', () => {
         loadDashboard();
@@ -3234,8 +2203,5 @@
 </script>
 
 </body>
-<<<<<<< HEAD
 </html> 
-=======
-</html>
->>>>>>> origin/main
+

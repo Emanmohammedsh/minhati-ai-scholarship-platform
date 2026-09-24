@@ -34,7 +34,7 @@ class CourseRecommendationService
      */
     private function askGemini(string $skillName): ?array
     {
-        $apiKey = config('services.gemini.api_key');
+        $apiKey = config('services.gemini.key');
 
         $model = config(
             'services.gemini.model',
@@ -171,3 +171,4 @@ PROMPT;
         }
     }
 }
+

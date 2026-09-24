@@ -16,7 +16,7 @@ class GapFillerService
         string $missingRequirement,
         array $currentSkills = []
     ): array {
-        $apiKey = config('services.gemini.api_key');
+        $apiKey = config('services.gemini.key');
         $model = config(
             'services.gemini.model',
             'gemini-3.5-flash'
@@ -218,3 +218,4 @@ PROMPT;
         ];
     }
 }
+
