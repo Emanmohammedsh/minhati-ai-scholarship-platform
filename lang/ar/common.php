@@ -194,4 +194,7 @@ return [
     'view_match_analysis' => 'لماذا هذه المطابقة؟',
     'hide_match_analysis' => 'إخفاء التحليل',
     'loading_match_analysis' => 'جاري تحميل التحليل...',
-    ];
+    'apply' => 'سجّل تقديمي',
+    'applied' => 'تم تسجيل التقديم',
+    'apply_failed' => 'تعذّر تسجيل الطلب. حاول مرة ثانية.', 
+];

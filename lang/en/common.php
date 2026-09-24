@@ -195,4 +195,7 @@ return [
     'hide_match_analysis' => 'Hide analysis',
     'loading_match_analysis' => 'Loading analysis...',
  
+    'apply' => 'Apply',
+    'applied' => 'Applied',
+    'apply_failed' => 'Could not submit the application. Please try again.', 
 ];
