@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AI StudyPort - Academic Profile</title>
+<title>Jisr AI | Academic Profile</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&display=swap');
 
@@ -11,6 +11,8 @@
 
   /* -------------------------------------------------
      Theme tokens (light = default, dark = .theme-dark)
+     Kept identical to dashboard.blade.php so both pages
+     stay visually and behaviorally in sync.
   ------------------------------------------------- */
   :root {
     --primary: #0E7C90;
@@ -38,9 +40,9 @@
     --input-border: rgba(15, 23, 42, .16);
     --input-focus-bg: rgba(15, 23, 42, .06);
 
-    --overlay-1: rgba(244, 247, 251, .80);
-    --overlay-2: rgba(244, 247, 251, .45);
-    --overlay-3: rgba(244, 247, 251, .15);
+    --page-bg: #F4F7FB;
+    --page-glow-1: rgba(14,124,144,.06);
+    --page-glow-2: rgba(79,140,255,.07);
 
     --error: #DC2626;
     --error-bg: rgba(220, 38, 38, .10);
@@ -74,9 +76,9 @@
     --input-border: rgba(255, 255, 255, .16);
     --input-focus-bg: rgba(255, 255, 255, .09);
 
-    --overlay-1: rgba(6, 10, 20, .55);
-    --overlay-2: rgba(6, 10, 20, .15);
-    --overlay-3: rgba(6, 10, 20, .05);
+    --page-bg: #0B1220;
+    --page-glow-1: rgba(56,223,234,.13);
+    --page-glow-2: rgba(79,140,255,.16);
 
     --error: #FCA5A5;
     --error-bg: rgba(239, 68, 68, .16);
@@ -90,10 +92,12 @@
     font-family: 'Inter', system-ui, sans-serif;
     min-height: 100vh;
     color: var(--text);
+    /* Same branded gradient background as dashboard.blade.php —
+       no external background image, so nothing to go stale/missing. */
     background:
-      linear-gradient(90deg, var(--overlay-1) 0%, var(--overlay-2) 42%, var(--overlay-3) 60%),
-      url('/images/minhati.jpg') center/cover no-repeat;
-    background-attachment: fixed;
+      radial-gradient(circle at 92% 5%, var(--page-glow-1), transparent 26%),
+      radial-gradient(circle at 5% 65%, var(--page-glow-2), transparent 25%),
+      var(--page-bg);
     transition: background-color .25s ease, color .25s ease;
   }
 
@@ -114,23 +118,17 @@
   .brand {
     display: flex;
     align-items: center;
-    gap: 0.55rem;
+    gap: 0.6rem;
     font-family: 'Space Grotesk', sans-serif;
     font-weight: 600;
     font-size: 1.05rem;
     color: var(--topbar-heading);
   }
-  .brand .mark {
-    width: 26px;
-    height: 26px;
+  .brand-logo {
+    width: 30px;
+    height: 30px;
+    object-fit: contain;
     border-radius: 8px;
-    background: linear-gradient(135deg, var(--accent-a), var(--accent-b));
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 0.85rem;
-    font-weight: 700;
-    color: #0B1220;
   }
   .topbar-links { display: flex; align-items: center; gap: 0.6rem; }
   .back-link {
@@ -284,8 +282,8 @@
   <div id="appShell">
     <div class="topbar">
       <div class="brand">
-        <span class="mark">A</span>
-        AI StudyPort
+        <img src="/images/jisr-logo.jpeg" class="brand-logo" alt="Jisr AI">
+        Jisr AI
       </div>
       <div class="topbar-links">
         <a href="{{ route('dashboard') }}" class="back-link">&larr; Back to dashboard</a>
@@ -296,7 +294,7 @@
     <main>
       <div class="card">
         <h1>Academic Profile</h1>
-        <p class="sub" id="pageSub">Complete your academic profile so we can match you with relevant scholarships.</p>
+        <p class="sub" id="pageSub">Complete your academic profile so we can match you with relevant scholarships and career opportunities.</p>
 
         <div id="globalAlert" class="alert"></div>
 
