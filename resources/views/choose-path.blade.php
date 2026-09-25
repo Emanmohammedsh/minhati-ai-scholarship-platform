@@ -154,6 +154,7 @@
 <body>
 
 <header class="topbar">
+  <button id="themeToggleBtn" class="theme-toggle-btn" type="button" title="Dark / Light">🌙</button>
 
     <a href="/choose-path" class="brand">
         <img src="/images/jisr-logo.jpeg" alt="Jisr AI Logo">
@@ -326,5 +327,26 @@
     }
 </script>
 
+<script>
+  if (localStorage.getItem('jisr_theme') === 'dark') {
+    document.body.classList.add('theme-dark');
+  }
+  function applyTheme(theme) {
+    document.body.classList.toggle('theme-dark', theme === 'dark');
+    localStorage.setItem('jisr_theme', theme);
+    const toggleBtn = document.getElementById('themeToggleBtn');
+    if (toggleBtn) toggleBtn.textContent = theme === 'dark' ? '☀️' : '🌙';
+  }
+  document.addEventListener('DOMContentLoaded', () => {
+    const btn = document.getElementById('themeToggleBtn');
+    if (btn) {
+      btn.textContent = document.body.classList.contains('theme-dark') ? '☀️' : '🌙';
+      btn.addEventListener('click', () => {
+        const isDark = document.body.classList.contains('theme-dark');
+        applyTheme(isDark ? 'light' : 'dark');
+      });
+    }
+  });
+</script>
 </body>
 </html>

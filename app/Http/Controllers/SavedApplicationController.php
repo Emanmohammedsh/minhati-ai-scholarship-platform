@@ -44,23 +44,28 @@ class SavedApplicationController extends Controller
             ->where('scholarship_id', $validated['scholarship_id'])
             ->first();
 
-        if ($existing) {
-            // Apply على منحة محفوظة: ترقية السجل الحالي بدل التكرار
-            if ($requested === 'submitted' && $existing->status === 'saved') {
-                $existing->update([
-                    'status'            => 'submitted',
-                    'status_updated_at' => now(),
-                ]);
+      
+if ($existing) {
+    // Apply على منحة محفوظة: ترقية السجل الحالي بدل التكرار
+    if ($requested === 'submitted' && $existing->status === 'saved') {
+        $existing->update([
+            'status'            => 'submitted',
+            'status_updated_at' => now(),
+        ]);
 
-                return response()->json($existing, 200);
-            }
+        return response()->json($existing, 200);
+    }
 
-            return response()->json([
-                'message' => 'This scholarship is already saved.',
-                'data'    => $existing,
-            ], 409);
-        }
+    // مقدَّم أصلاً: نرجّع نجاح بدل خطأ
+    if ($requested === 'submitted') {
+        return response()->json($existing, 200);
+    }
 
+    return response()->json([
+        'message' => 'This scholarship is already saved.',
+        'data'    => $existing,
+    ], 409);
+} 
         $saved = SavedApplication::create(array_merge([
             'user_id'        => Auth::id(),
             'scholarship_id' => $validated['scholarship_id'],

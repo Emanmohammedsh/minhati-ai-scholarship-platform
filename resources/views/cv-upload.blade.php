@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html
     lang="{{ app()->getLocale() }}"
     dir="{{ app()->getLocale() === 'ar' ? 'rtl' : 'ltr' }}"
@@ -182,6 +182,7 @@
 <div id="appShell">
 
     <header class="topbar">
+  <button id="themeToggleBtn" class="theme-toggle-btn" type="button" title="Dark / Light">🌙</button>
 
         <a href="/choose-path" class="brand">
             <img src="/images/jisr-logo.jpeg" alt="Jisr AI Logo" style="width:44px;height:44px;object-fit:contain;border-radius:var(--radius);">
@@ -579,5 +580,26 @@
     });
 </script>
 
+<script>
+  if (localStorage.getItem('jisr_theme') === 'dark') {
+    document.body.classList.add('theme-dark');
+  }
+  function applyTheme(theme) {
+    document.body.classList.toggle('theme-dark', theme === 'dark');
+    localStorage.setItem('jisr_theme', theme);
+    const toggleBtn = document.getElementById('themeToggleBtn');
+    if (toggleBtn) toggleBtn.textContent = theme === 'dark' ? '☀️' : '🌙';
+  }
+  document.addEventListener('DOMContentLoaded', () => {
+    const btn = document.getElementById('themeToggleBtn');
+    if (btn) {
+      btn.textContent = document.body.classList.contains('theme-dark') ? '☀️' : '🌙';
+      btn.addEventListener('click', () => {
+        const isDark = document.body.classList.contains('theme-dark');
+        applyTheme(isDark ? 'light' : 'dark');
+      });
+    }
+  });
+</script>
 </body>
 </html>

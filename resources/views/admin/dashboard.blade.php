@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>Manhati AI | Admin Dashboard</title>
+    <title>Jisr AI | Admin Dashboard</title>
 
     <link
         rel="stylesheet"
@@ -132,7 +132,7 @@
                 class="brand-link text-decoration-none"
             >
                 <span class="sidebar-brand-text">
-                    Manhati AI
+                    Jisr AI
                 </span>
             </a>
         </div>
@@ -325,14 +325,14 @@
                         <div class="card">
                             <div class="card-header">
                                 <h3 class="card-title">
-                                    Manhati AI Impact
+                                    Jisr AI Impact
                                 </h3>
                             </div>
 
                             <div class="card-body">
 
                                 <p class="text-muted">
-                                    Manhati AI helps students move through a
+                                    Jisr AI helps students move through a
                                     complete scholarship journey:
                                 </p>
 
@@ -473,7 +473,7 @@
     <footer class="app-footer">
 
         <strong>
-            Manhati AI
+            Jisr AI
         </strong>
 
         <div class="float-end d-none d-sm-inline">
