@@ -44,7 +44,7 @@ return [
 
     'career_badge' => 'Jisr AI Career Path',
     'career_hero_title' => 'Turn your skills into opportunities.',
-    'career_hero_description' => 'Jisr AI helps graduates and job seekers discover career opportunities aligned with their skills, qualifications, education and experience. Soon, your profile and CV will be intelligently matched with job requirements to help you understand where you fit — and what you can improve.',
+    'career_hero_description' => 'Jisr AI helps graduates and job seekers discover career opportunities aligned with their skills, qualifications, education and experience. Your profile and CV are matched with structured job requirements to help you understand where you fit — and what you can improve.',
     'complete_profile' => 'Complete My Profile',
     'review_cv' => 'Review My CV',
 
@@ -54,7 +54,7 @@ return [
     'connected' => 'Connected',
     'profile_label' => 'profile',
     'career_path_status' => 'Career Path',
-    'building' => 'Building',
+    'building' => 'Active',
     'phase' => 'phase',
 
     'your_journey' => 'YOUR JOURNEY',

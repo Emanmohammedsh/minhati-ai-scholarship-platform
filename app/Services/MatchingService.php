@@ -7,7 +7,10 @@ use App\Models\Scholarship;
 use App\Models\ScholarshipCriterion;
 use App\Models\StudentProfile;
 use Illuminate\Support\Collection;
-
+use App\Models\Recommendation;
+use App\Models\RecommendationCriteriaMatch;
+use App\Models\User;
+use Illuminate\Support\Facades\DB;
 class MatchingService
 {
     /**
@@ -23,6 +26,85 @@ class MatchingService
      * (US-01 acceptance criterion: "no matches found" rather than
      * showing 0% cards).
      */
+
+    public function generate(User $user): Collection
+{
+    $profile = StudentProfile::where('user_id', $user->user_id)->first();
+
+    if (! $profile) {
+        return collect();
+    }
+
+    $cv = Cv::where('user_id', $user->user_id)
+        ->where('is_active', true)
+        ->where('reviewed_by_student', true)
+        ->latest('cv_id')
+        ->first();
+
+    $scholarships = Scholarship::with('criteria')
+        ->where('is_active', true)
+        ->get();
+
+    $results = $this->generateRecommendations(
+        $profile,
+        $cv,
+        $scholarships
+    );
+
+    return DB::transaction(function () use ($user, $cv, $results) {
+
+        // Refresh means replace the student's generated recommendations
+        // with the newly calculated set.
+        Recommendation::where('user_id', $user->user_id)->delete();
+
+        $savedRecommendations = collect();
+
+        foreach ($results as $result) {
+            $scholarship = $result['scholarship'];
+
+            $recommendation = Recommendation::create([
+                'user_id' => $user->user_id,
+                'scholarship_id' => $scholarship->scholarship_id,
+                'cv_id' => $cv?->cv_id,
+                'match_score' => $result['score'],
+                'generated_at' => now(),
+            ]);
+
+            $totalWeight = (float) $scholarship->criteria->sum('weight');
+
+            foreach ($result['criteria_results'] as $criterionResult) {
+                $criterion = $criterionResult['criterion'];
+                $satisfied = (bool) $criterionResult['satisfied'];
+
+                $contributionPoints = 0;
+
+                if ($satisfied && $totalWeight > 0) {
+                    $contributionPoints = round(
+                        ((float) $criterion->weight / $totalWeight) * 100,
+                        2
+                    );
+                }
+
+                RecommendationCriteriaMatch::create([
+                    'recommendation_id' => $recommendation->recommendation_id,
+                    'criterion_id' => $criterion->criterion_id,
+                    'is_satisfied' => $satisfied,
+                    'contribution_points' => $contributionPoints,
+                ]);
+            }
+
+            $savedRecommendations->push(
+                $recommendation->load([
+                    'scholarship',
+                    'cv',
+                    'criteriaMatches.criterion',
+                ])
+            );
+        }
+
+        return $savedRecommendations;
+    });
+}
     public function generateRecommendations(StudentProfile $profile, ?Cv $cv, Collection $scholarships): Collection
     {
         return $scholarships
