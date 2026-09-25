@@ -13,7 +13,8 @@ class NotificationController extends Controller
      */
     public function index(Request $request)
     {
-        $query = Notification::where('user_id', Auth::id());
+        $query = Notification::with('savedApplication.scholarship')
+            ->where('user_id', Auth::id());
 
         if ($request->filled('status')) {
             $query->where('status', $request->input('status'));
@@ -31,7 +32,7 @@ class NotificationController extends Controller
     {
         $this->authorizeOwner($notification);
 
-        return response()->json($notification);
+        return response()->json($notification->load('savedApplication.scholarship'));
     }
 
     /**
