@@ -47,6 +47,44 @@ class NotificationController extends Controller
         return response()->json(['message' => 'Notification deleted successfully.']);
     }
 
+    /**
+     * GET /api/notifications/unread-count
+     */
+    public function unreadCount(Request $request)
+    {
+        $count = Notification::forUser(Auth::id())
+            ->unread()
+            ->count();
+
+        return response()->json(['count' => $count]);
+    }
+
+    /**
+     * POST /api/notifications/{notification}/read
+     */
+    public function markAsRead(Notification $notification)
+    {
+        $this->authorizeOwner($notification);
+
+        if (is_null($notification->read_at)) {
+            $notification->update(['read_at' => now()]);
+        }
+
+        return response()->json(['success' => true]);
+    }
+
+    /**
+     * POST /api/notifications/read-all
+     */
+    public function markAllAsRead(Request $request)
+    {
+        Notification::forUser(Auth::id())
+            ->unread()
+            ->update(['read_at' => now()]);
+
+        return response()->json(['success' => true]);
+    }
+
     private function authorizeOwner(Notification $notification): void
     {
         if ($notification->user_id !== Auth::id()) {
