@@ -697,6 +697,24 @@
         .tailor-actions { display:flex; justify-content:flex-end; gap:10px; margin-top:20px; flex-wrap:wrap; }
         .tailor-note { font-size:13px; color:#4B5563; margin-top:10px; }
 
+
+        /* ===== COVER LETTERS ===== */
+        .cover-letter-btn { border-color:rgba(10,46,107,.22); color:var(--primary); background:#fff; margin-top:8px; }
+        .cover-letter-btn:hover { background:var(--background); }
+        .cover-letter-card { margin-top:14px; padding:18px; border:1px solid var(--border); border-radius:15px; background:var(--surface-soft); }
+        .cover-letter-card h3 { margin:0 0 5px; color:var(--heading); font-size:15px; }
+        .cover-letter-meta { color:var(--muted); font-size:11px; margin-bottom:13px; }
+        .cover-letter-content { white-space:pre-wrap; line-height:1.8; color:#445564; font-size:13px; padding:15px; border-radius:12px; background:#fff; border:1px solid var(--border); }
+        .cover-letter-actions { display:flex; flex-wrap:wrap; gap:8px; margin-top:12px; }
+        .cover-letter-actions .btn-secondary { color:var(--primary); background:var(--background); border:1px solid var(--border); }
+        /* ===== NOTIFICATIONS ===== */
+        .notification-card { margin-top:12px; padding:16px; border:1px solid var(--border); border-radius:15px; background:var(--surface-soft); }
+        .notification-top { display:flex; align-items:flex-start; justify-content:space-between; gap:14px; }
+        .notification-card h3 { margin:0 0 5px; color:var(--heading); font-size:14px; }
+        .notification-meta { display:flex; flex-wrap:wrap; gap:8px 14px; margin-top:11px; color:var(--muted); font-size:11px; }
+        .notification-status { flex:0 0 auto; text-transform:capitalize; font-size:10px; font-weight:700; padding:6px 9px; border-radius:999px; color:var(--primary); background:rgba(0,198,255,.10); }
+        .notification-actions { display:flex; justify-content:flex-end; margin-top:12px; }
+        .notification-actions .btn-secondary { color:var(--primary); background:var(--background); border:1px solid var(--border); }
     </style>
 </head>
 
@@ -929,7 +947,18 @@
                         <strong>{{ __('common.generate_matches') }}</strong>
                         <span>{{ __('common.generate_matches_note') }}</span>
                     </button>
-
+                    <button type="button" class="quick-action" onclick="openCvVersions()">
+                        <strong>{{ app()->getLocale() === 'ar' ? 'نسخ السيرة المخصصة' : 'Tailored CV Versions' }}</strong>
+                        <span>{{ app()->getLocale() === 'ar' ? 'عرض النسخ المحفوظة لكل منحة' : 'View saved CV versions for scholarships' }}</span>
+                    </button>
+                    <button type="button" class="quick-action" onclick="openCoverLetters()">
+                        <strong>{{ app()->getLocale() === 'ar' ? 'خطابات التقديم' : 'Cover Letters' }}</strong>
+                        <span>{{ app()->getLocale() === 'ar' ? 'عرض خطابات التقديم المحفوظة' : 'View generated scholarship cover letters' }}</span>
+                    </button>
+                    <button type="button" class="quick-action" onclick="openNotifications()">
+                        <strong>{{ app()->getLocale() === 'ar' ? 'الإشعارات والتذكيرات' : 'Notifications & Reminders' }}</strong>
+                        <span>{{ app()->getLocale() === 'ar' ? 'عرض تذكيرات مواعيد المنح وحالتها' : 'View scholarship deadline reminders and their status' }}</span>
+                    </button>
                 </div>
             </div>
 
@@ -957,6 +986,77 @@
             <button type="button" id="saveTailoredCvBtn" class="btn btn-primary" onclick="saveTailoredCv()" disabled>{{ app()->getLocale() === 'ar' ? 'حفظ النسخة المخصّصة' : 'Save Tailored Version' }}</button>
         </div>
         <p class="tailor-note">{{ app()->getLocale() === 'ar' ? 'سيتم حفظ نسخة منفصلة. لن يتم تعديل السيرة الأصلية.' : 'A separate version will be saved. Your original CV will not be changed.' }}</p>
+    </div>
+</div>
+<div id="cvVersionsModal" class="tailor-modal hidden" role="dialog" aria-modal="true">
+    <div class="tailor-dialog">
+
+        <div class="tailor-head">
+            <div>
+                <h2>
+                    {{ app()->getLocale() === 'ar'
+                        ? 'نسخ السيرة الذاتية المخصصة'
+                        : 'Tailored CV Versions' }}
+                </h2>
+
+                <p>
+                    {{ app()->getLocale() === 'ar'
+                        ? 'النسخ التي حفظتها للمنح المختلفة'
+                        : 'CV versions you saved for different scholarships' }}
+                </p>
+            </div>
+
+            <button
+                type="button"
+                class="tailor-close"
+                onclick="closeCvVersions()"
+                aria-label="Close"
+            >×</button>
+        </div>
+
+        <div id="cvVersionsStatus" class="tailor-status"></div>
+
+        <div id="cvVersionsList"></div>
+
+        <div class="tailor-actions">
+            <button
+                type="button"
+                class="btn btn-secondary"
+                onclick="closeCvVersions()"
+            >
+                {{ app()->getLocale() === 'ar' ? 'إغلاق' : 'Close' }}
+            </button>
+        </div>
+
+    </div>
+</div>
+
+<div id="coverLettersModal" class="tailor-modal hidden" role="dialog" aria-modal="true">
+    <div class="tailor-dialog">
+        <div class="tailor-head">
+            <div>
+                <h2>{{ app()->getLocale() === 'ar' ? 'خطابات التقديم' : 'Cover Letters' }}</h2>
+                <p>{{ app()->getLocale() === 'ar' ? 'خطابات مخصصة للمنح باستخدام بياناتك الموجودة فقط' : 'Scholarship letters generated using only your existing information' }}</p>
+            </div>
+            <button type="button" class="tailor-close" onclick="closeCoverLetters()" aria-label="Close">×</button>
+        </div>
+        <div id="coverLettersStatus" class="tailor-status"></div>
+        <div id="coverLettersList"></div>
+        <div class="tailor-actions">
+            <button type="button" class="btn btn-secondary" onclick="closeCoverLetters()">{{ app()->getLocale() === 'ar' ? 'إغلاق' : 'Close' }}</button>
+        </div>
+    </div>
+</div>
+
+<div id="notificationsModal" class="tailor-modal hidden" role="dialog" aria-modal="true">
+    <div class="tailor-dialog">
+        <div class="tailor-head"><div>
+            <h2>{{ app()->getLocale() === 'ar' ? 'الإشعارات والتذكيرات' : 'Notifications & Reminders' }}</h2>
+            <p>{{ app()->getLocale() === 'ar' ? 'تذكيرات طلبات المنح والمواعيد المجدولة' : 'Scheduled scholarship application reminders' }}</p>
+        </div><button type="button" class="tailor-close" onclick="closeNotifications()" aria-label="Close">×</button></div>
+        <div id="notificationsStatus" class="tailor-status"></div>
+        <div id="notificationsList"></div>
+        <div class="tailor-actions"><button type="button" class="btn btn-secondary" onclick="closeNotifications()">{{ app()->getLocale() === 'ar' ? 'إغلاق' : 'Close' }}</button></div>
     </div>
 </div>
 
@@ -1401,6 +1501,14 @@
                             onclick="openCvTailor(this)"
                         >
                             ${CURRENT_LOCALE === 'ar' ? 'خصّص سيرتك' : 'Tailor CV'}
+                        </button>
+                        <button
+                            type="button"
+                            class="why-match-btn cover-letter-btn"
+                            data-scholarship-id="${schId}"
+                            onclick="generateCoverLetter(this)"
+                        >
+                            ${CURRENT_LOCALE === 'ar' ? 'إنشاء خطاب تقديم' : 'Generate Cover Letter'}
                         </button>
 
                         <div
@@ -2270,7 +2378,252 @@
     window.addEventListener('pageshow', () => {
         loadDashboard();
     });
+async function openCvVersions() {
+    const modal = document.getElementById('cvVersionsModal');
+    const status = document.getElementById('cvVersionsStatus');
+    const list = document.getElementById('cvVersionsList');
 
+    modal.classList.remove('hidden');
+
+    status.textContent = CURRENT_LOCALE === 'ar'
+        ? 'جارٍ تحميل النسخ المحفوظة...'
+        : 'Loading saved CV versions...';
+
+    list.innerHTML = '';
+
+    try {
+        const versions = await requestJson(`${API_BASE_URL}/cv/versions`, {
+            headers: authHeaders()
+        });
+
+        if (!Array.isArray(versions) || !versions.length) {
+            status.textContent = CURRENT_LOCALE === 'ar'
+                ? 'لا توجد نسخ مخصصة محفوظة حتى الآن.'
+                : 'No tailored CV versions have been saved yet.';
+            return;
+        }
+
+        status.textContent = CURRENT_LOCALE === 'ar'
+            ? `${versions.length} نسخة محفوظة`
+            : `${versions.length} saved version${versions.length === 1 ? '' : 's'}`;
+
+        list.innerHTML = versions.map(version => {
+
+            const scholarship = version.scholarship || {};
+            const cv = version.cv || {};
+            const content = version.content || {};
+
+            const skills = Array.isArray(content.skills)
+                ? content.skills
+                : [];
+
+            const qualifications = Array.isArray(content.qualifications)
+                ? content.qualifications
+                : [];
+
+            const date = version.created_at
+                ? new Date(version.created_at).toLocaleDateString(
+                    CURRENT_LOCALE === 'ar' ? 'ar' : 'en'
+                )
+                : '';
+
+            return `
+                <div class="tailor-section" style="margin-bottom:16px">
+
+                    <h3>
+                        ${escapeHtml(
+                            scholarship.title ||
+                            (CURRENT_LOCALE === 'ar'
+                                ? 'منحة'
+                                : 'Scholarship')
+                        )}
+                    </h3>
+
+                    <p style="margin:4px 0 12px">
+                        ${escapeHtml(scholarship.provider_name || '')}
+                    </p>
+
+                    <small>
+                        ${CURRENT_LOCALE === 'ar' ? 'السيرة الأصلية:' : 'Original CV:'}
+                        ${escapeHtml(cv.original_filename || '')}
+                        ${date ? ` • ${escapeHtml(date)}` : ''}
+                    </small>
+
+                    <div style="margin-top:14px">
+                        <strong>
+                            ${CURRENT_LOCALE === 'ar' ? 'المهارات' : 'Skills'}
+                        </strong>
+
+                        <p>
+                            ${skills.length
+                                ? skills.map(skill => escapeHtml(String(skill))).join(' • ')
+                                : (CURRENT_LOCALE === 'ar'
+                                    ? 'لا توجد مهارات محفوظة'
+                                    : 'No saved skills')
+                            }
+                        </p>
+                    </div>
+
+                    <div style="margin-top:12px">
+                        <strong>
+                            ${CURRENT_LOCALE === 'ar'
+                                ? 'المؤهلات'
+                                : 'Qualifications'}
+                        </strong>
+
+                        <p>
+                            ${qualifications.length
+                                ? qualifications.map(item =>
+                                    escapeHtml(String(item))
+                                ).join('<br>')
+                                : (CURRENT_LOCALE === 'ar'
+                                    ? 'لا توجد مؤهلات محفوظة'
+                                    : 'No saved qualifications')
+                            }
+                        </p>
+                    </div>
+
+                </div>
+            `;
+        }).join('');
+
+    } catch (error) {
+        console.error(error);
+
+        status.textContent = CURRENT_LOCALE === 'ar'
+            ? 'تعذر تحميل نسخ السيرة الذاتية.'
+            : 'Could not load CV versions.';
+    }
+}
+
+
+function closeCvVersions() {
+    document
+        .getElementById('cvVersionsModal')
+        .classList
+        .add('hidden');
+}
+
+async function openCoverLetters() {
+    const modal=document.getElementById('coverLettersModal'), status=document.getElementById('coverLettersStatus'), list=document.getElementById('coverLettersList');
+    modal.classList.remove('hidden');
+    status.textContent=CURRENT_LOCALE==='ar'?'جارٍ تحميل خطابات التقديم...':'Loading cover letters...';
+    list.innerHTML='';
+    try {
+        const letters=normalizeCollection(await requestJson(`${API_BASE_URL}/cover-letters`,{headers:authHeaders()}));
+        renderCoverLetters(letters);
+    } catch(e) {
+        console.error(e);
+        status.textContent=CURRENT_LOCALE==='ar'?'تعذر تحميل خطابات التقديم.':'Could not load cover letters.';
+    }
+}
+function closeCoverLetters(){ document.getElementById('coverLettersModal').classList.add('hidden'); }
+
+function renderCoverLetters(letters){
+    const status=document.getElementById('coverLettersStatus'), list=document.getElementById('coverLettersList');
+    if(!letters.length){
+        status.textContent=CURRENT_LOCALE==='ar'?'لا توجد خطابات تقديم محفوظة حتى الآن.':'No cover letters have been generated yet.';
+        list.innerHTML=''; return;
+    }
+    status.textContent=CURRENT_LOCALE==='ar'?`${letters.length} خطاب محفوظ`:`${letters.length} saved cover letter${letters.length===1?'':'s'}`;
+    list.innerHTML=letters.map(letter=>{
+        const scholarship=letter.scholarship||{}, content=letter.content||'', id=Number(letter.cover_letter_id);
+        const completed=String(letter.generation_status||'').toLowerCase()==='completed';
+        return `<article class="cover-letter-card">
+            <h3>${escapeHtml(scholarship.title||TEXT.scholarship)}</h3>
+            <div class="cover-letter-meta">${escapeHtml(scholarship.provider_name||TEXT.providerNotSpecified)} · ${escapeHtml(letter.generation_status||'pending')}${letter.completed_at?' · '+escapeHtml(formatDate(letter.completed_at)):''}</div>
+            ${completed&&content?`<div class="cover-letter-content">${escapeHtml(content)}</div>`:`<div class="tailor-status">${CURRENT_LOCALE==='ar'?'لم يكتمل إنشاء هذا الخطاب.':'This cover letter was not completed.'}</div>`}
+            <div class="cover-letter-actions">
+                ${completed&&content?`<button type="button" class="btn btn-secondary copy-cover-btn" data-letter-id="${id}">${CURRENT_LOCALE==='ar'?'نسخ النص':'Copy'}</button>`:''}
+                <button type="button" class="btn btn-secondary" onclick="deleteCoverLetter(${id})">${CURRENT_LOCALE==='ar'?'حذف':'Delete'}</button>
+            </div>
+        </article>`;
+    }).join('');
+    document.querySelectorAll('.copy-cover-btn').forEach(btn=>{
+        btn.addEventListener('click',()=>{
+            const item=letters.find(x=>Number(x.cover_letter_id)===Number(btn.dataset.letterId));
+            copyCoverLetter(item?.content||'');
+        });
+    });
+}
+
+async function generateCoverLetter(btn){
+    const scholarshipId=Number(btn.dataset.scholarshipId); if(!scholarshipId)return;
+    const original=btn.textContent; btn.disabled=true;
+    btn.textContent=CURRENT_LOCALE==='ar'?'جارٍ إنشاء الخطاب...':'Generating...';
+    try{
+        const r=await fetch(`${API_BASE_URL}/cover-letters`,{method:'POST',headers:{...authHeaders(),'Content-Type':'application/json'},body:JSON.stringify({scholarship_id:scholarshipId})});
+        if(r.status===401){goToLogin();return;}
+        const body=await r.json().catch(()=>({}));
+        if(!r.ok){
+            if([502,503,504].includes(r.status)) throw new Error(CURRENT_LOCALE==='ar'?'خدمة الذكاء الاصطناعي مشغولة مؤقتًا. جرّبي مرة أخرى بعد قليل.':'The AI service is temporarily busy. Please try again shortly.');
+            throw new Error(body?.message||`Generation failed: ${r.status}`);
+        }
+        showToast(CURRENT_LOCALE==='ar'?'تم إنشاء خطاب التقديم وحفظه بنجاح.':'Cover letter generated and saved successfully.');
+        await openCoverLetters();
+    }catch(e){ console.error(e); showToast(e.message||(CURRENT_LOCALE==='ar'?'تعذر إنشاء خطاب التقديم الآن.':'Could not generate the cover letter right now.')); }
+    finally{btn.disabled=false;btn.textContent=original;}
+}
+async function deleteCoverLetter(id){
+    try{
+        const r=await fetch(`${API_BASE_URL}/cover-letters/${id}`,{method:'DELETE',headers:authHeaders()});
+        if(r.status===401){goToLogin();return;}
+        const body=await r.json().catch(()=>({}));
+        if(!r.ok)throw new Error(body?.message||`Delete failed: ${r.status}`);
+        showToast(CURRENT_LOCALE==='ar'?'تم حذف خطاب التقديم.':'Cover letter deleted.');
+        await openCoverLetters();
+    }catch(e){console.error(e);showToast(e.message||(CURRENT_LOCALE==='ar'?'تعذر حذف الخطاب.':'Could not delete the cover letter.'));}
+}
+async function copyCoverLetter(content){
+    try{await navigator.clipboard.writeText(content);showToast(CURRENT_LOCALE==='ar'?'تم نسخ الخطاب.':'Cover letter copied.');}
+    catch(_){showToast(CURRENT_LOCALE==='ar'?'تعذر نسخ النص تلقائيًا.':'Could not copy automatically.');}
+}
+
+
+function notificationTypeLabel(value) {
+    const raw=String(value||'').trim();
+    if(!raw) return CURRENT_LOCALE==='ar'?'تذكير':'Reminder';
+    return raw.replace(/[_-]+/g,' ').replace(/\b\w/g,c=>c.toUpperCase());
+}
+async function openNotifications(){
+    const modal=document.getElementById('notificationsModal'),status=document.getElementById('notificationsStatus'),list=document.getElementById('notificationsList');
+    modal.classList.remove('hidden');
+    status.textContent=CURRENT_LOCALE==='ar'?'جارٍ تحميل الإشعارات...':'Loading notifications...';
+    list.innerHTML='';
+    try{
+        const items=normalizeCollection(await requestJson(`${API_BASE_URL}/notifications`,{headers:authHeaders()}));
+        renderNotifications(items);
+    }catch(e){console.error(e);status.textContent=CURRENT_LOCALE==='ar'?'تعذر تحميل الإشعارات.':'Could not load notifications.';}
+}
+function closeNotifications(){document.getElementById('notificationsModal').classList.add('hidden');}
+function renderNotifications(items){
+    const status=document.getElementById('notificationsStatus'),list=document.getElementById('notificationsList');
+    if(!items.length){status.textContent=CURRENT_LOCALE==='ar'?'لا توجد إشعارات أو تذكيرات حتى الآن.':'No notifications or reminders yet.';list.innerHTML='';return;}
+    status.textContent=CURRENT_LOCALE==='ar'?`${items.length} إشعار`:`${items.length} notification${items.length===1?'':'s'}`;
+    list.innerHTML=items.map(item=>{
+        const app=item.saved_application||item.savedApplication||{},sch=app.scholarship||{},id=Number(item.notification_id);
+        const title=sch.title||(CURRENT_LOCALE==='ar'?'تذكير بمنحة':'Scholarship reminder');
+        const provider=sch.provider_name||'';
+        const days=item.reminder_window_days;
+        const reminder=(days!==null&&days!==undefined)?(CURRENT_LOCALE==='ar'?`${days} يوم قبل الموعد`:`${days} day${Number(days)===1?'':'s'} before deadline`):'';
+        const scheduled=item.scheduled_for?formatDate(item.scheduled_for):TEXT.notSpecified;
+        const sent=item.sent_at?formatDate(item.sent_at):'';
+        return `<article class="notification-card"><div class="notification-top"><div><h3>${escapeHtml(title)}</h3>${provider?`<div class="provider">${escapeHtml(provider)}</div>`:''}</div><span class="notification-status">${escapeHtml(item.status||'pending')}</span></div>
+        <div class="notification-meta"><span>${escapeHtml(notificationTypeLabel(item.notification_type))}</span>${reminder?`<span>${escapeHtml(reminder)}</span>`:''}<span>${CURRENT_LOCALE==='ar'?'مجدول:':'Scheduled:'} ${escapeHtml(scheduled)}</span><span>${CURRENT_LOCALE==='ar'?'القناة:':'Channel:'} ${escapeHtml(item.channel||TEXT.notSpecified)}</span>${sent?`<span>${CURRENT_LOCALE==='ar'?'أُرسل:':'Sent:'} ${escapeHtml(sent)}</span>`:''}</div>
+        <div class="notification-actions"><button type="button" class="btn btn-secondary" onclick="deleteNotification(${id})">${CURRENT_LOCALE==='ar'?'حذف':'Delete'}</button></div></article>`;
+    }).join('');
+}
+async function deleteNotification(id){
+    if(!id)return;
+    try{
+        const r=await fetch(`${API_BASE_URL}/notifications/${id}`,{method:'DELETE',headers:authHeaders()});
+        if(r.status===401){goToLogin();return;}
+        const body=await r.json().catch(()=>({}));
+        if(!r.ok)throw new Error(body?.message||`Delete failed: ${r.status}`);
+        showToast(CURRENT_LOCALE==='ar'?'تم حذف الإشعار.':'Notification deleted.');
+        await openNotifications();
+    }catch(e){console.error(e);showToast(e.message||(CURRENT_LOCALE==='ar'?'تعذر حذف الإشعار.':'Could not delete the notification.'));}
+}
 </script>
 
 </body>
