@@ -71,25 +71,6 @@ class SavedApplicationController extends Controller
 
         return response()->json($saved, 201);
     }
-    // مقدَّم أصلاً: نرجّع نجاح بدل خطأ
-    if ($requested === 'submitted') {
-        return response()->json($existing, 200);
-    }
-
-    return response()->json([
-        'message' => 'This scholarship is already saved.',
-        'data'    => $existing,
-    ], 409);
-} 
-        $saved = SavedApplication::create(array_merge([
-            'user_id'        => Auth::id(),
-            'scholarship_id' => $validated['scholarship_id'],
-            'status'         => $requested,
-            'saved_at'       => now(),
-        ], $requested === 'saved' ? [] : ['status_updated_at' => now()]));
-
-        return response()->json($saved, 201);
-    }
 
     /**
      * PATCH /api/saved-applications/{savedApplication}/status
@@ -103,8 +84,8 @@ class SavedApplicationController extends Controller
         ]);
 
         $savedApplication->update([
-            'status'             => $validated['status'],
-            'status_updated_at'  => now(),
+            'status'            => $validated['status'],
+            'status_updated_at' => now(),
         ]);
 
         return response()->json($savedApplication);
