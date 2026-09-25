@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html
     lang="{{ app()->getLocale() }}"
     dir="{{ app()->getLocale() === 'ar' ? 'rtl' : 'ltr' }}"
@@ -1190,6 +1190,18 @@
         }
 
 
+        .notification-unread {
+            border-inline-start: 3px solid #2563eb;
+            background: rgba(37, 99, 235, 0.05);
+        }
+        .unread-dot {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #2563eb;
+            margin-inline-end: 4px;
+        }
         .status-badge {
             flex: 0 0 auto;
 
@@ -2316,6 +2328,19 @@
 
                 <div id="applicationsList"></div>
 
+            <div class="section-card glass">
+                <div class="section-heading">
+                    <div>
+                        <h2>Notifications &amp; Reminders
+                            <span id="notificationsUnreadBadge" class="status-badge" style="display:none; margin-inline-start:8px;"></span>
+                        </h2>
+                        <p>Upcoming deadline reminders for your applications</p>
+                    </div>
+                    <button type="button" id="markAllNotificationsReadBtn" class="btn-secondary" style="display:none;">Mark all as read</button>
+                </div>
+                <div id="notificationsList"></div>
+            </div>
+
 
             </div>
 
@@ -2436,6 +2461,8 @@
     | Translated JS text
     |--------------------------------------------------------------------------
     */
+
+    const app_locale = "{{ app()->getLocale() }}";
 
     const TEXT = {
 
@@ -2572,6 +2599,8 @@
     let recommendations = [];
 
     let applications = [];
+
+    let notifications = [];
 
 
     function getToken() {
@@ -3846,6 +3875,125 @@
     }
 
 
+    async function loadNotifications() {
+        try {
+            const data = await requestJson('/api/notifications', { headers: authHeaders() });
+            notifications = normalizeCollection(data);
+            renderNotifications();
+        } catch (e) {
+            console.error('Failed to load notifications', e);
+        }
+    }
+
+    function renderNotificationsMeta() {
+        const unreadCount = notifications.filter(n => !n.read_at).length;
+
+        const badge = document.getElementById('notificationsUnreadBadge');
+        if (badge) {
+            if (unreadCount > 0) {
+                badge.textContent = String(unreadCount);
+                badge.style.display = 'inline-block';
+            } else {
+                badge.style.display = 'none';
+            }
+        }
+
+        const markAllBtn = document.getElementById('markAllNotificationsReadBtn');
+        if (markAllBtn) {
+            markAllBtn.style.display = unreadCount > 0 ? 'inline-block' : 'none';
+        }
+    }
+
+    async function markNotificationAsRead(notificationId) {
+        try {
+            await requestJson(`/api/notifications/${notificationId}/read`, {
+                method: 'POST',
+                headers: authHeaders()
+            });
+
+            const target = notifications.find(n => String(n.notification_id) === String(notificationId));
+            if (target) {
+                target.read_at = new Date().toISOString();
+            }
+
+            renderNotificationsMeta();
+        } catch (e) {
+            console.error('Failed to mark notification as read', e);
+        }
+    }
+
+    async function markAllNotificationsAsRead() {
+        try {
+            await requestJson('/api/notifications/read-all', {
+                method: 'POST',
+                headers: authHeaders()
+            });
+
+            notifications.forEach(n => { n.read_at = n.read_at || new Date().toISOString(); });
+            renderNotifications();
+        } catch (e) {
+            console.error('Failed to mark all notifications as read', e);
+        }
+    }
+
+    function renderNotifications() {
+        const container = document.getElementById('notificationsList');
+        if (!container) { return; }
+
+        renderNotificationsMeta();
+
+        if (!notifications.length) {
+            container.innerHTML = `
+                <div class="empty-state">
+                    <strong>${escapeHtml('No notifications or reminders yet')}</strong>
+                </div>
+            `;
+            return;
+        }
+
+        container.innerHTML = notifications.map(notification => {
+            const scholarship = (notification.saved_application && notification.saved_application.scholarship) || {};
+            const isUnread = !notification.read_at;
+            return `
+                <article class="application-card${isUnread ? ' notification-unread' : ''}" data-notification-id="${notification.notification_id}">
+                    <div class="application-top">
+                        <div>
+                            <div class="application-title">
+                                ${isUnread ? '<span class="unread-dot" aria-hidden="true"></span> ' : ''}${escapeHtml(scholarship.title || scholarship.provider_name || 'Scholarship Opportunity')}
+                            </div>
+                            <div class="provider" style="margin-top:5px;">
+                                ${escapeHtml((notification.notification_type || '').replace('_', ' '))}
+                                &middot;
+                                ${escapeHtml(notification.channel || '')}
+                            </div>
+                        </div>
+                        <span class="status-badge">${escapeHtml(notification.status || '')}</span>
+                    </div>
+                    <div class="application-meta">
+                        <span>${escapeHtml('Deadline')}: ${escapeHtml(formatDate(notification.scheduled_for))}</span>
+                    </div>
+                    <div class="application-actions" style="margin-top:10px;">
+                        ${isUnread ? `<button type="button" class="quick-action" onclick="markNotificationAsRead(${notification.notification_id})">${escapeHtml('Mark as read')}</button>` : ''}
+                        <button type="button" class="quick-action" onclick="deleteNotification(${notification.notification_id})">
+                            ${escapeHtml('Delete')}
+                        </button>
+                    </div>
+                </article>
+            `;
+        }).join('');
+    }
+
+    async function deleteNotification(id) {
+        if (!confirm('Delete this notification?')) { return; }
+        try {
+            await requestJson(`/api/notifications/${id}`, { method: 'DELETE', headers: authHeaders() });
+            notifications = notifications.filter(n => n.notification_id !== id);
+            renderNotifications();
+        } catch (e) {
+            console.error('Failed to delete notification', e);
+        }
+    }
+
     function renderApplications() {
 
         const container =
@@ -4100,6 +4248,8 @@
         renderMatches();
 
         renderApplications();
+
+        loadNotifications();
 
         renderJourney();
 
@@ -4623,6 +4773,11 @@
             }
         );
 
+
+    const markAllNotifBtn = document.getElementById('markAllNotificationsReadBtn');
+    if (markAllNotifBtn) {
+        markAllNotifBtn.addEventListener('click', markAllNotificationsAsRead);
+    }
 
     document
         .getElementById(
