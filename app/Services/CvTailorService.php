@@ -11,8 +11,8 @@ class CvTailorService
     public function tailor(Cv $cv, Scholarship $scholarship): array
     {
         $original = [
-            'skills' => $cv->extracted_skills ?? [],
-            'qualifications' => $cv->extracted_qualifications ?? [],
+            'skills' => array_values($cv->extracted_skills ?? []),
+            'qualifications' => array_values($cv->extracted_qualifications ?? []),
         ];
 
         if (empty($original['skills']) && empty($original['qualifications'])) {
@@ -23,14 +23,15 @@ class CvTailorService
         $model = config('services.gemini.model', 'gemini-3.5-flash');
 
         if (empty($apiKey)) {
-            abort(503, 'Gemini API key is not configured');
+            return $this->fallback($original, $scholarship);
         }
 
         try {
-            $response = Http::timeout(90)
-                ->retry(
-                    2,
-                    1500,
+            $response = Http::connectTimeout(5)
+                            ->timeout(15)
+                            ->retry(
+                                1,
+                                500,
                     fn ($exception) =>
                         in_array(
                             optional($exception->response ?? null)->status(),
@@ -67,22 +68,20 @@ class CvTailorService
         } catch (\Throwable $e) {
             report($e);
 
-            abort(
-                503,
-                'AI service connection failed'
-            );
+            logger()->warning('CV Tailor Gemini connection failed; using fallback.', [
+                'message' => $e->getMessage(),
+            ]);
+
+            return $this->fallback($original, $scholarship);
         }
 
         if ($response->failed()) {
-            logger()->warning('CV Tailor Gemini request failed', [
+            logger()->warning('CV Tailor Gemini request failed; using fallback.', [
                 'status' => $response->status(),
                 'body' => $response->body(),
             ]);
 
-            abort(
-                502,
-                'AI service unavailable: ' . $response->status()
-            );
+            return $this->fallback($original, $scholarship);
         }
 
         $text = data_get(
@@ -98,18 +97,68 @@ class CvTailorService
             !isset($parsed['suggestions']) ||
             !is_array($parsed['suggestions'])
         ) {
-            logger()->warning('CV Tailor returned invalid JSON', [
+            logger()->warning('CV Tailor returned invalid JSON; using fallback.', [
                 'response_text' => $text,
             ]);
 
-            abort(502, 'Invalid AI response');
+            return $this->fallback($original, $scholarship);
+        }
+
+        $suggestions = $this->verify(
+            $original,
+            $parsed['suggestions']
+        );
+
+        if (empty($suggestions)) {
+            return $this->fallback($original, $scholarship);
         }
 
         return [
-            'suggestions' => $this->verify(
-                $original,
-                $parsed['suggestions']
-            ),
+            'suggestions' => $suggestions,
+            'source' => 'ai',
+            'fallback' => false,
+        ];
+    }
+
+    private function fallback(
+        array $original,
+        Scholarship $scholarship
+    ): array {
+        $suggestions = [];
+
+        /*
+         * Safe fallback:
+         * It never creates new CV information.
+         * It only keeps the user's existing extracted data.
+         */
+
+        if (!empty($original['skills'])) {
+            $suggestions[] = [
+                'section' => 'skills',
+                'original' => array_values($original['skills']),
+                'suggested' => array_values($original['skills']),
+                'reason' => 'AI tailoring is temporarily unavailable. Your existing skills were kept unchanged.',
+                'flagged' => false,
+                'new_numbers' => [],
+            ];
+        }
+
+        if (!empty($original['qualifications'])) {
+            $suggestions[] = [
+                'section' => 'qualifications',
+                'original' => array_values($original['qualifications']),
+                'suggested' => array_values($original['qualifications']),
+                'reason' => 'AI tailoring is temporarily unavailable. Your existing qualifications were kept unchanged.',
+                'flagged' => false,
+                'new_numbers' => [],
+            ];
+        }
+
+        return [
+            'suggestions' => $suggestions,
+            'source' => 'fallback',
+            'fallback' => true,
+            'message' => 'AI tailoring is temporarily unavailable. Existing CV information is shown without adding or inventing any data.',
         ];
     }
 
@@ -203,10 +252,6 @@ PROMPT;
                 )
             );
 
-            /*
-             * Skills are strictly limited to skills that
-             * already exist in the original CV.
-             */
             if ($section === 'skills') {
                 $originalLookup = [];
 

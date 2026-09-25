@@ -87,4 +87,19 @@ class CvTailorController extends Controller
 
         return response()->json($version, 201);
     }
+    public function indexVersions(Request $request)
+{
+    $versions = CvVersion::query()
+        ->whereHas('cv', function ($query) use ($request) {
+            $query->where('user_id', $request->user()->getKey());
+        })
+        ->with([
+            'cv:cv_id,original_filename',
+            'scholarship:scholarship_id,title,provider_name',
+        ])
+        ->latest()
+        ->get();
+
+    return response()->json($versions);
+}
 }

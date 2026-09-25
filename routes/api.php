@@ -69,7 +69,7 @@ Route::middleware('auth:sanctum')->group(function () {
     // CV Tailor (تحسين الـ CV)
     Route::post('/cv/tailor/save', [CvTailorController::class, 'save']);
     Route::post('/cv/tailor', [CvTailorController::class, 'tailor']);
-
+    Route::get('/cv/versions', [CvTailorController::class, 'indexVersions']);
     // Recommendations
     Route::get('/recommendations', [RecommendationController::class, 'index']);
     Route::get('/recommendations/{recommendation}', [RecommendationController::class, 'show']);

@@ -1875,46 +1875,117 @@
         return Array.isArray(value) ? value : [];
     }
 
-    function renderTailorSuggestions(payload) {
-        const skills = getTailorSection(payload, 'skills');
-        const qualifications = getTailorSection(payload, 'qualifications');
-        const container = document.getElementById('cvTailorSuggestions');
-        const status = document.getElementById('cvTailorStatus');
-        const saveBtn = document.getElementById('saveTailoredCvBtn');
+   function renderTailorSuggestions(payload) {
+    const container = document.getElementById('cvTailorSuggestions');
+    const status = document.getElementById('cvTailorStatus');
+    const saveBtn = document.getElementById('saveTailoredCvBtn');
 
-        const sectionHtml = (title, section, items) => {
-            if (!items.length) return '';
-            return `<div class="tailor-section"><h3>${escapeHtml(title)}</h3>${items.map((item, index) => {
-                const value = suggestionText(item);
-                const reason = suggestionReason(item);
-                const flagged = suggestionFlagged(item);
-                return `<label class="tailor-option">
-                    <input type="checkbox" class="tailor-choice" data-section="${section}" data-value="${escapeHtml(value)}" ${flagged ? '' : 'checked'}>
-                    <span><strong>${escapeHtml(value)}</strong>
-                    ${reason ? `<small>${escapeHtml(reason)}</small>` : ''}
-                    ${flagged ? `<small class="tailor-warning">${CURRENT_LOCALE === 'ar' ? 'يحتاج مراجعتك قبل الحفظ.' : 'Please review this suggestion before saving.'}</small>` : ''}
-                    </span></label>`;
-            }).join('')}</div>`;
-        };
-
-        container.innerHTML =
-            sectionHtml(CURRENT_LOCALE === 'ar' ? 'المهارات' : 'Skills', 'skills', skills) +
-            sectionHtml(CURRENT_LOCALE === 'ar' ? 'المؤهلات' : 'Qualifications', 'qualifications', qualifications);
-
-        if (!skills.length && !qualifications.length) {
-            status.textContent = CURRENT_LOCALE === 'ar'
-                ? 'لا توجد اقتراحات آمنة للتخصيص لهذه المنحة.'
-                : 'No safe tailoring suggestions were returned for this scholarship.';
-            saveBtn.disabled = true;
-            return;
-        }
+    // Gemini is temporarily unavailable.
+    // Do not present unchanged CV data as AI tailoring.
+    if (payload?.fallback === true) {
+        container.innerHTML = '';
 
         status.textContent = CURRENT_LOCALE === 'ar'
-            ? 'راجعي الاقتراحات واختاري ما تريدين حفظه.'
-            : 'Review the suggestions and select what you want to save.';
-        saveBtn.disabled = false;
+            ? 'خدمة تخصيص السيرة بالذكاء الاصطناعي مشغولة مؤقتًا. لم يتم تغيير أي بيانات في سيرتك الذاتية. جرّبي مرة أخرى بعد قليل.'
+            : 'AI CV tailoring is temporarily unavailable. No changes were made to your CV. Please try again shortly.';
+
+        saveBtn.disabled = true;
+        return;
     }
 
+    const suggestions = Array.isArray(payload?.suggestions)
+        ? payload.suggestions
+        : [];
+
+    const skillsSuggestion = suggestions.find(
+        item => item?.section === 'skills'
+    );
+
+    const qualificationsSuggestion = suggestions.find(
+        item => item?.section === 'qualifications'
+    );
+
+    const skills = Array.isArray(skillsSuggestion?.suggested)
+        ? skillsSuggestion.suggested
+        : [];
+
+    const qualifications = Array.isArray(qualificationsSuggestion?.suggested)
+        ? qualificationsSuggestion.suggested
+        : [];
+
+    const sectionHtml = (title, section, items, suggestion) => {
+        if (!items.length) return '';
+
+        const reason = suggestion?.reason ?? '';
+        const flagged = Boolean(suggestion?.flagged);
+
+        return `
+            <div class="tailor-section">
+                <h3>${escapeHtml(title)}</h3>
+
+                ${reason
+                    ? `<p class="tailor-reason">${escapeHtml(reason)}</p>`
+                    : ''
+                }
+
+                ${items.map(item => `
+                    <label class="tailor-option">
+                        <input
+                            type="checkbox"
+                            class="tailor-choice"
+                            data-section="${section}"
+                            data-value="${escapeHtml(String(item))}"
+                            ${flagged ? '' : 'checked'}
+                        >
+
+                        <span>
+                            <strong>${escapeHtml(String(item))}</strong>
+
+                            ${flagged
+                                ? `<small class="tailor-warning">
+                                    ${CURRENT_LOCALE === 'ar'
+                                        ? 'يحتاج مراجعتك قبل الحفظ.'
+                                        : 'Please review this suggestion before saving.'
+                                    }
+                                   </small>`
+                                : ''
+                            }
+                        </span>
+                    </label>
+                `).join('')}
+            </div>
+        `;
+    };
+
+    container.innerHTML =
+        sectionHtml(
+            CURRENT_LOCALE === 'ar' ? 'المهارات' : 'Skills',
+            'skills',
+            skills,
+            skillsSuggestion
+        ) +
+        sectionHtml(
+            CURRENT_LOCALE === 'ar' ? 'المؤهلات' : 'Qualifications',
+            'qualifications',
+            qualifications,
+            qualificationsSuggestion
+        );
+
+    if (!skills.length && !qualifications.length) {
+        status.textContent = CURRENT_LOCALE === 'ar'
+            ? 'لم يقترح الذكاء الاصطناعي تعديلات آمنة لهذه المنحة. بقيت سيرتك الأصلية دون تغيير.'
+            : 'No safe CV changes were suggested for this scholarship. Your original CV remains unchanged.';
+
+        saveBtn.disabled = true;
+        return;
+    }
+
+    status.textContent = CURRENT_LOCALE === 'ar'
+        ? 'راجعي الاقتراحات واختاري ما تريدين حفظه في النسخة المخصصة.'
+        : 'Review the suggestions and select what you want to save in the tailored version.';
+
+    saveBtn.disabled = false;
+}
     async function openCvTailor(btn) {
         const scholarshipId = Number(btn.dataset.scholarshipId);
         const scholarshipTitle = btn.dataset.scholarshipTitle || '';
