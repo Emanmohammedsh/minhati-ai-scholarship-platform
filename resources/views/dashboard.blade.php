@@ -2331,12 +2331,12 @@
             <div class="section-card glass">
                 <div class="section-heading">
                     <div>
-                        <h2>Notifications &amp; Reminders
+                        <h2>{{ __('common.notifications_title') }}
                             <span id="notificationsUnreadBadge" class="status-badge" style="display:none; margin-inline-start:8px;"></span>
                         </h2>
-                        <p>Upcoming deadline reminders for your applications</p>
+                        <p>{{ __('common.notifications_description') }}</p>
                     </div>
-                    <button type="button" id="markAllNotificationsReadBtn" class="btn-secondary" style="display:none;">Mark all as read</button>
+                    <button type="button" id="markAllNotificationsReadBtn" class="btn-secondary" style="display:none;">{{ __('common.notifications_mark_all_read') }}</button>
                 </div>
                 <div id="notificationsList"></div>
             </div>
@@ -2510,6 +2510,21 @@
 
         noMatchesGenerated:
             @json(__('common.no_matches_generated')),
+
+        notificationsEmpty:
+            @json(__('common.notifications_empty')),
+
+        notificationsMarkRead:
+            @json(__('common.notifications_mark_read')),
+
+        notificationsDelete:
+            @json(__('common.notifications_delete')),
+
+        notificationsDeleteConfirm:
+            @json(__('common.notifications_delete_confirm')),
+
+        notificationsDeadline:
+            @json(__('common.notifications_deadline')),
 
         noMatchesGeneratedNote:
             @json(__('common.no_matches_generated_note')),
@@ -3945,7 +3960,7 @@
         if (!notifications.length) {
             container.innerHTML = `
                 <div class="empty-state">
-                    <strong>${escapeHtml('No notifications or reminders yet')}</strong>
+                    <strong>${escapeHtml(TEXT.notificationsEmpty)}</strong>
                 </div>
             `;
             return;
@@ -3970,12 +3985,12 @@
                         <span class="status-badge">${escapeHtml(notification.status || '')}</span>
                     </div>
                     <div class="application-meta">
-                        <span>${escapeHtml('Deadline')}: ${escapeHtml(formatDate(notification.scheduled_for))}</span>
+                        <span>${escapeHtml(TEXT.notificationsDeadline)}: ${escapeHtml(formatDate(notification.scheduled_for))}</span>
                     </div>
                     <div class="application-actions" style="margin-top:10px;">
-                        ${isUnread ? `<button type="button" class="quick-action" onclick="markNotificationAsRead(${notification.notification_id})">${escapeHtml('Mark as read')}</button>` : ''}
+                        ${isUnread ? `<button type="button" class="quick-action" onclick="markNotificationAsRead(${notification.notification_id})">${escapeHtml(TEXT.notificationsMarkRead)}</button>` : ''}
                         <button type="button" class="quick-action" onclick="deleteNotification(${notification.notification_id})">
-                            ${escapeHtml('Delete')}
+                            ${escapeHtml(TEXT.notificationsDelete)}
                         </button>
                     </div>
                 </article>
@@ -3984,7 +3999,7 @@
     }
 
     async function deleteNotification(id) {
-        if (!confirm('Delete this notification?')) { return; }
+        if (!confirm(TEXT.notificationsDeleteConfirm)) { return; }
         try {
             await requestJson(`/api/notifications/${id}`, { method: 'DELETE', headers: authHeaders() });
             notifications = notifications.filter(n => n.notification_id !== id);

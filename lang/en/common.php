@@ -228,4 +228,14 @@ return [
     'save_failed' => 'Could not save your reviewed information. Please try again.',
     'saved_redirecting' => 'Saved. Redirecting to your recommendations…',
     'connection_error' => 'Could not connect to the server. Make sure your Laravel backend is running.', 
+
+    // Notifications
+    'notifications_title' => 'Notifications & Reminders',
+    'notifications_description' => 'Upcoming deadline reminders for your applications',
+    'notifications_empty' => 'No notifications or reminders yet',
+    'notifications_mark_all_read' => 'Mark all as read',
+    'notifications_mark_read' => 'Mark as read',
+    'notifications_delete' => 'Delete',
+    'notifications_delete_confirm' => 'Delete this notification?',
+    'notifications_deadline' => 'Deadline',
 ];

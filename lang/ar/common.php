@@ -229,4 +229,14 @@ return [
     'save_failed' => 'تعذر حفظ المعلومات المراجعة. حاولي مرة أخرى.',
     'saved_redirecting' => 'تم الحفظ. جارٍ التوجيه إلى توصياتك…',
     'connection_error' => 'تعذر الاتصال بالخادم. تأكدي من تشغيل خادم Laravel.',
+
+    // Notifications
+    'notifications_title' => 'الإشعارات والتذكيرات',
+    'notifications_description' => 'تذكيرات بالمواعيد النهائية القادمة لطلباتك',
+    'notifications_empty' => 'لا توجد إشعارات أو تذكيرات بعد',
+    'notifications_mark_all_read' => 'تعليم الكل كمقروء',
+    'notifications_mark_read' => 'تعليم كمقروء',
+    'notifications_delete' => 'حذف',
+    'notifications_delete_confirm' => 'هل تريد حذف هذا الإشعار؟',
+    'notifications_deadline' => 'الموعد النهائي',
 ];
