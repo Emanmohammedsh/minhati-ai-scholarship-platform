@@ -54,7 +54,7 @@ return [
     'connected' => 'مرتبطة',
     'profile_label' => 'بالملف',
     'career_path_status' => 'المسار المهني',
-    'building' => 'قيد البناء',
+    'building' => 'فعّال',
     'phase' => 'مرحلة',
 
     'your_journey' => 'رحلتك المهنية',

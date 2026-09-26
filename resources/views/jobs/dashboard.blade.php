@@ -2176,47 +2176,7 @@
 
 
 
-    <!-- ======================================
-         DEVELOPMENT
-    ====================================== -->
-
-    <section class="coming-card">
-
-
-        <div>
-
-            <h3>
-                {{ __('common.career_development_title') }}
-            </h3>
-
-
-            <p>
-                {{ __('common.career_development_description') }}
-            </p>
-
-        </div>
-
-
-
-        <div class="development-status">
-
-            <small>
-                {{ __('common.career_module') }}
-            </small>
-
-
-            <strong>
-
-                <span class="status-dot"></span>
-
-                {{ __('common.in_development') }}
-
-            </strong>
-
-        </div>
-
-
-    </section>
+   
 
 
 

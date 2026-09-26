@@ -489,7 +489,7 @@
 <script>
     const API_BASE_URL = '/api';
 
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem('auth_token');
 
     function authHeaders() {
         return {
@@ -559,7 +559,7 @@
 
         } catch (error) {
 
-            localStorage.removeItem('token');
+            localStorage.removeItem('auth_token');
 
             window.location.href = '/login';
 
@@ -774,7 +774,7 @@
             console.error(error);
         }
 
-        localStorage.removeItem('token');
+        localStorage.removeItem('auth_token');
 
         window.location.href = '/login';
     }
