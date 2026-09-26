@@ -13,7 +13,13 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware): void {
 
+        // Web pages: locale comes from the session.
         $middleware->web(append: [
+            \App\Http\Middleware\SetLocale::class,
+        ]);
+
+        // API requests: locale can come from Accept-Language.
+        $middleware->api(append: [
             \App\Http\Middleware\SetLocale::class,
         ]);
 
