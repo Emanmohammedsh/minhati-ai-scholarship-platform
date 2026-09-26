@@ -56,3 +56,5 @@ Route::get('/language/{locale}', function ($locale) {
 
     return redirect()->back();
 })->name('language.switch');
+
+// force rebuild 09/26/2026 21:52:55
