@@ -4,8 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Recommendation;
 use App\Models\StudentProfile;
-use App\Services\MatchingService;
 use App\Services\CourseRecommendationService;
+use App\Services\MatchingService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -68,16 +68,20 @@ class RecommendationController extends Controller
 
         if (! $profile) {
             return response()->json([
-                'message' => 'Please complete your profile before generating recommendations.',
+                'message' => $this->isArabic()
+                    ? 'يرجى إكمال ملفك الشخصي قبل إنشاء المطابقات.'
+                    : 'Please complete your profile before generating recommendations.',
             ], 422);
         }
 
         $recommendations = $this->matchingService->generate($user);
 
         return response()->json([
-            'message' => 'Recommendations generated successfully.',
-            'count'   => $recommendations->count(),
-            'data'    => $recommendations,
+            'message' => $this->isArabic()
+                ? 'تم إنشاء مطابقات المنح بنجاح.'
+                : 'Recommendations generated successfully.',
+            'count' => $recommendations->count(),
+            'data' => $recommendations,
         ], 201);
     }
 
@@ -156,18 +160,18 @@ class RecommendationController extends Controller
         if ($criteriaCount <= 1) {
             $warnings[] = [
                 'type' => 'limited_criteria',
-                'message' =>
-                    'This scholarship currently has limited eligibility criteria in the system. '
-                    . 'The match score should not be interpreted as full application readiness.',
+                'message' => $this->isArabic()
+                    ? 'تحتوي هذه المنحة حاليًا على عدد محدود من معايير الأهلية في النظام، لذلك لا ينبغي اعتبار نسبة المطابقة دليلًا على الجاهزية الكاملة للتقديم.'
+                    : 'This scholarship currently has limited eligibility criteria in the system. The match score should not be interpreted as full application readiness.',
             ];
         }
 
         if (! $recommendation->cv) {
             $warnings[] = [
                 'type' => 'missing_cv',
-                'message' =>
-                    'No active CV is connected to this recommendation. '
-                    . 'Upload or activate a CV for a more complete analysis.',
+                'message' => $this->isArabic()
+                    ? 'لا توجد سيرة ذاتية نشطة مرتبطة بهذه المطابقة. ارفعي سيرة ذاتية أو فعّلي واحدة للحصول على تحليل أكثر اكتمالًا.'
+                    : 'No active CV is connected to this recommendation. Upload or activate a CV for a more complete analysis.',
             ];
         }
 
@@ -224,8 +228,18 @@ class RecommendationController extends Controller
         $recommendation->delete();
 
         return response()->json([
-            'message' => 'Recommendation deleted successfully.',
+            'message' => $this->isArabic()
+                ? 'تم حذف المطابقة بنجاح.'
+                : 'Recommendation deleted successfully.',
         ]);
+    }
+
+    /**
+     * Returns true when the current application language is Arabic.
+     */
+    private function isArabic(): bool
+    {
+        return app()->getLocale() === 'ar';
     }
 
     /**
@@ -233,6 +247,31 @@ class RecommendationController extends Controller
      */
     private function matchedMessage(string $type, string $value): string
     {
+        if ($this->isArabic()) {
+            return match ($type) {
+                'country' =>
+                    "بلدك يطابق البلد المطلوب: {$value}.",
+
+                'degree_level' =>
+                    "مستواك الدراسي يطابق المستوى المطلوب: {$value}.",
+
+                'field_of_study' =>
+                    "مجال دراستك يطابق متطلبات المنحة: {$value}.",
+
+                'skill' =>
+                    "سيرتك الذاتية تتضمن المهارة المطلوبة: {$value}.",
+
+                'qualification' =>
+                    "سيرتك الذاتية تتضمن المؤهل المطلوب: {$value}.",
+
+                'education' =>
+                    "بياناتك التعليمية تطابق متطلبات المنحة: {$value}.",
+
+                default =>
+                    'أنت تستوفي هذا الشرط من شروط المنحة.',
+            };
+        }
+
         return match ($type) {
             'country' =>
                 "Your country matches the required country: {$value}.",
@@ -253,7 +292,7 @@ class RecommendationController extends Controller
                 "Your education information matches the requirement: {$value}.",
 
             default =>
-                "You satisfy this scholarship criterion.",
+                'You satisfy this scholarship criterion.',
         };
     }
 
@@ -262,6 +301,31 @@ class RecommendationController extends Controller
      */
     private function gapMessage(string $type, string $value): string
     {
+        if ($this->isArabic()) {
+            return match ($type) {
+                'country' =>
+                    "تتطلب المنحة أهلية مرتبطة بالدولة: {$value}.",
+
+                'degree_level' =>
+                    "لم تتم مطابقة المستوى الدراسي المطلوب: {$value}.",
+
+                'field_of_study' =>
+                    "لم تتم مطابقة مجال الدراسة المطلوب: {$value}.",
+
+                'skill' =>
+                    "لم يتم العثور على المهارة المطلوبة في سيرتك الذاتية النشطة: {$value}.",
+
+                'qualification' =>
+                    "لم يتم العثور على المؤهل المطلوب في سيرتك الذاتية النشطة: {$value}.",
+
+                'education' =>
+                    "لم يتم العثور على المعلومات التعليمية المطلوبة في سيرتك الذاتية النشطة: {$value}.",
+
+                default =>
+                    'لم يتم استيفاء هذا الشرط من شروط المنحة.',
+            };
+        }
+
         return match ($type) {
             'country' =>
                 "The scholarship requires country eligibility for: {$value}.",
@@ -282,7 +346,7 @@ class RecommendationController extends Controller
                 "The required education information was not found in your active CV: {$value}.",
 
             default =>
-                "This scholarship requirement has not been satisfied.",
+                'This scholarship requirement has not been satisfied.',
         };
     }
 
@@ -291,6 +355,31 @@ class RecommendationController extends Controller
      */
     private function gapSuggestion(string $type, string $value): string
     {
+        if ($this->isArabic()) {
+            return match ($type) {
+                'country' =>
+                    'راجعي شروط أهلية المنحة وتأكدي مما إذا كانت جنسيتك أو مكان إقامتك ضمن الفئات المقبولة.',
+
+                'degree_level' =>
+                    'تحققي مما إذا كان مستواك الدراسي الحالي أو المستهدف يطابق متطلبات المنحة.',
+
+                'field_of_study' =>
+                    'راجعي مجالات الدراسة المؤهلة وتأكدي من إدخال مجال دراستك بشكل صحيح في ملفك الشخصي.',
+
+                'skill' =>
+                    "إذا كانت لديك مهارة {$value}، أضيفيها بوضوح إلى سيرتك الذاتية حتى يتمكن النظام من اكتشافها.",
+
+                'qualification' =>
+                    "إذا كان لديك المؤهل {$value}، أضيفيه بوضوح إلى سيرتك الذاتية ثم ارفعي النسخة المحدثة.",
+
+                'education' =>
+                    'تأكدي من إدراج معلومات الدرجة العلمية والمؤسسة التعليمية بوضوح في سيرتك الذاتية.',
+
+                default =>
+                    'راجعي متطلبات المنحة وحدّثي ملفك الشخصي أو سيرتك الذاتية إذا كانت هناك معلومات ناقصة.',
+            };
+        }
+
         return match ($type) {
             'country' =>
                 'Review the scholarship eligibility rules and confirm whether your residency or nationality is accepted.',
@@ -355,7 +444,9 @@ class RecommendationController extends Controller
         if ($recommendation->user_id !== Auth::id()) {
             abort(
                 403,
-                'You do not have permission to access this recommendation.'
+                $this->isArabic()
+                    ? 'ليس لديك صلاحية للوصول إلى هذه المطابقة.'
+                    : 'You do not have permission to access this recommendation.'
             );
         }
     }
