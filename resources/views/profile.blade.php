@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="{{ app()->getLocale() }}" dir="{{ app()->getLocale() === 'ar' ? 'rtl' : 'ltr' }}">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Jisr AI | Academic Profile</title>
+<title>Jisr AI | {{ app()->getLocale() === 'ar' ? 'الملف الأكاديمي' : 'Academic Profile' }}</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&display=swap');
 
@@ -263,89 +263,117 @@
     main { padding: 0 1.25rem; margin: 1.5rem auto; }
   }
 </style>
+<style>
+/* Jisr shared profile/CV page styling. Header and footer remain shared components. */
+html { color-scheme: light; }
+html[data-theme="dark"] { color-scheme: dark; }
+body { font-family: 'Cairo','Inter',system-ui,sans-serif; background: radial-gradient(circle at 85% 0%,rgba(0,198,255,.09),transparent 32%),#f5f9ff; color:#163456; }
+body.theme-dark { background:radial-gradient(circle at 80% 0%,rgba(0,198,255,.09),transparent 34%),#08172d; }
+#appShell { min-height:100vh; }
+#appShell main { max-width:850px; width:calc(100% - 36px); margin:42px auto 60px; padding:0; }
+#appShell .card { border-radius:22px; padding:clamp(22px,4vw,42px); border:1px solid #dce9f6; background:#fff; box-shadow:0 15px 45px rgba(10,46,107,.055); margin-bottom:22px; }
+#appShell h1 { font-family:'Cairo','Inter',sans-serif; font-size:clamp(24px,3vw,32px); color:#0a2e6b; }
+#appShell h2 { font-family:'Cairo','Inter',sans-serif; color:#0a2e6b; }
+#appShell .sub { line-height:1.85; font-size:14px; color:#667d97; }
+#appShell label { font-family:inherit; font-size:14px; font-weight:700; }
+#appShell input:not([type=file]),#appShell textarea,#appShell select { font-family:inherit; border-radius:12px; min-height:48px; }
+#appShell input:focus,#appShell textarea:focus,#appShell select:focus { outline:2px solid rgba(0,198,255,.25); outline-offset:1px; border-color:#00a7db; }
+#appShell .save-btn,#appShell .btn-primary,#appShell .confirm-btn { background:linear-gradient(110deg,#0a2e6b,#087ec0); color:white; border-radius:12px; min-height:48px; font-family:inherit; font-weight:700; }
+#appShell .dropzone { background:#f6fbff; border-color:#a9cfe6; border-radius:18px; }
+#appShell .dropzone:hover,#appShell .dropzone.dragover { background:#eaf6ff; border-color:#00a7db; }
+#appShell .dropzone:focus-visible { outline:3px solid #00c6ff; outline-offset:3px; }
+#appShell .tag { border-radius:10px; }
+html[data-theme="dark"] body,body.theme-dark { color:#e3ecfa; }
+html[data-theme="dark"] #appShell .card,body.theme-dark #appShell .card { background:#10233f; border-color:#26415f; box-shadow:0 16px 48px rgba(0,0,0,.14); }
+html[data-theme="dark"] #appShell h1,html[data-theme="dark"] #appShell h2,body.theme-dark #appShell h1,body.theme-dark #appShell h2 { color:#edf7ff; }
+html[data-theme="dark"] #appShell .sub,body.theme-dark #appShell .sub { color:#afc6dc; }
+html[data-theme="dark"] #appShell .dropzone,body.theme-dark #appShell .dropzone { background:#132b48; border-color:#3a6580; }
+html[dir="rtl"] #appShell input,html[dir="rtl"] #appShell textarea,html[dir="rtl"] #appShell select { text-align:right; }
+@media(max-width:600px){#appShell main{width:calc(100% - 24px);margin:24px auto 42px}#appShell .card{padding:22px 18px}}
+</style>
 </head>
 <body>
 
-<script>
-  // Apply saved theme before first paint to avoid a light/dark flash.
-  (function () {
-    try {
-      if (localStorage.getItem('jisr_theme') === 'dark') {
-        document.body.classList.add('theme-dark');
-      }
-    } catch (e) {}
-  })();
-</script>
 
-  <div class="loading-screen" id="loadingScreen">Loading...</div>
+
+  <div class="loading-screen" id="loadingScreen">{{ app()->getLocale() === 'ar' ? 'جاري تحميل الملف...' : 'Loading profile...' }}</div>
 
   <div id="appShell">
-    <div class="topbar">
-      <div class="brand">
-        <img src="/images/jisr-logo.jpeg" class="brand-logo" alt="Jisr AI">
-        Jisr AI
-      </div>
-      <div class="topbar-links">
-        <a href="{{ route('dashboard') }}" class="back-link">&larr; Back to dashboard</a>
-        <button id="themeToggleBtn" class="theme-toggle-btn" type="button" title="Dark / Light">🌙</button>
-      </div>
-    </div>
+    @include('components.jisr-header')
 
     <main>
       <div class="card">
-        <h1>Academic Profile</h1>
-        <p class="sub" id="pageSub">Complete your academic profile so we can match you with relevant scholarships and career opportunities.</p>
+        <h1>{{ app()->getLocale() === 'ar' ? 'الملف الأكاديمي' : 'Academic Profile' }}</h1>
+        <p class="sub" id="pageSub">{{ app()->getLocale() === 'ar' ? 'أكملي بياناتك لنساعدك في العثور على المنح والوظائف المناسبة لك.' : 'Complete your academic profile so we can match you with relevant scholarships and career opportunities.' }}</p>
 
         <div id="globalAlert" class="alert"></div>
 
         <form id="profileForm" novalidate>
           <div class="form-group">
-            <label for="academic_background">Academic Background</label>
-            <textarea id="academic_background" name="academic_background" placeholder="e.g. BSc in Cybersecurity Engineering, graduated 2026"></textarea>
+            <label for="academic_background">{{ app()->getLocale() === 'ar' ? 'الخلفية الأكاديمية' : 'Academic Background' }}</label>
+            <textarea id="academic_background" name="academic_background" placeholder="{{ app()->getLocale() === 'ar' ? 'مثال: بكالوريوس هندسة الأمن السيبراني' : 'e.g. BSc in Cybersecurity Engineering, graduated 2026' }}"></textarea>
             <div class="field-error" id="err_academic_background"></div>
           </div>
 
           <div class="form-group">
-            <label for="field_of_study">Field of Study *</label>
-            <input type="text" id="field_of_study" name="field_of_study" placeholder="e.g. Computer Science" required>
+            <label for="field_of_study">{{ app()->getLocale() === 'ar' ? 'التخصص *' : 'Field of Study *' }}</label>
+            <input type="text" id="field_of_study" name="field_of_study" placeholder="{{ app()->getLocale() === 'ar' ? 'مثال: علوم الحاسوب' : 'e.g. Computer Science' }}" required>
             <div class="field-error" id="err_field_of_study"></div>
           </div>
 
           <div class="form-group">
-            <label for="degree_level">Degree Level *</label>
+            <label for="degree_level">{{ app()->getLocale() === 'ar' ? 'الدرجة العلمية *' : 'Degree Level *' }}</label>
             <select id="degree_level" name="degree_level" required>
-              <option value="">Select...</option>
-              <option value="diploma">Diploma</option>
-              <option value="bachelor">Bachelor's</option>
-              <option value="master">Master's</option>
-              <option value="phd">PhD</option>
+              <option value="">{{ app()->getLocale() === 'ar' ? 'اختاري...' : 'Select...' }}</option>
+              <option value="diploma">{{ app()->getLocale() === 'ar' ? 'دبلوم' : "Diploma" }}</option>
+              <option value="bachelor">{{ app()->getLocale() === 'ar' ? 'بكالوريوس' : "Bachelor's" }}</option>
+              <option value="master">{{ app()->getLocale() === 'ar' ? 'ماجستير' : "Master's" }}</option>
+              <option value="phd">{{ app()->getLocale() === 'ar' ? 'دكتوراه' : "PhD" }}</option>
             </select>
             <div class="field-error" id="err_degree_level"></div>
           </div>
 
           <div class="form-group">
-            <label for="interests">Areas of Interest</label>
-            <textarea id="interests" name="interests" placeholder="e.g. AI, cybersecurity, renewable energy"></textarea>
+            <label for="interests">{{ app()->getLocale() === 'ar' ? 'مجالات الاهتمام' : 'Areas of Interest' }}</label>
+            <textarea id="interests" name="interests" placeholder="{{ app()->getLocale() === 'ar' ? 'مثال: الذكاء الاصطناعي، الأمن السيبراني' : 'e.g. AI, cybersecurity, renewable energy' }}"></textarea>
             <div class="field-error" id="err_interests"></div>
           </div>
 
           <div class="form-group">
-            <label for="country">Country *</label>
-            <input type="text" id="country" name="country" placeholder="e.g. Palestine" required>
+            <label for="country">{{ app()->getLocale() === 'ar' ? 'الدولة *' : 'Country *' }}</label>
+            <input type="text" id="country" name="country" placeholder="{{ app()->getLocale() === 'ar' ? 'مثال: فلسطين' : 'e.g. Palestine' }}" required>
             <div class="field-error" id="err_country"></div>
           </div>
 
-          <button type="submit" class="save-btn" id="saveBtn">Save Profile</button>
-          <a href="{{ route('cv-upload') }}" class="save-btn" id="continueBtn" style="display:none;text-decoration:none;text-align:center;margin-top:0.9rem;background:linear-gradient(135deg, #34D399, #22C55E);color:#06210F;">Continue to CV Upload &rarr;</a>
+          <button type="submit" class="save-btn" id="saveBtn">{{ app()->getLocale() === 'ar' ? 'حفظ الملف الشخصي' : 'Save Profile' }}</button>
+          <a href="{{ route('cv-upload') }}" class="save-btn" id="continueBtn" style="display:none;text-decoration:none;text-align:center;margin-top:0.9rem;background:linear-gradient(135deg, #34D399, #22C55E);color:#06210F;">{{ app()->getLocale() === 'ar' ? 'المتابعة لرفع السيرة الذاتية ←' : 'Continue to CV Upload →' }}</a>
         </form>
       </div>
     </main>
+    @include('components.jisr-footer')
   </div>
 
 <script>
   const API_BASE_URL = "{{ url('/api') }}";
   const LOGIN_URL = "{{ route('login') }}";
   const CONTINUE_URL = "{{ route('cv-upload') }}";
+  @if(app()->getLocale() === 'ar')
+  const PROFILE_TEXT = {
+    saving: 'جاري الحفظ...',
+    saved: 'تم حفظ الملف الشخصي بنجاح.',
+    failed: 'تعذر حفظ الملف الشخصي. حاولي مجددًا.',
+    connection: 'تعذر الاتصال بالخادم. حاولي مجددًا.',
+    save: 'حفظ الملف الشخصي'
+  };
+  @else
+  const PROFILE_TEXT = {
+    saving: 'Saving...',
+    saved: 'Profile saved successfully.',
+    failed: 'Could not save your profile. Please try again.',
+    connection: 'Could not connect to the server. Please try again.',
+    save: 'Save Profile'
+  };
+  @endif
 
   let profileExists = false;
 
@@ -449,7 +477,7 @@
     };
 
     saveBtn.disabled = true;
-    saveBtn.textContent = 'Saving...';
+    saveBtn.textContent = PROFILE_TEXT.saving;
 
     try {
       // Create on first save, update independently afterwards.
@@ -467,7 +495,7 @@
       if (response.ok) {
         profileExists = true;
         document.getElementById('continueBtn').style.display = 'block';
-        alertBox.textContent = 'Profile saved successfully.';
+        alertBox.textContent = PROFILE_TEXT.saved;
         alertBox.className = 'alert alert-success';
         alertBox.style.display = 'block';
       } else if (response.status === 422 && data.errors) {
@@ -476,47 +504,23 @@
           showFieldError(field, messages[0]);
         });
       } else {
-        alertBox.textContent = data.message || 'Could not save your profile. Please try again.';
+        alertBox.textContent = data.message || PROFILE_TEXT.failed;
         alertBox.className = 'alert alert-error';
         alertBox.style.display = 'block';
       }
     } catch (error) {
-      alertBox.textContent = 'Could not connect to the server. Make sure your Laravel backend is running.';
+      alertBox.textContent = PROFILE_TEXT.connection;
       alertBox.className = 'alert alert-error';
       alertBox.style.display = 'block';
     } finally {
       saveBtn.disabled = false;
-      saveBtn.textContent = 'Save Profile';
+      saveBtn.textContent = PROFILE_TEXT.save;
     }
-  });
-
-  function applyTheme(theme) {
-    document.body.classList.toggle('theme-dark', theme === 'dark');
-    try {
-      localStorage.setItem('jisr_theme', theme);
-    } catch (_) {}
-
-    const toggleBtn = document.getElementById('themeToggleBtn');
-    if (toggleBtn) {
-      toggleBtn.textContent = theme === 'dark' ? '☀️' : '🌙';
-    }
-  }
-
-  (function initTheme() {
-    let savedTheme = 'light';
-    try {
-      savedTheme = localStorage.getItem('jisr_theme') || 'light';
-    } catch (_) {}
-    applyTheme(savedTheme);
-  })();
-
-  document.getElementById('themeToggleBtn').addEventListener('click', () => {
-    const isDark = document.body.classList.contains('theme-dark');
-    applyTheme(isDark ? 'light' : 'dark');
   });
 
   window.addEventListener('pageshow', loadProfile);
 </script>
+
 
 </body>
 </html>

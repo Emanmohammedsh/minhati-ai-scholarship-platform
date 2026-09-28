@@ -1804,6 +1804,25 @@
             .jisr-analysis-head,.jisr-analysis-body{padding:16px}
         }
 
+
+        /* Jisr AI — career dashboard dark-mode contrast fix */
+        html[data-theme="dark"] .stats .stat-label,
+        html[data-theme="dark"] .stats .stat-value small {
+            color: #BFD3E8;
+        }
+        html[data-theme="dark"] .stats .stat-value,
+        html[data-theme="dark"] .stats .stat-value strong {
+            color: #75DCFF;
+        }
+        html[data-theme="dark"] .job-card .match-badge {
+            background: #183B61;
+            border-color: rgba(117,220,255,.38);
+            color: #8DE5FF;
+            box-shadow: none;
+        }
+        html[data-theme="dark"] .job-card .match-badge small {
+            color: #C4D9EC;
+        }
     </style>
 
 </head>
@@ -2256,17 +2275,7 @@
 
 <script>
 
-    (function(){
-        const stored=localStorage.getItem('jisr-theme')||localStorage.getItem('jisr_theme');
-        document.documentElement.dataset.theme=stored||(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');
-        addEventListener('DOMContentLoaded',()=>{
-            const b=document.getElementById('themeToggleBtn');
-            if(b)b.addEventListener('click',()=>{const n=document.documentElement.dataset.theme==='dark'?'light':'dark';document.documentElement.dataset.theme=n;localStorage.setItem('jisr-theme',n);});
-            const l=document.getElementById('logoutBtn');
-            if(l)l.addEventListener('click',logout);
-        });
-    })();
-
+    // Shared header owns theme and logout event handlers.
 
     /*
     |--------------------------------------------------------------------------

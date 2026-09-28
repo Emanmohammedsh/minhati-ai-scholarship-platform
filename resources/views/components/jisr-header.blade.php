@@ -23,6 +23,48 @@ html[data-theme="dark"] .jisr-nav a{color:#DCEBFA}
 </style>
 <header class="jisr-site-header"><div class="jisr-header-inner">
 <a href="{{ route('dashboard') }}" class="jisr-brand" aria-label="Jisr AI"><img src="{{ asset('images/brand/jisr-logo-official.png') }}" class="jisr-logo jisr-logo-light" alt="Jisr AI"><img src="{{ asset('images/brand/jisr-logo-dark.png') }}" class="jisr-logo jisr-logo-dark" alt="Jisr AI"></a>
-<nav class="jisr-nav" aria-label="Main navigation"><a href="{{ route('dashboard') }}" class="active">{{ app()->getLocale()==='ar' ? 'الرئيسية' : 'Home' }}</a><a href="{{ route('choose-path') }}">{{ __('common.switch_path') }}</a><a href="{{ route('profile') }}">{{ __('common.profile') }}</a><a href="{{ route('cv-upload') }}">{{ __('common.my_cv') }}</a></nav>
-<div class="jisr-header-actions"><div class="jisr-lang"><a href="{{ route('language.switch','ar') }}" class="{{ app()->getLocale()==='ar' ? 'active' : '' }}">AR</a><a href="{{ route('language.switch','en') }}" class="{{ app()->getLocale()==='en' ? 'active' : '' }}">EN</a></div><button id="themeToggleBtn" class="jisr-theme-btn" type="button"><span>☾</span></button><button id="logoutBtn" class="jisr-logout-btn" type="button">{{ __('common.logout') }}</button></div>
+<nav class="jisr-nav" aria-label="Main navigation"><a href="{{ route('dashboard') }}" class="{{ request()->routeIs('dashboard') ? 'active' : '' }}">{{ app()->getLocale()==='ar' ? 'الرئيسية' : 'Home' }}</a><a href="{{ route('choose-path') }}">{{ __('common.switch_path') }}</a><a href="{{ route('profile') }}">{{ __('common.profile') }}</a><a href="{{ route('cv-upload') }}">{{ __('common.my_cv') }}</a></nav>
+<div class="jisr-header-actions"><div class="jisr-lang" aria-label="Language"><a href="{{ route('language.switch','ar') }}" class="{{ app()->getLocale()==='ar' ? 'active' : '' }}">AR</a><a href="{{ route('language.switch','en') }}" class="{{ app()->getLocale()==='en' ? 'active' : '' }}">EN</a></div><button id="themeToggleBtn" class="jisr-theme-btn" type="button" aria-label="Toggle color theme"><span>☾</span></button><button id="logoutBtn" class="jisr-logout-btn" type="button">{{ __('common.logout') }}</button></div>
 </div></header>
+<style>@media(max-width:560px){.jisr-site-header .jisr-lang{display:flex}.jisr-site-header .jisr-header-inner{gap:6px}.jisr-site-header .jisr-header-actions{gap:5px}.jisr-site-header .jisr-logout-btn{padding:0 9px;font-size:11px}.jisr-site-header .jisr-theme-btn{width:34px;min-height:34px}}</style>
+
+<script>
+(function () {
+    if (window.__jisrSharedHeaderReady) return;
+    window.__jisrSharedHeaderReady = true;
+    function applyTheme(theme) {
+        const dark = theme === 'dark';
+        document.documentElement.dataset.theme = dark ? 'dark' : 'light';
+        document.body.classList.toggle('theme-dark', dark);
+        const button = document.getElementById('themeToggleBtn');
+        if (button) {
+            button.setAttribute('aria-label', dark ? 'Switch to light mode' : 'Switch to dark mode');
+            const icon = button.querySelector('span');
+            if (icon) icon.textContent = dark ? '☀' : '☾';
+        }
+        try { localStorage.setItem('jisr_theme', dark ? 'dark' : 'light'); localStorage.setItem('jisr-theme', dark ? 'dark' : 'light'); } catch (_) {}
+    }
+    let saved = 'light';
+    try { saved = localStorage.getItem('jisr_theme') || localStorage.getItem('jisr-theme') || 'light'; } catch (_) {}
+    applyTheme(saved);
+    document.getElementById('themeToggleBtn')?.addEventListener('click', function () {
+        applyTheme(document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark');
+    });
+    document.getElementById('logoutBtn')?.addEventListener('click', async function () {
+        const token = localStorage.getItem('auth_token');
+        this.disabled = true;
+        try {
+            if (token) {
+                await fetch("{{ url('/api/logout') }}", {
+                    method: 'POST',
+                    headers: { 'Accept': 'application/json', 'Authorization': `Bearer ${token}` }
+                });
+            }
+        } catch (_) {} finally {
+            localStorage.removeItem('auth_token');
+            localStorage.removeItem('auth_user');
+            window.location.replace("{{ route('login') }}");
+        }
+    });
+})();
+</script>

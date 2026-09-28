@@ -173,6 +173,34 @@
             main { padding: 0 var(--sp-4); margin: var(--sp-6) auto; }
         }
     </style>
+<style>
+/* Jisr shared profile/CV page styling. Header and footer remain shared components. */
+html { color-scheme: light; }
+html[data-theme="dark"] { color-scheme: dark; }
+body { font-family: 'Cairo','Inter',system-ui,sans-serif; background: radial-gradient(circle at 85% 0%,rgba(0,198,255,.09),transparent 32%),#f5f9ff; color:#163456; }
+body.theme-dark { background:radial-gradient(circle at 80% 0%,rgba(0,198,255,.09),transparent 34%),#08172d; }
+#appShell { min-height:100vh; }
+#appShell main { max-width:850px; width:calc(100% - 36px); margin:42px auto 60px; padding:0; }
+#appShell .card { border-radius:22px; padding:clamp(22px,4vw,42px); border:1px solid #dce9f6; background:#fff; box-shadow:0 15px 45px rgba(10,46,107,.055); margin-bottom:22px; }
+#appShell h1 { font-family:'Cairo','Inter',sans-serif; font-size:clamp(24px,3vw,32px); color:#0a2e6b; }
+#appShell h2 { font-family:'Cairo','Inter',sans-serif; color:#0a2e6b; }
+#appShell .sub { line-height:1.85; font-size:14px; color:#667d97; }
+#appShell label { font-family:inherit; font-size:14px; font-weight:700; }
+#appShell input:not([type=file]),#appShell textarea,#appShell select { font-family:inherit; border-radius:12px; min-height:48px; }
+#appShell input:focus,#appShell textarea:focus,#appShell select:focus { outline:2px solid rgba(0,198,255,.25); outline-offset:1px; border-color:#00a7db; }
+#appShell .save-btn,#appShell .btn-primary,#appShell .confirm-btn { background:linear-gradient(110deg,#0a2e6b,#087ec0); color:white; border-radius:12px; min-height:48px; font-family:inherit; font-weight:700; }
+#appShell .dropzone { background:#f6fbff; border-color:#a9cfe6; border-radius:18px; }
+#appShell .dropzone:hover,#appShell .dropzone.dragover { background:#eaf6ff; border-color:#00a7db; }
+#appShell .dropzone:focus-visible { outline:3px solid #00c6ff; outline-offset:3px; }
+#appShell .tag { border-radius:10px; }
+html[data-theme="dark"] body,body.theme-dark { color:#e3ecfa; }
+html[data-theme="dark"] #appShell .card,body.theme-dark #appShell .card { background:#10233f; border-color:#26415f; box-shadow:0 16px 48px rgba(0,0,0,.14); }
+html[data-theme="dark"] #appShell h1,html[data-theme="dark"] #appShell h2,body.theme-dark #appShell h1,body.theme-dark #appShell h2 { color:#edf7ff; }
+html[data-theme="dark"] #appShell .sub,body.theme-dark #appShell .sub { color:#afc6dc; }
+html[data-theme="dark"] #appShell .dropzone,body.theme-dark #appShell .dropzone { background:#132b48; border-color:#3a6580; }
+html[dir="rtl"] #appShell input,html[dir="rtl"] #appShell textarea,html[dir="rtl"] #appShell select { text-align:right; }
+@media(max-width:600px){#appShell main{width:calc(100% - 24px);margin:24px auto 42px}#appShell .card{padding:22px 18px}}
+</style>
 </head>
 
 <body>
@@ -181,23 +209,7 @@
 
 <div id="appShell">
 
-    <header class="topbar">
-  <button id="themeToggleBtn" class="theme-toggle-btn" type="button" title="Dark / Light">🌙</button>
-
-        <a href="/choose-path" class="brand">
-            <img src="/images/jisr-logo.jpeg" alt="Jisr AI Logo" style="width:44px;height:44px;object-fit:contain;border-radius:var(--radius);">
-            <div class="brand-info" style="line-height:1.2;">
-                <strong style="display:block;font-size:var(--fs-lg);color:var(--text);">Jisr AI</strong>
-            </div>
-        </a>
-
-        <div class="topbar-links">
-            <a href="{{ route('dashboard') }}" class="back-link">
-                {{ __('common.back_to_dashboard') }}
-            </a>
-        </div>
-
-    </header>
+    @include('components.jisr-header')
 
     <main>
 
@@ -209,7 +221,7 @@
 
             <form id="uploadForm" novalidate>
 
-                <div class="dropzone" id="dropzone">
+                <div class="dropzone" id="dropzone" role="button" tabindex="0" aria-label="{{ __('common.dropzone_text') }}">
                     <input type="file" id="fileInput" name="file" accept="application/pdf">
                     <div class="dz-icon">&#128196;</div>
                     <div class="dz-text">{{ __('common.dropzone_text') }}</div>
@@ -268,6 +280,7 @@
         </div>
 
     </main>
+    @include('components.jisr-footer')
 
 </div>
 
@@ -307,6 +320,7 @@
     function authHeaders(token) {
         return {
             'Accept': 'application/json',
+            'Accept-Language': document.documentElement.lang || 'en',
             'Authorization': `Bearer ${token}`
         };
     }
@@ -338,6 +352,7 @@
     const errFile = document.getElementById('err_file');
 
     dropzone.addEventListener('click', () => fileInput.click());
+    dropzone.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); fileInput.click(); } });
 
     dropzone.addEventListener('dragover', function (e) {
         e.preventDefault();
@@ -580,26 +595,6 @@
     });
 </script>
 
-<script>
-  if (localStorage.getItem('jisr_theme') === 'dark') {
-    document.body.classList.add('theme-dark');
-  }
-  function applyTheme(theme) {
-    document.body.classList.toggle('theme-dark', theme === 'dark');
-    localStorage.setItem('jisr_theme', theme);
-    const toggleBtn = document.getElementById('themeToggleBtn');
-    if (toggleBtn) toggleBtn.textContent = theme === 'dark' ? '☀️' : '🌙';
-  }
-  document.addEventListener('DOMContentLoaded', () => {
-    const btn = document.getElementById('themeToggleBtn');
-    if (btn) {
-      btn.textContent = document.body.classList.contains('theme-dark') ? '☀️' : '🌙';
-      btn.addEventListener('click', () => {
-        const isDark = document.body.classList.contains('theme-dark');
-        applyTheme(isDark ? 'light' : 'dark');
-      });
-    }
-  });
-</script>
+
 </body>
 </html>
