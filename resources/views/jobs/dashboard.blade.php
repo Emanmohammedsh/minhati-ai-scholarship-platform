@@ -1685,6 +1685,125 @@
         color: #55717F;
         font-size: 10px;
     }
+
+
+        /* JISR CAREER DASHBOARD V8 */
+        html[data-theme="dark"]{--surface:#0D2345;--background:#07162D;--text:#B7C7D9;--heading:#F5FAFF;--border:rgba(135,223,255,.15)}
+        html[data-theme="dark"] body{background:radial-gradient(circle at 90% 5%,rgba(0,198,255,.10),transparent 26%),#07162D;color:var(--text)}
+        html[data-theme="dark"] .job-card,html[data-theme="dark"] .stat,html[data-theme="dark"] .journey-card,html[data-theme="dark"] .empty-state,html[data-theme="dark"] .loading-state,html[data-theme="dark"] .gap-learning-plan{background:#0D2345;border-color:rgba(135,223,255,.14)}
+        html[data-theme="dark"] .meta-pill,html[data-theme="dark"] .analysis-stat{background:rgba(255,255,255,.045);border-color:rgba(135,223,255,.13);color:#B8C9D8}
+        .container{width:min(1240px,calc(100% - 40px));padding-top:30px}
+        .hero{min-height:285px;padding:42px 48px;border-radius:28px}.hero h1{font-size:clamp(34px,4.2vw,52px)}
+        .stats{margin:22px 0 38px}.stat{position:relative;overflow:hidden}.stat::after{content:"";position:absolute;inset-inline-start:0;bottom:0;width:100%;height:3px;background:linear-gradient(90deg,var(--primary),var(--secondary));opacity:.75}
+        .matches-section{padding:30px;border-radius:28px;border:1px solid var(--border);background:rgba(255,255,255,.55);box-shadow:0 20px 60px rgba(10,46,107,.07)}
+        html[data-theme="dark"] .matches-section{background:rgba(13,35,69,.72)}
+        .job-card{position:relative;overflow:hidden;transition:.25s ease}.job-card::before{content:"";position:absolute;inset-inline-start:0;top:0;width:4px;height:100%;background:linear-gradient(180deg,var(--secondary),var(--primary))}
+        .job-card:hover{transform:translateY(-4px);border-color:rgba(0,198,255,.45);box-shadow:0 20px 55px rgba(10,46,107,.11)}
+        .match-badge{min-width:92px;font-size:21px}.why-btn{background:linear-gradient(135deg,var(--primary),#0878C9)}
+        .analysis-panel.open{display:block;position:static;transform:none;width:auto;max-height:none;overflow:visible;margin-top:18px;padding-top:18px;border:0;border-top:1px solid var(--border);border-radius:0;background:transparent;box-shadow:none}
+
+        @media(max-width:900px){.job-matches-grid{grid-template-columns:1fr}.matches-section{padding:20px}}
+        @media(max-width:620px){.container{width:calc(100% - 24px)}.hero{padding:28px 22px;border-radius:22px}.stats{grid-template-columns:repeat(2,1fr)}.matches-section{border-radius:22px;padding:16px}.analysis-panel.open{width:calc(100vw - 20px);max-height:88vh;padding:18px}}
+
+
+        /* ===== Career cards UX/UI refinement ===== */
+        .job-matches-grid{
+            grid-template-columns:repeat(2,minmax(0,1fr));
+            gap:20px;
+            align-items:start;
+        }
+        .job-card{
+            padding:22px 22px 18px;
+            border:1px solid #E1EDF5;
+            border-radius:20px;
+            background:#fff;
+            box-shadow:0 8px 26px rgba(10,46,107,.055);
+            transition:transform .22s ease,box-shadow .22s ease,border-color .22s ease;
+        }
+        .job-card::before{width:3px;opacity:.85}
+        .job-card:hover{
+            transform:translateY(-3px);
+            border-color:#B9E9F8;
+            box-shadow:0 16px 38px rgba(10,46,107,.09);
+        }
+        .job-card-top{gap:14px}
+        .job-card h3{font-size:17px;line-height:1.45;margin-bottom:4px}
+        .company-name{font-size:12px;color:#7A8995}
+        .match-badge{
+            min-width:72px;padding:8px 10px;border-radius:12px;
+            font-size:17px;background:#F0FAFE;border-color:#D2EFF8;
+        }
+        .match-badge small{font-size:8.5px}
+        .job-meta{gap:6px;margin:14px 0 12px}
+        .meta-pill{
+            padding:6px 9px;border-radius:999px;background:#F8FBFD;
+            border-color:#E1EDF4;font-size:10.5px;color:#647681;
+        }
+        .job-description{
+            display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;
+            overflow:hidden;font-size:12px;line-height:1.65;margin:12px 0 15px;color:#71818D;
+        }
+        .job-actions{gap:7px}
+        .why-btn,.save-job-btn,.apply-job-btn,.remove-job-btn{
+            min-height:36px;padding:8px 12px;border-radius:10px;font-size:11px;
+        }
+        .application-state{padding:6px 9px;font-size:10.5px}
+        .status-select{min-height:36px;padding:7px 9px;font-size:11px}
+
+        /* Analysis is a true modal: it never changes card height. */
+        .analysis-panel{display:none!important}
+        body.jisr-modal-open{overflow:hidden}
+        .jisr-analysis-modal{
+            position:fixed;inset:0;z-index:12000;display:none;
+            align-items:center;justify-content:center;padding:20px;
+        }
+        .jisr-analysis-modal.open{display:flex}
+        .jisr-analysis-backdrop{
+            position:absolute;inset:0;background:rgba(3,15,34,.58);
+            backdrop-filter:blur(6px);
+        }
+        .jisr-analysis-dialog{
+            position:relative;z-index:1;width:min(760px,100%);
+            max-height:min(84vh,780px);overflow:hidden;
+            display:flex;flex-direction:column;
+            background:#fff;border:1px solid #DCEAF3;border-radius:24px;
+            box-shadow:0 35px 100px rgba(0,20,50,.28);
+        }
+        .jisr-analysis-head{
+            display:flex;align-items:center;justify-content:space-between;
+            gap:16px;padding:18px 20px;border-bottom:1px solid #E7F0F6;
+        }
+        .jisr-analysis-title{margin:0;color:#071D45;font-size:17px}
+        .jisr-analysis-subtitle{margin-top:3px;color:#7A8995;font-size:11px}
+        .jisr-analysis-close{
+            width:38px;height:38px;flex:0 0 38px;border:1px solid #DCEAF3;
+            border-radius:11px;background:#F7FBFD;color:#0A2E6B;
+            font-size:22px;line-height:1;cursor:pointer;
+        }
+        .jisr-analysis-body{padding:20px;overflow:auto;overscroll-behavior:contain}
+        .jisr-analysis-body .analysis-summary{margin-bottom:18px}
+        .jisr-analysis-body .analysis-stat{
+            background:#F7FBFD;border-color:#DDECF4;padding:13px;border-radius:14px;
+        }
+        .jisr-analysis-body .requirement-block{
+            padding:16px;border:1px solid #E3EEF5;border-radius:16px;background:#FCFEFF;
+        }
+        .jisr-analysis-body .requirement-block + .requirement-block{margin-top:12px}
+        .jisr-analysis-body .gap-item{background:#FFFCF5;border-color:#F3E1B8}
+        html[data-theme="dark"] .jisr-analysis-dialog{background:#0D2345;border-color:rgba(135,223,255,.16)}
+        html[data-theme="dark"] .jisr-analysis-head{border-bottom-color:rgba(135,223,255,.12)}
+        html[data-theme="dark"] .jisr-analysis-title{color:#F5FAFF}
+        html[data-theme="dark"] .jisr-analysis-close{background:#102C53;border-color:rgba(135,223,255,.15);color:#fff}
+        html[data-theme="dark"] .jisr-analysis-body .requirement-block{background:rgba(255,255,255,.025);border-color:rgba(135,223,255,.12)}
+
+        @media(max-width:900px){.job-matches-grid{grid-template-columns:1fr}}
+        @media(max-width:560px){
+            .job-card{padding:18px 16px 15px}
+            .jisr-analysis-modal{padding:10px}
+            .jisr-analysis-dialog{max-height:90vh;border-radius:19px}
+            .jisr-analysis-head,.jisr-analysis-body{padding:16px}
+        }
+
     </style>
 
 </head>
@@ -1693,98 +1812,7 @@
 <body>
 
 
-<!-- ======================================
-     NAVBAR
-====================================== -->
-
-<header class="navbar">
-
-
-    <div class="brand">
-
-        <img
-            src="/images/jisr-logo.jpeg"
-            alt="Jisr AI Logo"
-        >
-
-
-        <div class="brand-text">
-
-            <strong>
-                Jisr AI
-            </strong>
-
-            <span>
-                BRIDGING TALENT TO OPPORTUNITY
-            </span>
-
-        </div>
-
-    </div>
-
-
-
-    <nav class="nav-links">
-
-
-        <a
-            href="/choose-path"
-            class="nav-item"
-        >
-            {{ __('common.switch_path') }}
-        </a>
-
-
-        <a
-            href="/profile"
-            class="nav-item"
-        >
-            {{ __('common.profile') }}
-        </a>
-
-
-        <a
-            href="/cv-upload"
-            class="nav-item"
-        >
-            {{ __('common.my_cv') }}
-        </a>
-
-
-
-        <div class="language-switcher">
-
-            <a
-                href="{{ route('language.switch','ar') }}"
-                class="{{ app()->getLocale() === 'ar' ? 'active' : '' }}"
-            >
-                AR
-            </a>
-
-            <span>|</span>
-
-            <a
-                href="{{ route('language.switch','en') }}"
-                class="{{ app()->getLocale() === 'en' ? 'active' : '' }}"
-            >
-                EN
-            </a>
-
-        </div>
-
-
-
-        <button
-            class="logout-btn"
-            onclick="logout()"
-        >
-            {{ __('common.logout') }}
-        </button>
-
-
-    </nav>
-
-</header>
+@include('components.jisr-header')
 
 
 
@@ -1857,7 +1885,7 @@
             <div class="hero-logo-card">
 
                 <img
-                    src="/images/jisr-logo.jpeg"
+                    src="{{ asset('images/brand/jisr-logo-official.png') }}"
                     alt="Jisr AI"
                 >
 
@@ -1933,10 +1961,10 @@
 
             <div class="stat-value">
 
-                {{ __('common.building') }}
+                {{ app()->getLocale() === 'ar' ? 'نشط' : 'Active' }}
 
                 <small>
-                    {{ __('common.phase') }}
+                    {{ app()->getLocale() === 'ar' ? 'المسار الوظيفي' : 'Career Path' }}
                 </small>
 
             </div>
@@ -2176,7 +2204,7 @@
 
 
 
-   
+
 
 
 
@@ -2204,7 +2232,41 @@
 
 
 
+
+<div id="jobAnalysisModal" class="jisr-analysis-modal" aria-hidden="true">
+    <div class="jisr-analysis-backdrop" onclick="closeJobAnalysisModal()"></div>
+    <section class="jisr-analysis-dialog" role="dialog" aria-modal="true" aria-labelledby="jobAnalysisModalTitle">
+        <div class="jisr-analysis-head">
+            <div>
+                <h3 id="jobAnalysisModalTitle" class="jisr-analysis-title">
+                    {{ app()->getLocale()==='ar' ? 'تحليل مطابقة الوظيفة' : 'Job Match Analysis' }}
+                </h3>
+                <p class="jisr-analysis-subtitle">
+                    {{ app()->getLocale()==='ar' ? 'افهم نقاط القوة والفجوات بدون مغادرة الوظيفة.' : 'Understand your strengths and gaps without leaving the job.' }}
+                </p>
+            </div>
+            <button type="button" class="jisr-analysis-close" onclick="closeJobAnalysisModal()" aria-label="Close">×</button>
+        </div>
+        <div id="jobAnalysisModalBody" class="jisr-analysis-body"></div>
+    </section>
+</div>
+
+
+@include('components.jisr-footer')
+
 <script>
+
+    (function(){
+        const stored=localStorage.getItem('jisr-theme')||localStorage.getItem('jisr_theme');
+        document.documentElement.dataset.theme=stored||(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');
+        addEventListener('DOMContentLoaded',()=>{
+            const b=document.getElementById('themeToggleBtn');
+            if(b)b.addEventListener('click',()=>{const n=document.documentElement.dataset.theme==='dark'?'light':'dark';document.documentElement.dataset.theme=n;localStorage.setItem('jisr-theme',n);});
+            const l=document.getElementById('logoutBtn');
+            if(l)l.addEventListener('click',logout);
+        });
+    })();
+
 
     /*
     |--------------------------------------------------------------------------
@@ -2388,6 +2450,9 @@
 
                         'Accept':
                             'application/json',
+
+                        'Accept-Language':
+                            document.documentElement.lang || 'en',
 
                         ...(options.headers || {})
 
@@ -2844,132 +2909,55 @@
     }
 
 
-    async function toggleGapAnalysis(
-        recommendationId
-    ) {
+    function closeJobAnalysisModal() {
+        const modal = document.getElementById('jobAnalysisModal');
+        const body = document.getElementById('jobAnalysisModalBody');
+        if (!modal) return;
+        modal.classList.remove('open');
+        modal.setAttribute('aria-hidden', 'true');
+        document.body.classList.remove('jisr-modal-open');
+        if (body) body.innerHTML = '';
+    }
 
-        const panel =
-            document.getElementById(
-                `analysis-${recommendationId}`
-            );
+    async function toggleGapAnalysis(recommendationId) {
+        const modal = document.getElementById('jobAnalysisModal');
+        const modalBody = document.getElementById('jobAnalysisModalBody');
+        const button = document.getElementById(`analysisButton-${recommendationId}`);
 
-        const button =
-            document.getElementById(
-                `analysisButton-${recommendationId}`
-            );
+        if (!modal || !modalBody || !button) return;
 
+        modal.classList.add('open');
+        modal.setAttribute('aria-hidden', 'false');
+        document.body.classList.add('jisr-modal-open');
 
-        if (
-            !panel ||
-            !button
-        ) {
-            return;
-        }
-
-
-        if (
-            panel.classList.contains(
-                'open'
-            )
-        ) {
-
-            panel.classList.remove(
-                'open'
-            );
-
-            button.textContent =
-                translations.viewAnalysis;
-
-            return;
-
-        }
-
-
-        if (
-            panel.dataset.loaded ===
-            'true'
-        ) {
-
-            panel.classList.add(
-                'open'
-            );
-
-            button.textContent =
-                translations.hideAnalysis;
-
-            return;
-
-        }
-
-
-        panel.classList.add(
-            'open'
-        );
-
-
-        panel.innerHTML = `
+        modalBody.innerHTML = `
             <div class="loading-state">
-                ${escapeHtml(
-                    translations.loadingAnalysis
-                )}
+                ${escapeHtml(translations.loadingAnalysis)}
             </div>
         `;
 
-
-        button.disabled =
-            true;
-
+        button.disabled = true;
 
         try {
-
-            const data =
-                await apiRequest(
-                    `/api/job-recommendations/${recommendationId}/gap-analysis`
-                );
-
-
-            renderGapAnalysis(
-                panel,
-                data
+            const data = await apiRequest(
+                `/api/job-recommendations/${recommendationId}/gap-analysis`
             );
-
-
-            panel.dataset.loaded =
-                'true';
-
-
-            button.textContent =
-                translations.hideAnalysis;
-
-        }
-
-        catch (error) {
-
+            renderGapAnalysis(modalBody, data);
+        } catch (error) {
             console.error(error);
-
-
-            panel.innerHTML = `
+            modalBody.innerHTML = `
                 <div class="empty-state">
-
-                    <h3>
-                        ${escapeHtml(
-                            translations.loadFailed
-                        )}
-                    </h3>
-
+                    <h3>${escapeHtml(translations.loadFailed)}</h3>
                 </div>
             `;
-
+        } finally {
+            button.disabled = false;
         }
-
-        finally {
-
-            button.disabled =
-                false;
-
-        }
-
     }
+
+    document.addEventListener('keydown', event => {
+        if (event.key === 'Escape') closeJobAnalysisModal();
+    });
 
 
     function renderGapAnalysis(

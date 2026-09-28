@@ -2,22 +2,22 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Seeder;
 use App\Models\JobOpportunity;
+use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 
 class JobOpportunitySeeder extends Seeder
 {
     public function run(): void
     {
         /*
-        |--------------------------------------------------------------------------
-        | Demo Job Opportunities
-        |--------------------------------------------------------------------------
-        |
-        | These opportunities are sample data for demonstrating the Jisr AI
-        | Career Matching Engine. They are not presented as live vacancies.
-        |
-        */
+         * Demo opportunities for Jisr AI.
+         * These are sample jobs, not live vacancies.
+         *
+         * Only title and description are translated.
+         * Matching requirements remain
+         *  unchanged.
+         */
 
         $jobs = [
             [
@@ -34,6 +34,18 @@ class JobOpportunitySeeder extends Seeder
                     'application_deadline' => '2026-10-15',
                     'is_active' => true,
                 ],
+
+                'translations' => [
+                    'en' => [
+                        'title' => 'Junior Cyber Security Analyst',
+                        'description' => 'Entry-level cyber security role focused on monitoring, identifying security risks, and supporting incident response activities.',
+                    ],
+                    'ar' => [
+                        'title' => 'محلل أمن سيبراني مبتدئ',
+                        'description' => 'وظيفة للمبتدئين في مجال الأمن السيبراني، تركز على المراقبة واكتشاف المخاطر الأمنية والمساعدة في الاستجابة للحوادث الأمنية.',
+                    ],
+                ],
+
                 'requirements' => [
                     [
                         'requirement_type' => 'field_of_study',
@@ -76,6 +88,18 @@ class JobOpportunitySeeder extends Seeder
                     'application_deadline' => '2026-10-20',
                     'is_active' => true,
                 ],
+
+                'translations' => [
+                    'en' => [
+                        'title' => 'Network Security Assistant',
+                        'description' => 'Junior role supporting network monitoring, security configuration, troubleshooting, and infrastructure protection.',
+                    ],
+                    'ar' => [
+                        'title' => 'مساعد أمن شبكات',
+                        'description' => 'وظيفة للمبتدئين للمساعدة في مراقبة الشبكات وإعدادات الأمان واستكشاف المشكلات التقنية وحلها وحماية البنية التحتية.',
+                    ],
+                ],
+
                 'requirements' => [
                     [
                         'requirement_type' => 'field_of_study',
@@ -118,6 +142,18 @@ class JobOpportunitySeeder extends Seeder
                     'application_deadline' => '2026-10-25',
                     'is_active' => true,
                 ],
+
+                'translations' => [
+                    'en' => [
+                        'title' => 'Junior Backend Developer',
+                        'description' => 'Entry-level backend development role working with APIs, databases, server-side applications, and software development practices.',
+                    ],
+                    'ar' => [
+                        'title' => 'مطور Backend مبتدئ',
+                        'description' => 'وظيفة للمبتدئين في تطوير الأنظمة الخلفية، تشمل العمل على واجهات API وقواعد البيانات وتطبيقات الخوادم وممارسات تطوير البرمجيات.',
+                    ],
+                ],
+
                 'requirements' => [
                     [
                         'requirement_type' => 'degree_level',
@@ -160,6 +196,18 @@ class JobOpportunitySeeder extends Seeder
                     'application_deadline' => '2026-11-01',
                     'is_active' => true,
                 ],
+
+                'translations' => [
+                    'en' => [
+                        'title' => 'IT Support Assistant',
+                        'description' => 'Entry-level IT support role involving user support, network troubleshooting, system configuration, and technical issue resolution.',
+                    ],
+                    'ar' => [
+                        'title' => 'مساعد دعم فني لتكنولوجيا المعلومات',
+                        'description' => 'وظيفة للمبتدئين في الدعم الفني، تشمل مساعدة المستخدمين وحل مشكلات الشبكات وإعداد الأنظمة ومعالجة الأعطال التقنية.',
+                    ],
+                ],
+
                 'requirements' => [
                     [
                         'requirement_type' => 'degree_level',
@@ -202,6 +250,18 @@ class JobOpportunitySeeder extends Seeder
                     'application_deadline' => '2026-11-10',
                     'is_active' => true,
                 ],
+
+                'translations' => [
+                    'en' => [
+                        'title' => 'SOC Analyst Intern',
+                        'description' => 'Cyber security internship focused on security monitoring, network analysis, vulnerability awareness, and incident investigation.',
+                    ],
+                    'ar' => [
+                        'title' => 'متدرب محلل مركز العمليات الأمنية SOC',
+                        'description' => 'تدريب في الأمن السيبراني يركز على المراقبة الأمنية وتحليل الشبكات وفهم الثغرات الأمنية والتحقيق في الحوادث.',
+                    ],
+                ],
+
                 'requirements' => [
                     [
                         'requirement_type' => 'field_of_study',
@@ -231,12 +291,54 @@ class JobOpportunitySeeder extends Seeder
             ],
         ];
 
-        foreach ($jobs as $data) {
-            $job = JobOpportunity::create($data['job']);
+        DB::transaction(function () use ($jobs) {
+            foreach ($jobs as $data) {
+                /*
+                 * Identify existing demo jobs by their
+                 * canonical title and company name.
+                 *
+                 * Do not overwrite existing job data
+                 * or change existing job IDs.
+                 */
+                $job = JobOpportunity::firstOrCreate(
+                    [
+                        'title' => $data['job']['title'],
+                        'company_name' => $data['job']['company_name'],
+                    ],
+                    $data['job']
+                );
 
-            foreach ($data['requirements'] as $requirement) {
-                $job->requirements()->create($requirement);
+                /*
+                 * Insert or update translations.
+                 * One translation per job and locale.
+                 */
+                foreach ($data['translations'] as $locale => $translation) {
+                    $job->translations()->updateOrCreate(
+                        [
+                            'locale' => $locale,
+                        ],
+                        $translation
+                    );
+                }
+
+                /*
+                 * Preserve existing matching requirements.
+                 * Do not duplicate requirements when
+                 * the seeder runs again.
+                 */
+                foreach ($data['requirements'] as $requirement) {
+                    $job->requirements()->firstOrCreate(
+                        [
+                            'requirement_type' => $requirement['requirement_type'],
+                            'required_value' => $requirement['required_value'],
+                        ],
+                        [
+                            'is_mandatory' => $requirement['is_mandatory'],
+                            'weight' => $requirement['weight'],
+                        ]
+                    );
+                }
             }
-        }
+        });
     }
 }

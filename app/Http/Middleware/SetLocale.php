@@ -10,25 +10,22 @@ class SetLocale
 {
     public function handle(Request $request, Closure $next): Response
     {
-        /*
-         * API requests can send the current UI language
-         * through the Accept-Language header.
-         */
-        $headerLocale = $request->header('Accept-Language');
+        // API requests receive the selected language
+        // from the frontend through Accept-Language.
+        if ($request->is('api/*')) {
+            $headerLocale = $request->header('Accept-Language');
 
-        if ($headerLocale) {
-            $headerLocale = strtolower(
-                substr($headerLocale, 0, 2)
-            );
+            if ($headerLocale) {
+                $headerLocale = strtolower(substr($headerLocale, 0, 2));
+            }
+
+            $locale = in_array($headerLocale, ['ar', 'en'], true)
+                ? $headerLocale
+                : session('locale', config('app.locale', 'en'));
+        } else {
+            // Normal web pages use the language selected by the user.
+            $locale = session('locale', config('app.locale', 'en'));
         }
-
-        /*
-         * Prefer the language sent by the current page.
-         * Otherwise use the language stored in the session.
-         */
-        $locale = in_array($headerLocale, ['ar', 'en'], true)
-            ? $headerLocale
-            : session('locale', config('app.locale'));
 
         if (! in_array($locale, ['ar', 'en'], true)) {
             $locale = config('app.locale', 'en');

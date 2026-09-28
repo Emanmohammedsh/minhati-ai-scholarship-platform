@@ -56,4 +56,27 @@ class JobOpportunity extends Model
             'job_id'
         );
     }
+    /**
+ * Localized content for this job opportunity.
+ */
+public function translations()
+{
+    return $this->hasMany(
+        JobOpportunityTranslation::class,
+        'job_id',
+        'job_id'
+    );
+}
+
+/**
+ * Translation for the currently active locale.
+ */
+public function translation()
+{
+    return $this->hasOne(
+        JobOpportunityTranslation::class,
+        'job_id',
+        'job_id'
+    )->where('locale', app()->getLocale());
+}
 }

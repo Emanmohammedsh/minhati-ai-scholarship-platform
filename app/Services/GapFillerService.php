@@ -17,20 +17,38 @@ class GapFillerService
         array $currentSkills = []
     ): array {
         $apiKey = config('services.gemini.key');
+
         $model = config(
             'services.gemini.model',
             'gemini-3.5-flash'
         );
 
+        $locale = app()->getLocale();
+        $isArabic = $locale === 'ar';
+
         if (! $apiKey) {
             return $this->fallbackPlan(
-                $missingRequirement
+                $missingRequirement,
+                $isArabic
             );
         }
 
         $skills = empty($currentSkills)
-            ? 'Not provided'
+            ? ($isArabic ? 'غير متوفرة' : 'Not provided')
             : implode(', ', $currentSkills);
+
+        $languageInstruction = $isArabic
+            ? <<<TEXT
+Write ALL user-facing values in Arabic.
+Keep technical technology names such as Python, Laravel,
+PHP, JavaScript, Cyber Security, SQL, and Git in their
+standard form when appropriate.
+The JSON keys must remain exactly as specified in English.
+TEXT
+            : <<<TEXT
+Write ALL user-facing values in English.
+The JSON keys must remain exactly as specified below.
+TEXT;
 
         $prompt = <<<PROMPT
 You are Jisr AI, a career readiness assistant.
@@ -49,6 +67,9 @@ Missing requirement:
 Current verified CV skills:
 {$skills}
 
+Language requirements:
+{$languageInstruction}
+
 Rules:
 - Do not invent skills or experience.
 - Focus only on the missing requirement.
@@ -58,6 +79,10 @@ Rules:
 - Do not claim that completing the plan guarantees
   employment.
 - Return JSON only.
+- Every user-facing value must follow the requested
+  language.
+- Do not translate technical names when translation
+  would make them unclear.
 
 Return exactly this JSON structure:
 
@@ -104,13 +129,13 @@ PROMPT;
                 Log::warning(
                     'Gap Filler Gemini request failed.',
                     [
-                        'status'
-                            => $response->status(),
+                        'status' => $response->status(),
                     ]
                 );
 
                 return $this->fallbackPlan(
-                    $missingRequirement
+                    $missingRequirement,
+                    $isArabic
                 );
             }
 
@@ -121,7 +146,8 @@ PROMPT;
 
             if (! $text) {
                 return $this->fallbackPlan(
-                    $missingRequirement
+                    $missingRequirement,
+                    $isArabic
                 );
             }
 
@@ -137,12 +163,14 @@ PROMPT;
                 || empty($plan['steps'])
             ) {
                 return $this->fallbackPlan(
-                    $missingRequirement
+                    $missingRequirement,
+                    $isArabic
                 );
             }
 
             return [
                 'source' => 'ai',
+
                 'missing_requirement'
                     => $missingRequirement,
 
@@ -179,17 +207,48 @@ PROMPT;
             );
 
             return $this->fallbackPlan(
-                $missingRequirement
+                $missingRequirement,
+                $isArabic
             );
         }
     }
 
     /**
-     * Safe response when Gemini is unavailable.
+     * Safe localized response when Gemini is unavailable.
      */
     private function fallbackPlan(
-        string $missingRequirement
+        string $missingRequirement,
+        bool $isArabic
     ): array {
+        if ($isArabic) {
+            return [
+                'source' => 'fallback',
+
+                'missing_requirement'
+                    => $missingRequirement,
+
+                'why_it_matters'
+                    => 'هذا المتطلب جزء من معايير الوظيفة ويساعد على تحسين مدى توافق ملفك مع متطلبات الفرصة.',
+
+                'learning_goal'
+                    => "بناء معرفة عملية في {$missingRequirement}.",
+
+                'steps' => [
+                    "تعلّم أساسيات {$missingRequirement}.",
+                    "طبّق {$missingRequirement} من خلال تمرين عملي صغير.",
+                    "أنشئ مشروعًا أو مثالًا بسيطًا باستخدام {$missingRequirement}.",
+                ],
+
+                'practice_task'
+                    => "أنشئ مثالًا عمليًا صغيرًا يوضح استخدام {$missingRequirement}.",
+
+                'search_keywords' => [
+                    "دورة {$missingRequirement} للمبتدئين",
+                    "شرح عملي {$missingRequirement}",
+                ],
+            ];
+        }
+
         return [
             'source' => 'fallback',
 
@@ -197,7 +256,7 @@ PROMPT;
                 => $missingRequirement,
 
             'why_it_matters'
-                => "This requirement is part of the job criteria.",
+                => 'This requirement is part of the job criteria and can improve how well your profile aligns with the opportunity.',
 
             'learning_goal'
                 => "Build practical knowledge in {$missingRequirement}.",
@@ -218,4 +277,3 @@ PROMPT;
         ];
     }
 }
-
