@@ -3019,7 +3019,7 @@ body.theme-dark .why-match-btn{color:#39D8FF!important}.apply-btn:not(:disabled)
 <script>
 
     const API_BASE_URL =
-        @json(url('/api'));
+        "/api";
 
     const LOGIN_URL =
         @json(route('login'));

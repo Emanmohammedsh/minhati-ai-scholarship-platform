@@ -55,7 +55,7 @@ html[data-theme="dark"] .jisr-nav a{color:#DCEBFA}
         this.disabled = true;
         try {
             if (token) {
-                await fetch("{{ url('/api/logout') }}", {
+                await fetch("/api/logout", {
                     method: 'POST',
                     headers: { 'Accept': 'application/json', 'Authorization': `Bearer ${token}` }
                 });
