@@ -285,7 +285,7 @@ html[dir="rtl"] #appShell input,html[dir="rtl"] #appShell textarea,html[dir="rtl
 </div>
 
 <script>
-    const API_BASE_URL = "{{ url('/api') }}";
+    const API_BASE_URL = "/api";
     const LOGIN_URL = "{{ route('login') }}";
     const DASHBOARD_URL = "{{ route('dashboard') }}";
 

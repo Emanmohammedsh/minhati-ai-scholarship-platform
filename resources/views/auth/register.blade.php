@@ -1036,7 +1036,7 @@
 
 
 <script>
-    const API_BASE_URL = "{{ url('/api') }}";
+    const API_BASE_URL = "/api";
     const LOGIN_URL = "{{ route('login') }}";
     const IS_ARABIC = {{ $ar ? 'true' : 'false' }};
 

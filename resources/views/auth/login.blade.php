@@ -1003,7 +1003,7 @@
 
 
 <script>
-    const API_BASE_URL = "{{ url('/api') }}";
+    const API_BASE_URL = "/api";
     const DASHBOARD_URL = "{{ route('choose-path') }}";
     const IS_ARABIC = {{ $ar ? 'true' : 'false' }};
 
