@@ -13,6 +13,9 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware): void {
 
+        // Railway is behind a proxy: trust it so url() generates https
+        $middleware->trustProxies(at: '*');
+
         // Web pages: locale comes from the session.
         $middleware->web(append: [
             \App\Http\Middleware\SetLocale::class,
