@@ -143,12 +143,14 @@ $model = config('services.gemini.model', 'gemini-3.6-flash');
         $rawText = data_get($response->json(), 'candidates.0.content.parts.0.text');
 
         if (! $rawText) {
+            Log::error('Gemini returned no content', ['finish_reason' => data_get($response->json(), 'candidates.0.finishReason')]);
             throw new \RuntimeException('Gemini API returned no content.');
         }
 
         $parsed = json_decode($rawText, true);
 
         if (! is_array($parsed)) {
+            Log::error('Gemini returned invalid JSON', ['finish_reason' => data_get($response->json(), 'candidates.0.finishReason'), 'length' => strlen($rawText)]);
             throw new \RuntimeException('Gemini API returned invalid JSON.');
         }
 
