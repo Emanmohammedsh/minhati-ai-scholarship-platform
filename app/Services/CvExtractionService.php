@@ -106,7 +106,7 @@ $model = config('services.gemini.model', 'gemini-3.6-flash');
         do {
             $attempt++;
 
-            $response = Http::timeout(30)
+            $response = Http::timeout(100)
                 ->withHeaders(['x-goog-api-key' => $apiKey])
                 ->post("https://generativelanguage.googleapis.com/v1beta/models/{$model}:generateContent", [
                     'contents' => [
