@@ -166,13 +166,32 @@ class MatchingService
         };
     }
 
+        private function normalize(string $v): string
+    {
+        $v = mb_strtolower(trim($v));
+        $aliases = [
+            'فلسطين' => 'palestine', 'فلسكطين' => 'palestine',
+            'palestine, state of' => 'palestine',
+            "bachelor's" => 'bachelor', "master's" => 'master',
+        ];
+        $v = $aliases[$v] ?? $v;
+        return trim(preg_replace('/\s+/', ' ', $v));
+    }
+
     private function fuzzyEquals(?string $studentValue, string $criterionValue): bool
     {
         if (! $studentValue) {
             return false;
         }
 
-        return mb_strtolower(trim($studentValue)) === $criterionValue;
+        $s = $this->normalize($studentValue);
+        $c = $this->normalize($criterionValue);
+
+        if ($s === '' || $c === '') {
+            return false;
+        }
+
+        return $s === $c || str_contains($c, $s) || str_contains($s, $c);
     }
 
     private function matchesSkillKeyword(string $keyword, ?Cv $cv): bool
