@@ -1,21 +1,23 @@
-import logging
+﻿import logging
 from functools import lru_cache
 
 import numpy as np
-from sentence_transformers import SentenceTransformer
+from google import genai
 from sklearn.metrics.pairwise import cosine_similarity
 
 from schemas import ExtractedCV, MatchResult, Scholarship
 
 logger = logging.getLogger("semantic_matcher.matcher")
 
-EMBEDDING_MODEL = "paraphrase-multilingual-MiniLM-L12-v2"
-_model = SentenceTransformer(EMBEDDING_MODEL)
+client = genai.Client()
+
+EMBEDDING_MODEL = "text-embedding-004"
 
 
 @lru_cache(maxsize=2048)
 def _get_embedding_cached(text: str):
-    return tuple(_model.encode(text))
+    result = client.models.embed_content(model=EMBEDDING_MODEL, contents=text)
+    return tuple(result.embedding.values)
 
 
 def get_embedding(text: str) -> np.ndarray:

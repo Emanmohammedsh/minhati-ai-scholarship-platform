@@ -1,0 +1,16 @@
+id,degree_level,field_of_study,gpa,interests,skills
+1,master,Computer Science,3.5,machine learning;nlp,Python;PyTorch
+2,bachelor,Graphic Design,3.2,branding;illustration,Photoshop;Figma
+3,phd,Biology,3.8,genetics;bioinformatics,R;Python;lab research
+4,master,Business Administration,3.0,marketing;entrepreneurship,Excel;leadership
+5,bachelor,Civil Engineering,2.8,infrastructure;sustainability,AutoCAD;project management
+6,master,Education,3.4,curriculum design;e-learning,teaching;research
+7,phd,Computer Science,3.0,computer vision;robotics,Python;C++;OpenCV
+8,bachelor,Medicine,3.6,public health;surgery,clinical skills;research
+9,master,Public Health,3.3,epidemiology;health policy,SPSS;data analysis
+10,bachelor,English Literature,3.1,translation;writing,editing;translation
+11,master,Architecture,2.9,urban planning;design,Revit;AutoCAD
+12,phd,Physics,3.7,quantum computing;simulation,Python;MATLAB
+13,bachelor,Computer Science,3.9,web development;ai,JavaScript;Python
+14,master,Economics,3.2,development economics;policy,Stata;R
+15,master,Computer Science,2.7,data science;analytics,SQL;Python
