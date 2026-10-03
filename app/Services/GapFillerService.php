@@ -20,7 +20,7 @@ class GapFillerService
 
         $model = config(
             'services.gemini.model',
-            'gemini-3.5-flash'
+            config('services.gemini.model', 'gemini-3.5-flash-lite')
         );
 
         $locale = app()->getLocale();

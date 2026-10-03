@@ -38,7 +38,7 @@ class CourseRecommendationService
 
         $model = config(
             'services.gemini.model',
-            'gemini-3.5-flash'
+            config('services.gemini.model', 'gemini-3.5-flash-lite')
         );
 
         if (!$apiKey) {

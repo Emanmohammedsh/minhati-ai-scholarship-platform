@@ -1,4 +1,5 @@
-﻿import io
+import os
+import io
 import logging
 
 import pdfplumber
@@ -34,7 +35,7 @@ def parse_cv_from_pdf(pdf_bytes: bytes) -> ExtractedCV:
     """
 
     response = client.models.generate_content(
-        model="gemini-2.5-flash",
+        model=os.getenv("GEMINI_MODEL", "gemini-3.5-flash-lite"),
         contents=prompt,
         config={
             "response_mime_type": "application/json",
