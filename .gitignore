@@ -34,3 +34,4 @@ result.txt
 fix_bom.ps1
 erd.mwb.bak
 erd.mwb.beforefix
+backup_*.sql
