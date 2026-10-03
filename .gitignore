@@ -39,3 +39,14 @@ backup_*.sql
 __pycache__/
 *.pyc
 *.bak
+
+telegram_review.csv
+tg_public.py
+tg_collect.py
+*.session
+
+storage/scholarships_backup_*.json
+telegram_review.csv
+tg_public.py
+tg_collect.py
+*.session
